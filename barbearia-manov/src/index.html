@@ -3,35 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Sistema de barbearia online com agendamento, e-commerce e feed interativo"><!--descrição objetiva do site para motores de busca e redes sociais-->
-    <meta name="keywords" content="barbearia, barbeiro, barba, cabelo, corte, agendamento, e-commerce, feed, interativo"> <!--palavras chaves  para maior visibilidade em resultados de pesquisa-->
-    <!-- OG Tags (Redes Sociais) --> 
-    <!--metadados utilizados para controle de formato de exibição em redes sociais-->
-<meta property="og:title" content="Barbearia Online ✂️">
-<meta property="og:description" content="Agende serviços, compre produtos e veja promoções na nossa barbearia.">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://seusite.com">
-<meta property="og:image" content="https://seusite.com/assets/images/logo-social.png">
+    <meta name="description" content="Sistema de barbearia online com agendamento, e-commerce e feed interativo">
+    <meta name="keywords" content="barbearia, barbeiro, barba, cabelo, corte, agendamento, e-commerce, feed, interativo">
+    <meta property="og:title" content="Barbearia Online ✂️">
+    <meta property="og:description" content="Agende serviços, compre produtos e veja promoções na nossa barbearia.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://seusite.com">
+    <meta property="og:image" content="https://seusite.com/assets/images/logo-social.png">
     <title>Barbearia Manov</title>
     <link rel="stylesheet" href="styles/style.css">
 </head>
 <body>
-    <header>
-        <h1>Barbearia Manov</h1>
-    </header>
-    
-    <section id="login">
-        <h2>Login</h2>
-        <form id="loginForm">
-            <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-            <button type="submit">Login</button>
-            <button type="button" id="registerButton">Register</button>
-        </form>
-    </section>
-
+    <div class="container">
+        <header>
+            <h1>Barbearia Manov</h1>
+        </header>
+        <div> 
+            <section id="login">
+                <h2>Login</h2>
+                <form id="loginForm">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <button type="submit">Login</button>
+                    <button type="button" id="registerButton">Register</button>
+                </form>
+            </section>
+        </div>
+    </div>
     <script src="scripts/app.js"></script>
 </body>
 </html>

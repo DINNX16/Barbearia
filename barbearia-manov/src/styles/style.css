@@ -1,5 +1,6 @@
 body {
-    font-family: Arial, sans-serif;
+    
+    font-family: Arial, sans-serif poppins;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
@@ -14,19 +15,26 @@ header {
 
 h1 {
     margin: 0;
+    border: 5px solid;
 }
 
+h2 { 
+    justify-content: center;
+    text-align: center;
+}
 .container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
+    max-width: 550px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 100px;
+    height: 700px; /* Define uma altura fixa maior */
 }
-
 form {
     background: #ffffff;
     padding: 20px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 220px;;
 }
 
 form input[type="text"],
@@ -75,4 +83,5 @@ form input[type="submit"]:hover {
 
 .post:last-child {
     border-bottom: none;
+    
 }

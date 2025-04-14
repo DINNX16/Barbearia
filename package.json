@@ -1,0 +1,30 @@
+{
+  "name": "barbearia",
+  "version": "1.0.0",
+  "description": "Este projeto é um sistema completo para barbearias que inclui autenticação de usuários, catálogo de produtos/serviços, agendamento online e um feed interativo para promoções. Os usuários podem agendar serviços, comprar produtos e interagir com postagens.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DINNX16/Barbearia.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DINNX16/Barbearia/issues"
+  },
+  "homepage": "https://github.com/DINNX16/Barbearia#readme",
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "pg": "^8.14.1",
+    "stripe": "^18.0.0"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.11.11",
+    "playwright": "^1.51.1"
+  }
+}
