@@ -1,32 +1,68 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="Pages\login.css">
-    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+    <title>Document</title>
 </head>
 <body>
-    <main>
-        <section class="login-container" aria-label="Tela de Login">
-            <header>
-                <h1>Login</h1>
-            </header>
-            <form action="/login" method="POST">
-                <div class="form-group">
-                    <label for="email">E-mail</label>
-                    <input type="email" id="email" name="email" required aria-describedby="emailHelp">
-                </div>
-                <div class="form-group">
-                    <label for="password">Senha</label>
-                    <input type="password" id="password" name="password" required>
-                </div>
-                <div class="form-actions">
-                    <button type="submit">Entrar</button>
-                    <a href="/esqueceu-senha">Esqueceu sua senha?</a>
-                </div>
-            </form>
-        </section>
-    </main>
+    <h2>Por que o barbeiro nunca perde uma discussõe? Porque ele sempre corta a conversa.</h2>
+<div class="container" id="container">
+	<div class="form-container sign-up-container">
+		<form action="#">
+			<h1>Cadastro</h1>
+			<div class="social-container">
+				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<span>ou utilize um email para se registrar</span>
+			<input type="text" placeholder="Name" />
+			<input type="email" placeholder="Email" />
+			<input type="password" placeholder="Password" />
+			<button>Cadastre-se</button>
+		</form>
+	</div>
+	<div class="form-container sign-in-container">
+		<form action="#">
+			<h1>Iniciar sessão</h1>
+			<div class="social-container">
+				<a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+				<a href="#" class="social"><i class="fab fa-google-plus-g"></i></a>
+				<a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+			</div>
+			<span>ou utilize um email para entrar</span>
+			<input type="email" placeholder="Email" />
+			<input type="password" placeholder="Password" />
+			<a href="#">Esqueceu a sua senha?</a>
+			<button>Entrar</button>
+		</form>
+	</div>
+	<div class="overlay-container">
+		<div class="overlay">
+			<div class="overlay-panel overlay-left">
+				<h1>Bem-vindo de volta!</h1>
+				<p>Para se conectar com a gente, realiza o cadastro das suas informações pessoais</p>
+				<button class="ghost" id="signIn">Entrar</button>
+			</div>
+			<div class="overlay-panel overlay-right">
+				<h1>Bem-vindo!</h1>
+				<p> Para se manter conectado conosco, realize o login.</p>
+				<button class="ghost" id="signUp">Cadastre-se</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<footer>
+	<p>
+		📍 Endereço: Rua João Batista , 2926 - 76890-000 Centro - Jaru/RO></i> 
+		📞 Telefone: (69) 99224-2405
+		✉️ Email: contato@barbeariafalse.com>here</a>.
+	</p>
+</footer>
+<script src="login.js"></script>
 </body>
 </html>
