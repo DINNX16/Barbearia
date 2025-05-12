@@ -98,8 +98,3 @@ Envie um pull request.
 
 ## 📄 Licença
 Este projeto está sob a licença MIT. Veja o arquivo LICENSE para detalhes.
-
-## Desenvolvido por [Seu Nome]
-📧 Contato: seu-email@exemplo.com
-
-✨ Dica: Para funcionalidades backend (como autenticação real), considere integrar com Firebase ou uma API customizada.
