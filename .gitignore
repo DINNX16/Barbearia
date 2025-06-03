@@ -6,3 +6,6 @@
 node_modules/
 # Ignora arquivos de build
 build/
+# Ignora arquivos de banco de dados
+*.db/
+
