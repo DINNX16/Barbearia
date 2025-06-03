@@ -3,61 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Moeda Girando como Peão</title>
+  <title>Moeda Girando até Redirecionar</title>
   <style>
-    /* Estilo básico da imagem */
+    /* Centraliza tudo no body com Flexbox */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f9f9f9; /* Opcional: cor de fundo leve */
+    }
+
+    /* Estilo da imagem da moeda */
     #minha-moeda {
       width: 150px;
       height: 150px;
-      display: block;
-      margin: 50px auto;
-      transition: transform 0.3s ease-out;
       will-change: transform;
       transform-style: preserve-3d;
     }
-
-    /* Classe que aplica o giro estilo peão */
-    .girar-peao {
-      animation: girarPeao 3s ease-out;
+    
+    /* Giro infinito */
+    .girar-infinito {
+      animation: girarInfinito 1s linear infinite;
     }
 
-    /* Animação estilo peão */
-    @keyframes girarPeao {
-      0% {
+    @keyframes girarInfinito {
+      from {
         transform: rotateY(0deg);
       }
-      50% {
-        transform: rotateY(1080deg); /* 3 voltas */
-      }
-      80% {
-        transform: rotateY(1440deg); /* +1 volta */
-      }
-      100% {
-        transform: rotateY(1500deg); /* desacelera no final */
+      to {
+        transform: rotateY(360deg);
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Sua imagem da moeda -->
-  <img src="moeda_bigode.png" alt="Moeda" id="minha-moeda" />
+  <!-- ...existing code... -->
+<img src="../src/moeda_bigode.png" alt="Gold coin featuring a mustache illustration spinning in a bright and cheerful setting, no visible text" id="minha-moeda" />
+<!-- ...existing code... -->
 
   <script>
-    const elemento = document.getElementById('minha-moeda');
+    const moeda = document.getElementById('minha-moeda');
 
-    elemento.addEventListener('mouseenter', () => {
-      // Se já estiver girando, não aplica novamente
-      if (elemento.classList.contains('girar-peao')) return;
+    window.addEventListener('load', () => {
+      moeda.classList.add('girar-infinito');
 
-      elemento.classList.add('girar-peao');
-
-      // Remove a classe após 3s (tempo da animação)
+      // Redireciona após 5 segundos
       setTimeout(() => {
-        elemento.classList.remove('girar-peao');
-      }, 3000);
+        window.location.href = "http://127.0.0.1:5501/Pages/main.html";
+      }, 5000);
     });
   </script>
 
 </body>
-</html> 
+</html>
