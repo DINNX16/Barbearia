@@ -36,6 +36,44 @@
         position: relative;
       }
 
+      .search-header {
+  display: flex;
+  margin: auto;
+  position: absolute; /*FiXA A BARRA*/
+  top: 60%;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-header input {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Linha inferior sutil */
+  padding: 8px 35px 8px 5px; /* Padding: top, right (para não cobrir o ícone), bottom, left */
+  font-size: 0.95rem;
+  color: var(--light); /* Texto claro */
+  outline: none;
+  transition: border-bottom-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-busca {
+  background-color: var(--secondary);
+  border: none;
+  color: var(--primary);
+  font-size: 1.2rem;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-busca:hover {
+  background-color: transparent;
+}
+
       .abrir-menu {
         font-size: 18px;
         cursor: pointer;
@@ -197,9 +235,20 @@
         position: absolute;
         top: 20px;
         right: 45px;
+<<<<<<< HEAD:Pages/main.html
         font-size: 0px;
+=======
+        font-size: 50px;
+>>>>>>> 1fffd4e81017d489d965ed8cb0e09e38ff3d115b:barbearia-manov/Pages/main.html
         color: white;
       }
+      /*botão fechar do menu*/
+      #btnFechar {
+        width: 40px;
+        height: 40px;
+        font-size: 50px;
+      }
+
       /* Estilo para o botão de Sair */
       #logoutBtn {
         color: #ff6b6b;
@@ -230,7 +279,7 @@
       <span class="abrir-menu" onclick="openNav()">☰ Menu</span>
       <div class="logo">
         <h1>Barbearia Manóv</h1>
-      </div>
+      
       <nav class="nav">
         <ul>
           <!-- AGENDA -->
@@ -316,11 +365,19 @@
           <li><a href="#avisos">Avisos</a></li>
         </ul>
       </nav>
+      </div><div class="search-header">
+  <input type="text" placeholder="Buscar..." aria-label="Buscar" />
+  <button class="btn-busca" aria-label="Buscar">🔍</button>
+</div>
     </header>
-
+    
     <!-- Menu Mobile Overlay -->
     <div id="myNav" class="overlay">
-      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()"
+      <a
+        href="javascript:void(0)"
+        id="btnFechar"
+        class="closebtn"
+        onclick="closeNav()"
         >&times;</a
       >
       <div class="overlay-content">
@@ -360,6 +417,5 @@
     </script>
 
     <script src="auth.js"></script>
-
   </body>
 </html>

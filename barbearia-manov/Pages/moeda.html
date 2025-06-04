@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Moeda Girando até Redirecionar</title>
+  <style>
+    /* Centraliza tudo no body com Flexbox */
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #f9f9f9; /* Opcional: cor de fundo leve */
+    }
+
+    /* Estilo da imagem da moeda */
+    #minha-moeda {
+      width: 150px;
+      height: 150px;
+      will-change: transform;
+      transform-style: preserve-3d;
+    }
+    
+    /* Giro infinito */
+    .girar-infinito {
+      animation: girarInfinito 1s linear infinite;
+    }
+
+    @keyframes girarInfinito {
+      from {
+        transform: rotateY(0deg);
+      }
+      to {
+        transform: rotateY(360deg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ...existing code... -->
+<img src="../src/moeda_bigode.png" alt="Gold coin featuring a mustache illustration spinning in a bright and cheerful setting, no visible text" id="minha-moeda" />
+<!-- ...existing code... -->
+
+  <script>
+    const moeda = document.getElementById('minha-moeda');
+
+    window.addEventListener('load', () => {
+      moeda.classList.add('girar-infinito');
+
+      // Redireciona após 5 segundos
+      setTimeout(() => {
+        window.location.href = "http://127.0.0.1:5501/Pages/main.html";
+      }, 5000);
+    });
+  </script>
+
+</body>
+</html>
