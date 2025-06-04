@@ -386,11 +386,14 @@
   .card-content p {
     font-size: 0.85rem;
   }
-
+.card img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center top; /* Adicionado para focar no topo da imagem */
+  display: block;
 }
-
-
-
+}
     </style>
   </head>
   <body>
@@ -457,7 +460,7 @@
                 <a href="#cortes">Cortes</a>
                 <ul class="sub-dropdown">
                   <li><a href="#tipos-cortes">Tipos</a></li>
-                  <li><a href="fotos-cortes.html">Fotos</a></li>
+                  <li><a href="#fotos-cortes">Fotos</a></li>
                   <li><a href="#valores-cortes">Valores</a></li>
                 </ul>
               </li>
@@ -518,8 +521,95 @@
     </div>
 
     <main>
+  <section class="vertical-feed"> <h2>Nossas Novidades e Destaques</h2>
 
- 
+   <div class="feed-grid-container"> 
+
+
+
+      <article class="feed-item card">
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/jovem_2.png" alt="Imagem do Cartão 1">
+        <div class="card-content">
+          <h3>Cliente Satisfeito</h3>
+          <p>Mais um cliente satisfeito.</p>
+          <a href="#corte_1" class="card-link">Agendar</a>
+        </div>
+      </article>
+
+      <article class="feed-item card">
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/jovem_3.png" alt="Imagem do Cartão 2">
+        <div class="card-content">
+          <h3>Sempre melhorando</h3>
+          <p>Sempre melhorando nos cortes.</p>
+          <a href="#corte_2" class="card-link">Agendar</a>
+        </div>
+      </article>
+
+      <article class="feed-item card">
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/buzzcut.png" alt= "Destaque C">
+        <div class="card-content">
+          <h3>Qualidade sempre🔥</h3>
+          <p>Cliente satisfeito, e estiloso.</p>
+          <a href="#corte_3" class="card-link">Agendar</a>
+        </div>
+      </article>
+
+      <article class="feed-item card">
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/jovem_4.png" alt="Imagem do Cartão 4">
+        <div class="card-content">
+          <h3>Marque seu horário🥀</h3>
+          <p>Agenda aberta pra semana.</p>
+          <a href="#corte_4" class="card-link">Agendar</a>
+        </div>
+      </article>
+
+      <article class="feed-item card">
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/social.png" alt="Imagem do Cartão 5">
+        <div class="card-content">
+          <h3>Pós Corte</h3>
+          <p>Cortes luxuosos e estilosos, para qualquer idade.</p>
+          <a href="#corte_5" class="card-link">Agendar</a>
+        </div>
+      </article>
+
+      <article class="feed-item card">
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/jovem_5.png" alt="Imagem do Cartão 6">
+        <div class="card-content">
+          <h3>Venha ficar na régua📐</h3>
+          <p>Sempre qualidade.</p>
+          <a href="#corte_6" class="card-link">Agendar</a>
+        </div>
+      </article>
+
+<article class="feed-item card"> 
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/dreads.png" alt="Imagem do Item 7">
+        <div class="card-content">
+          <h3>Dreads</h3>
+          <p>Também fazemos dreads, sempre prezando pela saúde e estilo do seu cabelo.</p>
+          <a href="#corte_7" class="card-link">Agendar</a>
+        </div>
+      </article>
+
+      <article class="feed-item card">
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/loiro.png" alt="Imagem do Cartão 8"> 
+        <div class="card-content">
+          <h3>Luzes</h3>
+          <p>Também tingimos cabelos, prezando pela qualidade do serviço e seu tempo de duração.</p>
+          <a href="#corte_8" class="card-link">Agendar</a>
+        </div>
+      </article>
+
+      <article class="feed-item card">
+        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/jovem.png" 
+        alt="Imagem do Cartão 9" class="img-focus-top">
+        <div class="card-content">
+          <h3>Corte Jovial</h3>
+          <p>Cortes do momento.</p>
+          <a href="#corte_9" class="card-link">Agendar</a>
+        </div>
+      </article>
+      </div> 
+    </section>
     </main>
 
     <footer class="footer">
