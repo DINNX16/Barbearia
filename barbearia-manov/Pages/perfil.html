@@ -140,18 +140,18 @@
             border-bottom: none;
         }
 
-        .service-name {
+        .service-name, .product-name { /* Adicionado .product-name para compras */
             font-weight: 600;
             margin-bottom: 0.25rem;
         }
 
-        .service-date {
+        .service-date, .purchase-date { /* Adicionado .purchase-date para compras */
             color: var(--gray);
             font-size: 0.9rem;
             margin-bottom: 0.5rem;
         }
 
-        .service-price {
+        .service-price, .purchase-price { /* Adicionado .purchase-price para compras */
             font-weight: 600;
             color: var(--secondary);
         }
@@ -164,17 +164,17 @@
             font-weight: 600;
         }
 
-        .status-completed {
+        .status-completed, .status-entregue { /* Adicionado .status-entregue */
             background-color: #d4edda;
             color: #155724;
         }
 
-        .status-upcoming {
+        .status-upcoming, .status-agendado { /* Adicionado .status-agendado */
             background-color: #fff3cd;
             color: #856404;
         }
 
-        .status-cancelled {
+        .status-cancelled, .status-cancelado { /* Adicionado .status-cancelado */
             background-color: #f8d7da;
             color: #721c24;
         }
@@ -204,10 +204,10 @@
 
     <div class="container">
         <div class="profile-header">
-            <img src="https://via.placeholder.com/150" alt="Foto de perfil" class="profile-pic">
+            <img src="https://via.placeholder.com/150" alt="Foto de perfil" class="profile-pic" id="profile-pic-display">
             <div class="user-info">
-                <h2 class="user-name">João da Silva</h2>
-                <p class="user-email">joao.silva@email.com</p>
+                <h2 class="user-name" id="user-name-display">Carregando...</h2>
+                <p class="user-email" id="user-email-display">Carregando...</p>
                 <button class="edit-profile">Editar Perfil</button>
             </div>
         </div>
@@ -215,108 +215,213 @@
         <div class="profile-sections">
             <div class="section">
                 <h3 class="section-title"><i class="fas fa-calendar-check"></i> Próximos Agendamentos</h3>
-                
-                <div class="history-item">
-                    <div class="service-name">Corte de Cabelo + Barba</div>
-                    <div class="service-date">15/06/2023 - 14:30</div>
-                    <div class="service-price">R$ 80,00</div>
-                    <span class="status status-upcoming">Agendado</span>
-                </div>
-                
-                <div class="history-item">
-                    <div class="service-name">Manutenção de Barba</div>
-                    <div class="service-date">30/06/2023 - 10:00</div>
-                    <div class="service-price">R$ 45,00</div>
-                    <span class="status status-upcoming">Agendado</span>
-                </div>
-                
-                <div class="empty-message" style="display: none;">Nenhum agendamento futuro</div>
+                <div id="proximos-agendamentos-list">
+                    </div>
+                <div class="empty-message" id="empty-proximos-agendamentos" style="display: none;">Nenhum agendamento futuro.</div>
             </div>
 
             <div class="section">
                 <h3 class="section-title"><i class="fas fa-cut"></i> Últimos Serviços</h3>
-                
-                <div class="history-item">
-                    <div class="service-name">Corte Social</div>
-                    <div class="service-date">01/06/2023 - 15:00</div>
-                    <div class="service-price">R$ 60,00</div>
-                    <span class="status status-completed">Concluído</span>
-                </div>
-                
-                <div class="history-item">
-                    <div class="service-name">Sobrancelha</div>
-                    <div class="service-date">20/05/2023 - 11:30</div>
-                    <div class="service-price">R$ 25,00</div>
-                    <span class="status status-completed">Concluído</span>
-                </div>
-                
-                <div class="history-item">
-                    <div class="service-name">Corte + Hidratação</div>
-                    <div class="service-date">05/05/2023 - 16:00</div>
-                    <div class="service-price">R$ 90,00</div>
-                    <span class="status status-completed">Concluído</span>
-                </div>
+                <div id="ultimos-servicos-list">
+                    </div>
+                <div class="empty-message" id="empty-ultimos-servicos" style="display: none;">Nenhum serviço recente.</div>
             </div>
 
             <div class="section">
                 <h3 class="section-title"><i class="fas fa-history"></i> Histórico de Agendamentos</h3>
-                
-                <div class="history-item">
-                    <div class="service-name">Corte Degradê</div>
-                    <div class="service-date">15/04/2023 - 14:00</div>
-                    <div class="service-price">R$ 65,00</div>
-                    <span class="status status-completed">Concluído</span>
-                </div>
-                
-                <div class="history-item">
-                    <div class="service-name">Barba Completa</div>
-                    <div class="service-date">01/04/2023 - 10:30</div>
-                    <div class="service-price">R$ 40,00</div>
-                    <span class="status status-completed">Concluído</span>
-                </div>
-                
-                <div class="history-item">
-                    <div class="service-name">Corte + Barba (Cancelado)</div>
-                    <div class="service-date">20/03/2023 - 13:00</div>
-                    <div class="service-price">R$ 80,00</div>
-                    <span class="status status-cancelled">Cancelado</span>
-                </div>
+                <div id="historico-agendamentos-list">
+                    </div>
+                <div class="empty-message" id="empty-historico-agendamentos" style="display: none;">Nenhum histórico de agendamentos.</div>
             </div>
 
             <div class="section">
                 <h3 class="section-title"><i class="fas fa-shopping-bag"></i> Histórico de Compras</h3>
-                
-                <div class="history-item">
-                    <div class="service-name">Kit Barber - Pomada + Pente</div>
-                    <div class="service-date">10/06/2023</div>
-                    <div class="service-price">R$ 120,00</div>
-                    <span class="status status-completed">Entregue</span>
-                </div>
-                
-                <div class="history-item">
-                    <div class="service-name">Navalhete Profissional</div>
-                    <div class="service-date">25/05/2023</div>
-                    <div class="service-price">R$ 85,00</div>
-                    <span class="status status-completed">Entregue</span>
-                </div>
-                
-                <div class="empty-message" style="display: none;">Nenhuma compra realizada</div>
+                <div id="historico-compras-list">
+                    </div>
+                <div class="empty-message" id="empty-historico-compras" style="display: none;">Nenhuma compra realizada.</div>
             </div>
         </div>
     </div>
 
     <footer class="footer">
-        <p>© 2023 Barbearia Manóv - Todos os direitos reservados</p>
+        <p>© <span id="current-year">2023</span> Barbearia Manóv - Todos os direitos reservados</p>
     </footer>
 
     <script>
-        // Aqui você pode adicionar funcionalidades como:
-        // - Carregar dados reais do usuário via API
-        // - Edição do perfil
-        // - Filtros para o histórico
-        
-        document.querySelector('.edit-profile').addEventListener('click', function() {
-            alert('Funcionalidade de edição de perfil será implementada aqui!');
+        // Função para formatar data (dd/mm/yyyy)
+        function formatDate(dateString) {
+            if (!dateString) return 'Data indisponível';
+            const date = new Date(dateString);
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // Meses são 0-indexados
+            const year = date.getFullYear();
+            return `${day}/${month}/${year}`;
+        }
+
+        // Função para formatar preço (R$ xx,xx)
+        function formatPrice(price) {
+            if (typeof price !== 'number') return 'Preço indisponível';
+            return `R$ ${price.toFixed(2).replace('.', ',')}`;
+        }
+
+        // --- Funções para simular chamadas de API (substitua por chamadas reais `fetch`) ---
+        async function mockFetchUserProfile() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve({
+                        nome: "Carlos Alberto Nóbrega",
+                        email: "carlos.nobrega@email.com",
+                        fotoUrl: "https://i.pravatar.cc/150?u=carlosnobrega" // Imagem aleatória
+                    });
+                }, 500);
+            });
+        }
+
+        async function mockFetchUpcomingAppointments() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve([
+                        { id: 1, servico: "Corte de Cabelo + Barba Detalhada", data: "2025-06-15T14:30:00", preco: 80.00, status: "Agendado" },
+                        { id: 2, servico: "Manutenção de Barba", data: "2025-06-30T10:00:00", preco: 45.00, status: "Agendado" }
+                    ]);
+                }, 700);
+            });
+        }
+
+        async function mockFetchLastServices() {
+             return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve([
+                        { id: 3, servico: "Corte Social", data: "2025-06-01T15:00:00", preco: 60.00, status: "Concluído" },
+                        { id: 4, servico: "Sobrancelha Masculina", data: "2025-05-20T11:30:00", preco: 25.00, status: "Concluído" },
+                        { id: 5, servico: "Corte + Hidratação Profunda", data: "2025-05-05T16:00:00", preco: 90.00, status: "Concluído" }
+                    ]);
+                }, 600);
+            });
+        }
+
+        async function mockFetchAppointmentsHistory() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                    resolve([
+                        { id: 6, servico: "Corte Degradê", data: "2025-04-15T14:00:00", preco: 65.00, status: "Concluído" },
+                        { id: 7, servico: "Barba Completa Clássica", data: "2025-04-01T10:30:00", preco: 40.00, status: "Concluído" },
+                        { id: 8, servico: "Corte + Barba (Cancelado)", data: "2025-03-20T13:00:00", preco: 80.00, status: "Cancelado" }
+                    ]);
+                }, 800);
+            });
+        }
+
+        async function mockFetchPurchasesHistory() {
+            return new Promise(resolve => {
+                setTimeout(() => {
+                     resolve([
+                        { id: 101, produto: "Kit Barber - Pomada Modeladora + Pente de Madeira", data: "2025-06-10", preco: 120.00, status: "Entregue" },
+                        { id: 102, produto: "Navalhete Profissional Aço Inox", data: "2025-05-25", preco: 85.00, status: "Entregue" }
+                    ]);
+                    // Para testar a mensagem de "nenhuma compra":
+                    // resolve([]);
+                }, 900);
+            });
+        }
+
+        // --- Funções para renderizar os dados no HTML ---
+
+        function renderUserProfile(userData) {
+            document.getElementById('profile-pic-display').src = userData.fotoUrl || 'https://via.placeholder.com/150';
+            document.getElementById('profile-pic-display').alt = `Foto de ${userData.nome}`;
+            document.getElementById('user-name-display').textContent = userData.nome || 'Nome não informado';
+            document.getElementById('user-email-display').textContent = userData.email || 'Email não informado';
+        }
+
+        function getStatusClass(status) {
+            if (!status) return '';
+            const s = status.toLowerCase();
+            if (s === 'agendado' || s === 'upcoming') return 'status-upcoming';
+            if (s === 'concluído' || s === 'completed' || s === 'entregue') return 'status-completed';
+            if (s === 'cancelado' || s === 'cancelled') return 'status-cancelled';
+            return ''; // Classe padrão ou nenhuma
+        }
+
+        function renderGenericList(items, listElementId, emptyMessageElementId, itemHtmlGenerator) {
+            const listElement = document.getElementById(listElementId);
+            const emptyMessageElement = document.getElementById(emptyMessageElementId);
+
+            listElement.innerHTML = ''; // Limpa a lista
+
+            if (items && items.length > 0) {
+                emptyMessageElement.style.display = 'none';
+                items.forEach(item => {
+                    listElement.innerHTML += itemHtmlGenerator(item);
+                });
+            } else {
+                emptyMessageElement.style.display = 'block';
+            }
+        }
+
+        function createAppointmentsHtml(item) {
+            const date = new Date(item.data);
+            const time = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            return `
+                <div class="history-item">
+                    <div class="service-name">${item.servico}</div>
+                    <div class="service-date">${formatDate(item.data)} - ${time}</div>
+                    <div class="service-price">${formatPrice(item.preco)}</div>
+                    <span class="status ${getStatusClass(item.status)}">${item.status}</span>
+                </div>
+            `;
+        }
+
+        function createPurchasesHtml(item) {
+            return `
+                <div class="history-item">
+                    <div class="product-name">${item.produto}</div>
+                    <div class="purchase-date">${formatDate(item.data)}</div>
+                    <div class="purchase-price">${formatPrice(item.preco)}</div>
+                    <span class="status ${getStatusClass(item.status)}">${item.status}</span>
+                </div>
+            `;
+        }
+
+
+        // --- Função principal para carregar todos os dados ---
+        async function loadProfileData() {
+            try {
+                const userData = await mockFetchUserProfile();
+                renderUserProfile(userData);
+
+                const upcomingAppointments = await mockFetchUpcomingAppointments();
+                renderGenericList(upcomingAppointments, 'proximos-agendamentos-list', 'empty-proximos-agendamentos', createAppointmentsHtml);
+
+                const lastServices = await mockFetchLastServices();
+                renderGenericList(lastServices, 'ultimos-servicos-list', 'empty-ultimos-servicos', createAppointmentsHtml);
+
+                const appointmentsHistory = await mockFetchAppointmentsHistory();
+                renderGenericList(appointmentsHistory, 'historico-agendamentos-list', 'empty-historico-agendamentos', createAppointmentsHtml);
+                
+                const purchasesHistory = await mockFetchPurchasesHistory();
+                renderGenericList(purchasesHistory, 'historico-compras-list', 'empty-historico-compras', createPurchasesHtml);
+
+            } catch (error) {
+                console.error("Erro ao carregar dados do perfil:", error);
+                // Aqui você pode exibir uma mensagem de erro mais amigável para o usuário em alguma parte da página
+                document.getElementById('user-name-display').textContent = "Erro ao carregar";
+                document.getElementById('user-email-display').textContent = "Tente novamente mais tarde.";
+                // Poderia também mostrar as mensagens de erro em cada seção
+                document.getElementById('empty-proximos-agendamentos').textContent = "Erro ao carregar agendamentos.";
+                document.getElementById('empty-proximos-agendamentos').style.display = 'block';
+                // ... e para as outras seções
+            }
+        }
+
+        // --- Inicialização ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfileData();
+            document.getElementById('current-year').textContent = new Date().getFullYear();
+
+            document.querySelector('.edit-profile').addEventListener('click', function() {
+                alert('Funcionalidade de edição de perfil será implementada aqui! Você precisará criar um formulário e uma lógica para enviar os dados atualizados para sua API.');
+            });
         });
     </script>
 </body>

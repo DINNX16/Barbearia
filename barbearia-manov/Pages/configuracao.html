@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Configurações - Barbearia Manóv</title>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/configuracoes-style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* CSS das outras respostas ou movido para arquivos .css */
+      :root {
+        --primary: #1a1a1a;
+        --secondary: #d4af37;
+        --light: #f8f9fa;
+        --dark: #212529;
+      }
+      body {
+        font-family: "Montserrat", sans-serif;
+        margin: 0;
+        padding: 0;
+        color: var(--primary);
+        background-color: #f5f5f5;
+        padding-bottom: 60px; /* Espaço para o footer */
+      }
+      
+      /* Em configuracoes-style.css */
+      .container-configuracoes {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: var(--light);
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+      }
+
+      .container-configuracoes h2 {
+        font-family: "Playfair Display", serif;
+        color: var(--primary);
+        text-align: center;
+        margin-bottom: 2.5rem;
+        font-size: 2.2rem;
+      }
+
+      .secao-config {
+        margin-bottom: 2.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      .secao-config:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+      }
+
+      .secao-config h3 {
+        font-family: "Playfair Display", serif;
+        color: var(--dark);
+        margin-bottom: 1.5rem;
+        font-size: 1.6rem;
+        border-left: 4px solid var(--secondary);
+        padding-left: 0.8rem;
+      }
+
+      .form-grupo {
+        margin-bottom: 1.2rem;
+      }
+
+      .form-grupo label {
+        display: block;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 500;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+      }
+
+      .form-grupo input[type="text"],
+      .form-grupo input[type="email"],
+      .form-grupo input[type="tel"],
+      .form-grupo input[type="password"] {
+        width: 100%;
+        padding: 0.8rem 1rem;
+        font-family: "Montserrat", sans-serif;
+        font-size: 1rem;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box; /* Para que o padding não aumente a largura */
+        transition: border-color 0.3s, box-shadow 0.3s;
+      }
+
+      .form-grupo input:focus {
+        border-color: var(--secondary);
+        box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25); /* Sombra dourada sutil no foco */
+        outline: none;
+      }
+
+      .form-grupo-checkbox {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.8rem;
+      }
+
+      .form-grupo-checkbox input[type="checkbox"] {
+        margin-right: 0.8rem;
+        width: 18px; /* Tamanho customizado do checkbox */
+        height: 18px;
+        cursor: pointer;
+        accent-color: var(--secondary); /* Cor do checkbox quando marcado */
+      }
+
+      .form-grupo-checkbox label {
+        font-family: "Montserrat", sans-serif;
+        font-weight: normal;
+        font-size: 0.95rem;
+        color: var(--dark);
+        cursor: pointer;
+        margin-bottom: 0; /* Reset margin from .form-grupo label */
+      }
+
+      .btn-salvar-config {
+        display: inline-block;
+        background-color: var(--secondary);
+        color: var(--primary);
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.8rem 1.8rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s, transform 0.2s;
+        text-transform: uppercase;
+      }
+
+      .btn-salvar-config:hover {
+        background-color: var(--primary);
+        color: var(--secondary);
+        transform: translateY(-2px);
+      }
+
+      .secao-perigo {
+        background-color: #fff3f3;
+        border-left-color: #e74c3c; /* Vermelho para perigo */
+        padding: 1.5rem;
+        border-radius: 4px;
+      }
+      .secao-perigo h3 {
+        color: #c0392b;
+        border-left-color: #c0392b;
+      }
+      .secao-perigo p {
+        font-family: "Montserrat", sans-serif;
+        color: #58151c;
+        line-height: 1.6;
+        margin-bottom: 1rem;
+      }
+      .btn-perigo {
+        display: inline-block;
+        background-color: #e74c3c; /* Vermelho */
+        color: white;
+        font-family: "Montserrat", sans-serif;
+        font-weight: 700;
+        font-size: 1rem;
+        padding: 0.8rem 1.8rem;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+        text-transform: uppercase;
+      }
+      .btn-perigo:hover {
+        background-color: #c0392b; /* Vermelho mais escuro */
+        transform: translateY(-2px);
+      }
+
+      /* Responsividade */
+      @media (max-width: 768px) {
+        .container-configuracoes {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+        .container-configuracoes h2 {
+          font-size: 1.8rem;
+        }
+        .secao-config h3 {
+          font-size: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+
+    </div>
+
+    <main>
+      <div class="container-configuracoes">
+        <h2>Configurações da Conta</h2>
+
+        <section id="dados-pessoais" class="secao-config">
+          <h3>Dados Pessoais</h3>
+          <form id="form-dados-pessoais">
+            <div class="form-grupo">
+              <label for="config-nome">Nome Completo:</label>
+              <input
+                type="text"
+                id="config-nome"
+                name="nome"
+                value="Nome do Usuário Atual"
+                required
+              />
+            </div>
+            <div class="form-grupo">
+              <label for="config-email">E-mail:</label>
+              <input
+                type="email"
+                id="config-email"
+                name="email"
+                value="usuario@email.com"
+                required
+              />
+            </div>
+            <div class="form-grupo">
+              <label for="config-telefone">Telefone:</label>
+              <input
+                type="tel"
+                id="config-telefone"
+                name="telefone"
+                value="(69) 99999-9999"
+              />
+            </div>
+            <button type="submit" class="btn-salvar-config">
+              Salvar Dados Pessoais
+            </button>
+          </form>
+        </section>
+
+        <section id="alterar-senha" class="secao-config">
+          <h3>Alterar Senha</h3>
+          <form id="form-alterar-senha">
+            <div class="form-grupo">
+              <label for="config-senha-atual">Senha Atual:</label>
+              <input
+                type="password"
+                id="config-senha-atual"
+                name="senha_atual"
+                required
+              />
+            </div>
+            <div class="form-grupo">
+              <label for="config-nova-senha">Nova Senha:</label>
+              <input
+                type="password"
+                id="config-nova-senha"
+                name="nova_senha"
+                required
+              />
+            </div>
+            <div class="form-grupo">
+              <label for="config-confirma-senha">Confirmar Nova Senha:</label>
+              <input
+                type="password"
+                id="config-confirma-senha"
+                name="confirma_senha"
+                required
+              />
+            </div>
+            <button type="submit" class="btn-salvar-config">
+              Alterar Senha
+            </button>
+          </form>
+        </section>
+
+        <section id="notificacoes" class="secao-config">
+          <h3>Preferências de Notificação</h3>
+          <form id="form-notificacoes">
+            <div class="form-grupo-checkbox">
+              <input
+                type="checkbox"
+                id="notif-lembrete-email"
+                name="lembrete_email"
+                checked
+              />
+              <label for="notif-lembrete-email"
+                >Receber lembretes de agendamento por E-mail.</label
+              >
+            </div>
+            <div class="form-grupo-checkbox">
+              <input
+                type="checkbox"
+                id="notif-lembrete-sms"
+                name="lembrete_sms"
+              />
+              <label for="notif-lembrete-sms"
+                >Receber lembretes de agendamento por SMS (se
+                disponível).</label
+              >
+            </div>
+            <div class="form-grupo-checkbox">
+              <input
+                type="checkbox"
+                id="notif-promocoes"
+                name="promocoes"
+                checked
+              />
+              <label for="notif-promocoes"
+                >Receber novidades e promoções da Barbearia Manóv.</label
+              >
+            </div>
+            <button type="submit" class="btn-salvar-config">
+              Salvar Preferências de Notificação
+            </button>
+          </form>
+        </section>
+
+        <section id="excluir-conta" class="secao-config secao-perigo">
+          <h3>Excluir Conta</h3>
+          <p>
+            Esta ação é permanente e removerá todos os seus dados da Barbearia
+            Manóv. Seus agendamentos futuros serão cancelados.
+          </p>
+          <button type="button" id="btn-excluir-conta" class="btn-perigo">
+            Solicitar Exclusão da Conta
+          </button>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script>
+      // Scripts para menu mobile (openNav, closeNav)
+      function openNav() {
+        document.getElementById("myNav").style.width = "50%";
+      }
+      function closeNav() {
+        document.getElementById("myNav").style.width = "0%";
+      }
+
+      // Lógica para carregar configurações atuais e salvar alterações (exemplo)
+      document.addEventListener("DOMContentLoaded", () => {
+        // Simulação: Carregar dados do usuário logado
+        // Em um cenário real, você faria uma chamada API para buscar as configs atuais
+        // e preencheria os campos do formulário.
+        // Ex: document.getElementById('config-nome').value = dadosDoUsuario.nome;
+
+        const formDadosPessoais = document.getElementById(
+          "form-dados-pessoais"
+        );
+        if (formDadosPessoais) {
+          formDadosPessoais.addEventListener("submit", function (e) {
+            e.preventDefault();
+            // Lógica para enviar dados para o backend
+            alert("Dados pessoais salvos (simulação)!");
+          });
+        }
+
+        const formAlterarSenha = document.getElementById("form-alterar-senha");
+        if (formAlterarSenha) {
+          formAlterarSenha.addEventListener("submit", function (e) {
+            e.preventDefault();
+            const novaSenha =
+              document.getElementById("config-nova-senha").value;
+            const confirmaSenha = document.getElementById(
+              "config-confirma-senha"
+            ).value;
+            if (novaSenha !== confirmaSenha) {
+              alert("As novas senhas não coincidem!");
+              return;
+            }
+            // Lógica para enviar dados para o backend
+            alert("Senha alterada (simulação)!");
+            this.reset(); // Limpa o formulário
+          });
+        }
+
+        const formNotificacoes = document.getElementById("form-notificacoes");
+        if (formNotificacoes) {
+          formNotificacoes.addEventListener("submit", function (e) {
+            e.preventDefault();
+            // Lógica para enviar dados para o backend
+            alert("Preferências de notificação salvas (simulação)!");
+          });
+        }
+
+        const btnExcluirConta = document.getElementById("btn-excluir-conta");
+        if (btnExcluirConta) {
+          btnExcluirConta.addEventListener("click", function () {
+            if (
+              confirm(
+                "Tem certeza que deseja solicitar a exclusão da sua conta? Esta ação não pode ser desfeita."
+              )
+            ) {
+              if (
+                confirm(
+                  "CONFIRMAÇÃO FINAL: Todos os seus dados e agendamentos serão perdidos. Continuar?"
+                )
+              ) {
+                // Lógica para enviar solicitação de exclusão para o backend
+                alert("Solicitação de exclusão de conta enviada (simulação).");
+                // Idealmente, deslogar o usuário ou redirecionar
+              }
+            }
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
