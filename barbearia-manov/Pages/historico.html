@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        :root {
+  --primary: #1a1a1a;
+  --secondary: #d4af37;
+  --light: #f8f9fa;
+  --dark: #212529;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  color: var(--primary);
+  background-color: #f5f5f5;
+  margin: 0;
+  padding: 0;
+  padding-bottom: 80px; /* Ajuste conforme a altura do seu footer fixo */
+}
+/* Estilos específicos para o conteúdo da página de histórico */
+main {
+  padding-top: 20px; /* Espaço após o header */
+  padding-bottom: 20px; /* Espaço antes do footer */
+}
+
+.container-historico {
+  max-width: 1100px; /* Largura um pouco maior para tabelas */
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--light); /* #f8f9fa */
+  border-radius: 8px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  color: var(--dark); /* Texto escuro para contraste no fundo claro */
+}
+
+.container-historico h2 {
+  font-family: "Playfair Display", serif;
+  color: var(--primary); /* #1a1a1a */
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+/* Filtros */
+.filtros-historico {
+  display: flex;
+  flex-wrap: wrap; /* Permite que os itens quebrem linha em telas menores */
+  gap: 1rem; /* Espaçamento entre os elementos do filtro */
+  align-items: center; /* Alinha os itens verticalmente */
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background-color: #ffffff; /* Fundo branco para destacar os filtros */
+  border-radius: 6px;
+  border: 1px solid #e0e0e0;
+}
+
+.filtros-historico label {
+  font-weight: 500; /* Montserrat com peso médio */
+  color: var(--primary);
+  margin-right: 0.5rem;
+}
+
+.filtros-historico input[type="date"],
+.filtros-historico select {
+  font-family: "Montserrat", sans-serif;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: var(--dark);
+  background-color: #fff;
+  flex-grow: 1; /* Permite que os inputs cresçam para preencher espaço */
+  min-width: 150px; /* Largura mínima para evitar que fiquem muito pequenos */
+}
+
+.filtros-historico select {
+  cursor: pointer;
+}
+
+.filtros-historico button#btnFiltrarHistorico {
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--secondary); /* #d4af37 */
+  color: var(--primary); /* Texto escuro no botão dourado */
+  border: none;
+  padding: 0.7rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 700; /* Montserrat bold */
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+  flex-shrink: 0; /* Evita que o botão encolha demais */
+}
+
+.filtros-historico button#btnFiltrarHistorico:hover {
+  background-color: var(--primary); /* Cor primária no hover */
+  color: var(--secondary); /* Cor secundária para o texto no hover */
+  transform: translateY(-2px);
+}
+
+/* Tabela de Histórico */
+.tabela-historico {
+  width: 100%;
+  border-collapse: collapse; /* Remove espaços entre as células */
+  margin-bottom: 2rem;
+  font-size: 0.9rem; /* Montserrat regular */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.tabela-historico th,
+.tabela-historico td {
+  border: 1px solid #e0e0e0; /* Borda sutil */
+  padding: 0.9rem 1rem; /* Mais preenchimento para melhor leitura */
+  text-align: left;
+  vertical-align: middle; /* Alinha conteúdo no meio da célula */
+}
+
+.tabela-historico th {
+  background-color: var(--dark); /* #212529 */
+  color: var(--light); /* #f8f9fa */
+  font-weight: 700; /* Montserrat bold */
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tabela-historico tr:nth-child(even) {
+  background-color: #fdfdfd; /* Zebrado muito sutil para as linhas pares */
+}
+
+.tabela-historico tr:hover {
+  background-color: #f0f0f0; /* Leve destaque ao passar o mouse */
+}
+
+.tabela-historico td {
+  color: var(--primary);
+}
+
+/* Paginação */
+.paginacao-historico {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.paginacao-historico button {
+  font-family: "Montserrat", sans-serif;
+  background-color: var(--primary);
+  color: var(--light);
+  border: 1px solid var(--primary);
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.paginacao-historico button:hover:not(:disabled) {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border-color: var(--secondary);
+}
+
+.paginacao-historico button:disabled {
+  background-color: #ccc;
+  color: #666;
+  border-color: #ccc;
+  cursor: not-allowed;
+}
+
+.paginacao-historico #infoPagina {
+  font-family: "Montserrat", sans-serif;
+  font-weight: 500;
+  color: var(--dark);
+  font-size: 0.95rem;
+}
+
+/* Ajustes para Telas Menores (Responsividade) */
+@media (max-width: 768px) {
+  .container-historico {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .container-historico h2 {
+    font-size: 1.8rem;
+  }
+
+  .filtros-historico {
+    flex-direction: column; /* Filtros um abaixo do outro */
+    align-items: stretch; /* Ocupam toda a largura */
+    padding: 1rem;
+  }
+
+  .filtros-historico input[type="date"],
+  .filtros-historico select,
+  .filtros-historico button#btnFiltrarHistorico {
+    width: 100%; /* Ocupam toda a largura disponível */
+    margin-bottom: 0.8rem; /* Espaçamento quando empilhados */
+  }
+  .filtros-historico label {
+    margin-bottom: 0.3rem;
+    display: block; /* Para que a label fique acima do input */
+  }
+
+  /* Para tabelas em telas pequenas, pode ser necessário rolagem horizontal */
+  .tabela-historico {
+    display: block; /* Permite rolagem horizontal se a tabela for muito larga */
+    overflow-x: auto; /* Adiciona barra de rolagem horizontal apenas se necessário */
+    white-space: nowrap; /* Impede que o conteúdo da célula quebre linha, mantendo as colunas */
+    font-size: 0.85rem;
+  }
+
+  .tabela-historico th,
+  .tabela-historico td {
+    padding: 0.7rem 0.8rem;
+    white-space: nowrap; /* Garante que o conteúdo não quebre e force a rolagem */
+  }
+  .paginacao-historico {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .paginacao-historico button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+    .container-historico h2 {
+        font-size: 1.6rem;
+    }
+    .filtros-historico input[type="date"],
+    .filtros-historico select,
+    .filtros-historico button#btnFiltrarHistorico,
+    .paginacao-historico button {
+        font-size: 0.85rem;
+        padding: 0.5rem 1rem;
+    }
+    .tabela-historico {
+      font-size: 0.8rem;
+    }
+    .tabela-historico th,
+    .tabela-historico td {
+      padding: 0.6rem 0.7rem;
+    }
+}
+    </style>
+</head>
+<body>
+    <main>
+  <div class="container-historico">
+    <h2>Meu Histórico Completo</h2>
+    <div class="filtros-historico">
+      <label for="filtro-data-inicio">De:</label>
+      <input type="date" id="filtro-data-inicio" name="filtro-data-inicio">
+      <label for="filtro-data-fim">Até:</label>
+      <input type="date" id="filtro-data-fim" name="filtro-data-fim">
+      <label for="filtro-tipo-evento">Tipo:</label>
+      <select id="filtro-tipo-evento" name="filtro-tipo-evento">
+        <option value="">Todos os Tipos</option>
+        <option value="COMPRA_PRODUTO">Compras de Produtos</option>
+        <option value="SERVICO_REALIZADO">Serviços Realizados</option>
+        <option value="AGENDAMENTO_FUTURO">Agendamentos Futuros</option>
+        <option value="AGENDAMENTO_CANCELADO">Agendamentos Cancelados</option>
+      </select>
+      <button id="btnFiltrarHistorico">Filtrar</button>
+    </div>
+    <table class="tabela-historico">
+      <thead>
+        <tr>
+          <th>Data/Hora</th>
+          <th>Tipo</th>
+          <th>Descrição</th>
+          <th>Profissional</th>
+          <th>Valor</th>
+          <th>Status/Detalhes</th>
+        </tr>
+      </thead>
+      <tbody id="corpoTabelaHistorico">
+        <tr>
+          <td>02/07/2025 10:30</td>
+          <td>Compra de Produto</td>
+          <td>Pomada Modeladora Extra Forte</td>
+          <td>N/A</td>
+          <td>R$ 38,00</td>
+          <td>Pago</td>
+        </tr>
+        <tr>
+          <td>01/07/2025 15:00</td>
+          <td>Serviço Realizado</td>
+          <td>Corte Degradê + Barboterapia</td>
+          <td>Eduardo M.</td>
+          <td>R$ 90,00</td>
+          <td>Concluído</td>
+        </tr>
+        <tr>
+          <td>15/07/2025 11:00</td>
+          <td>Agendamento Futuro</td>
+          <td>Coloração Global</td>
+          <td>Ana L.</td>
+          <td>R$ 150,00</td>
+          <td>Confirmado</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="paginacao-historico">
+      <button id="btnAnterior">Anterior</button>
+      <span id="infoPagina">Página 1 de X</span>
+      <button id="btnProximo">Próximo</button>
+    </div>
+  </div>
+</main>
+    <script src="../Scripts/historico.js"></script>
+</body>
+</html>
