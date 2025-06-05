@@ -72,6 +72,7 @@
 
 .btn-busca:hover {
   background-color: transparent;
+
 }
 
       .abrir-menu {
@@ -268,6 +269,128 @@
         bottom: 0;
         width: 100%;
       }
+
+      .img-focus-top {
+  object-position: center top !important; /* Use !important com cautela ou certifique-se que este seletor é específico o suficiente */
+}
+
+      /* Estilos para a seção do feed (contêiner principal) */
+.vertical-feed {
+  padding: 2rem 1rem;
+  max-width: 1200px; /* Pode ser mais largo agora para acomodar a grade */
+  margin: 0 auto;
+}
+
+.vertical-feed h2 {
+  font-family: "Playfair Display", serif;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+/* Novo: Estilos para o contêiner da GRADE */
+.feed-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Cria 3 colunas de largura igual */
+  gap: 1.5rem; /* Espaçamento entre os itens da grade (linhas e colunas) */
+}
+
+/* Estilos para cada item do feed (aplicável a cards e imagens diretas na grade) */
+.feed-item {
+  /* margin-bottom não é mais necessário aqui, o 'gap' da grade cuida do espaçamento vertical */
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex; /* Adicionado para ajudar no alinhamento interno se necessário */
+  flex-direction: column; /* Garante que o conteúdo do card empilhe verticalmente */
+}
+
+/* Estilo específico para itens que são apenas imagem */
+.feed-item-image img {
+  width: 100%;
+  height: 100%; /* Faz a imagem tentar preencher a altura do item da grade */
+  object-fit: cover; /* Cobre a área sem distorcer, importante para alturas consistentes */
+  display: block;
+}
+
+/* Estilos para os Cartões de Informação */
+.card img {
+  width: 100%;
+  height: 250px; /* Altura fixa para imagens de cartão para consistência na grade. Ajuste. */
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+  /* border-bottom: 1px solid #eee; */ /* Removido ou opcional */
+}
+
+.card-content {
+  padding: 1rem 1.25rem;
+  flex-grow: 1; /* Permite que o card-content cresça para preencher o espaço no feed-item */
+}
+
+.card-content h3 {
+  font-family: "Playfair Display", serif;
+  color: var(--primary);
+  font-size: 1.3rem; /* Ajustado para caber bem na grade */
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.card-content p {
+  font-family: "Montserrat", sans-serif;
+  color: var(--dark);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.card-link {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--secondary);
+  font-weight: bold;
+  font-size: 0.85rem; /* Levemente ajustado */
+  padding: 0.4rem 0;
+  transition: color 0.3s ease;
+  margin-top: auto; /* Empurra o link para o final do card-content se houver espaço extra */
+}
+
+.card-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Ajustes de Responsividade para a Grade */
+@media (max-width: 992px) { /* Telas médias, como tablets */
+  .feed-grid-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+    gap: 1rem; /* Espaçamento menor */
+  }
+  .vertical-feed h2 {
+    font-size: 1.6rem;
+  }
+   .card img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 576px) { /* Telas pequenas, como celulares */
+  .feed-grid-container {
+    grid-template-columns: 1fr; /* 1 coluna */
+  }
+   .card-content h3 {
+    font-size: 1.2rem;
+  }
+  .card-content p {
+    font-size: 0.85rem;
+  }
+
+}
+
+
+
     </style>
   </head>
   <body>
@@ -334,7 +457,7 @@
                 <a href="#cortes">Cortes</a>
                 <ul class="sub-dropdown">
                   <li><a href="#tipos-cortes">Tipos</a></li>
-                  <li><a href="#fotos-cortes">Fotos</a></li>
+                  <li><a href="fotos-cortes.html">Fotos</a></li>
                   <li><a href="#valores-cortes">Valores</a></li>
                 </ul>
               </li>
@@ -394,7 +517,8 @@
     </div>
 
     <main>
-      <!-- Conteúdo principal aqui -->
+
+ 
     </main>
 
     <footer class="footer">

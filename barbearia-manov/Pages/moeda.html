@@ -40,22 +40,21 @@
 </head>
 <body>
 
-  <!-- ...existing code... -->
-<img src="../src/moeda_bigode.png" alt="Gold coin featuring a mustache illustration spinning in a bright and cheerful setting, no visible text" id="minha-moeda" />
-<!-- ...existing code... -->
+<!-- Imagem da moeda com link do Google Drive -->
+<img src="https://drive.google.com/uc?export=view&id=17mK2J5jXrzx-Bq0qkRZ8l2QGtMTqbHPR" alt="Moeda" id="minha-moeda" />
 
-  <script>
-    const moeda = document.getElementById('minha-moeda');
+<script>
+  const moeda = document.getElementById('minha-moeda');
 
-    window.addEventListener('load', () => {
-      moeda.classList.add('girar-infinito');
+  moeda.addEventListener('load', () => {
+    moeda.classList.add('girar-infinito');
 
-      // Redireciona após 5 segundos
-      setTimeout(() => {
-        window.location.href = "http://127.0.0.1:5501/Pages/main.html";
-      }, 5000);
-    });
-  </script>
+    // Redireciona após 5 segundos
+    setTimeout(() => {
+      window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
+    }, 5000);
+  });
+</script>
 
 </body>
 </html>
