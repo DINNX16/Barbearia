@@ -22,7 +22,6 @@
       will-change: transform;
       transform-style: preserve-3d;
     }
-    
     /* Giro infinito */
     .girar-infinito {
       animation: girarInfinito 1s linear infinite;
@@ -40,21 +39,21 @@
 </head>
 <body>
 
-<!-- Imagem da moeda com link do Google Drive -->
-<img src="https://drive.google.com/uc?export=view&id=17mK2J5jXrzx-Bq0qkRZ8l2QGtMTqbHPR" alt="Moeda" id="minha-moeda" />
+  <!-- Imagem da moeda -->
+  <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/moedamoeda.png" alt="Moeda" id="minha-moeda" />
 
-<script>
-  const moeda = document.getElementById('minha-moeda');
+  <script>
+    const moeda = document.getElementById('minha-moeda');
 
-  moeda.addEventListener('load', () => {
-    moeda.classList.add('girar-infinito');
+    window.addEventListener('load', () => {
+      moeda.classList.add('girar-infinito');
 
-    // Redireciona após 5 segundos
-    setTimeout(() => {
-      window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
-    }, 5000);
-  });
-</script>
+      // Redireciona após 5 segundos
+      setTimeout(() => {
+        window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
+      }, 5000);
+    });
+  </script>
 
 </body>
 </html>
