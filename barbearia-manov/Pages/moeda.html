@@ -3,54 +3,110 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Moeda Girando até Redirecionar</title>
+  <title>Carregando...</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet" />
+
   <style>
-    /* Centraliza tudo no body com Flexbox */
     body {
       margin: 0;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      background-color: #f9f9f9; /* Opcional: cor de fundo leve */
+      background-color: #000000;
+      font-family: "Playfair Display", serif;
+      color: #ffffff;
     }
 
-    /* Estilo da imagem da moeda */
     #minha-moeda {
       width: 150px;
       height: 150px;
       will-change: transform;
       transform-style: preserve-3d;
     }
-    /* Giro infinito */
+
     .girar-infinito {
       animation: girarInfinito 1s linear infinite;
     }
 
     @keyframes girarInfinito {
-      from {
-        transform: rotateY(0deg);
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    #mensagem-loading {
+      margin-top: 20px;
+      font-size: 1.5em;
+      letter-spacing: 2px;
+      color: #ffffff; /* branco simples */
+      animation: none; /* sem piscar */
+    }
+
+    /* Container Boas-Vindas */
+    #container-boas-vindas {
+      display: none;
+      margin-top: 40px;
+      padding: 30px 50px;
+      border: 2px solid #d4af37;
+      border-radius: 15px;
+      background: rgba(212, 175, 55, 0.05);
+      box-shadow: none; /* sem brilho */
+      text-align: center;
+      animation: aparecerZoom 0.8s ease-out forwards;
+    }
+
+    #container-boas-vindas h1 {
+      font-size: 2.5em;
+      margin: 0;
+      color: #d4af37; /* dourado sólido */
+      text-shadow: none; /* sem sombra */
+    }
+
+    @keyframes aparecerZoom {
+      0% {
+        transform: scale(0.2);
+        opacity: 0;
       }
-      to {
-        transform: rotateY(360deg);
+      100% {
+        transform: scale(1);
+        opacity: 1;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- Imagem da moeda -->
-  <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/moedamoeda.png" alt="Moeda" id="minha-moeda" />
+  <!-- Moeda girando -->
+  <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/moedamoeda.png" alt="Moeda girando" id="minha-moeda" />
+
+  <!-- Loading -->
+  <div id="mensagem-loading">Loading...</div>
+
+  <!-- Container Boas-Vindas -->
+  <div id="container-boas-vindas">
+    <h1>Bem-vindo(a)!</h1>
+  </div>
 
   <script>
     const moeda = document.getElementById('minha-moeda');
+    const loadingMsg = document.getElementById('mensagem-loading');
+    const boasVindas = document.getElementById('container-boas-vindas');
 
     window.addEventListener('load', () => {
       moeda.classList.add('girar-infinito');
 
-      // Redireciona após 5 segundos
       setTimeout(() => {
-        window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
+        moeda.style.display = 'none';
+        loadingMsg.style.display = 'none';
+
+        // Mostra o container de boas-vindas
+        boasVindas.style.display = 'block';
+
+        // Redireciona depois de alguns segundos
+        setTimeout(() => {
+          window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
+        }, 3000);
       }, 5000);
     });
   </script>
