@@ -69,7 +69,7 @@
       text-shadow: none;
     }
 
-    @keyframes aparecerZoom {
+    @keyframes aparecerZoom { 
       0% {
         transform: scale(0.2);
         opacity: 0;
@@ -79,20 +79,351 @@
         opacity: 1;
       }
     }
-  </style>
-</head>
-<body>
 
-  <!-- Moeda girando -->
-  <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/moedamoeda.png" alt="Moeda girando" id="minha-moeda" />
+      /* Estilização dos itens do menu */
+      .dropdown-menu li {
+        padding: 0;
+        margin: 0;
+          }
 
-  <!-- Loading -->
-  <div id="mensagem-loading">Loading...</div>
+      .dropdown-menu a {
+        color: white;
+        padding: 0.75rem 1rem;
+        display: block;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        white-space: nowrap;
+      }
 
-  <!-- Container Boas-Vindas -->
-  <div id="container-boas-vindas">
-    <h1>Bem-vindo(a)!</h1>
-  </div>
+      .dropdown-menu a:hover {
+        background-color: var(--secondary);
+        color: var(--primary);
+        padding-left: 1.25rem;
+      }
+
+      /* Seta indicativa */
+      .submenu > a:after {
+        content: "›";
+        margin-left: 0.5rem;
+        display: inline-block;
+      }
+
+      /* Overlay Menu Mobile */
+      .overlay {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: rgba(0, 0, 0, 0.9);
+        overflow-x: hidden;
+        transition: 0.5s;
+        z-index: 2000;
+      }
+
+      .overlay-content {
+        position: relative;
+        top: 25%;
+        width: 100%;
+        text-align: center;
+      }
+
+      .overlay a {
+        padding: 8px;
+        text-decoration: none;
+        font-size: 1.2rem;
+        color: white;
+        display: block;
+        transition: 0.3s;
+      }
+
+      .overlay a:hover {
+        color: var(--secondary);
+      }
+
+      .closebtn {
+        position: absolute;
+        top: 20px;
+        right: 45px;
+        font-size: 0px;
+        color: white;
+      }
+      /*botão fechar do menu*/
+      #btnFechar {
+        width: 40px;
+        height: 40px;
+        font-size: 50px;
+      }
+
+      /* Estilo para o botão de Sair */
+      #logoutBtn {
+        color: #ff6b6b;
+        font-weight: bold;
+        margin-top: 15px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      #logoutBtn:hover {
+        color: #ff3838;
+        transform: translateX(5px);
+      }
+
+      .footer {
+        background-color: var(--primary);
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+      }
+
+      .img-focus-top {
+  object-position: center top !important; /* Use !important com cautela ou certifique-se que este seletor é específico o suficiente */
+}
+
+      /* Estilos para a seção do feed (contêiner principal) */
+.vertical-feed {
+  padding: 2rem 1rem;
+  max-width: 1200px; /* Pode ser mais largo agora para acomodar a grade */
+  margin: 0 auto;
+}
+
+.vertical-feed h2 {
+  font-family: "Playfair Display", serif;
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+}
+
+/* Novo: Estilos para o contêiner da GRADE */
+.feed-grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Cria 3 colunas de largura igual */
+  gap: 1.5rem; /* Espaçamento entre os itens da grade (linhas e colunas) */
+}
+
+/* Estilos para cada item do feed (aplicável a cards e imagens diretas na grade) */
+.feed-item {
+  /* margin-bottom não é mais necessário aqui, o 'gap' da grade cuida do espaçamento vertical */
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  display: flex; /* Adicionado para ajudar no alinhamento interno se necessário */
+  flex-direction: column; /* Garante que o conteúdo do card empilhe verticalmente */
+}
+
+/* Estilo específico para itens que são apenas imagem */
+.feed-item-image img {
+  width: 100%;
+  height: 100%; /* Faz a imagem tentar preencher a altura do item da grade */
+  object-fit: cover; /* Cobre a área sem distorcer, importante para alturas consistentes */
+  display: block;
+}
+
+/* Estilos para os Cartões de Informação */
+.card img {
+  width: 100%;
+  height: 250px; /* Altura fixa para imagens de cartão para consistência na grade. Ajuste. */
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+  /* border-bottom: 1px solid #eee; */ /* Removido ou opcional */
+}
+
+.card-content {
+  padding: 1rem 1.25rem;
+  flex-grow: 1; /* Permite que o card-content cresça para preencher o espaço no feed-item */
+}
+
+.card-content h3 {
+  font-family: "Playfair Display", serif;
+  color: var(--primary);
+  font-size: 1.3rem; /* Ajustado para caber bem na grade */
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.card-content p {
+  font-family: "Montserrat", sans-serif;
+  color: var(--dark);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+}
+
+.card-link {
+  display: inline-block;
+  text-decoration: none;
+  color: var(--secondary);
+  font-weight: bold;
+  font-size: 0.85rem; /* Levemente ajustado */
+  padding: 0.4rem 0;
+  transition: color 0.3s ease;
+  margin-top: auto; /* Empurra o link para o final do card-content se houver espaço extra */
+}
+
+.card-link:hover {
+  color: var(--primary);
+  text-decoration: underline;
+}
+
+/* Ajustes de Responsividade para a Grade */
+@media (max-width: 992px) { /* Telas médias, como tablets */
+  .feed-grid-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+    gap: 1rem; /* Espaçamento menor */
+  }
+  .vertical-feed h2 {
+    font-size: 1.6rem;
+  }
+   .card img {
+    height: 180px;
+  }
+}
+
+@media (max-width: 576px) { /* Telas pequenas, como celulares */
+  .feed-grid-container {
+    grid-template-columns: 1fr; /* 1 coluna */
+  }
+   .card-content h3 {
+    font-size: 1.2rem;
+  }
+  .card-content p {
+    font-size: 0.85rem;
+  }
+
+}
+
+
+
+    </style>
+  </head>
+  <body>
+    <header class="header">
+      <span class="abrir-menu" onclick="openNav()">☰ Menu</span>
+      <div class="logo">
+        <h1>Barbearia Manóv</h1>
+      
+      <nav class="nav">
+        <ul>
+          <!-- AGENDA -->
+          <li class="dropdown">
+            <a href="#agenda">Agenda</a>
+            <ul class="dropdown-menu">
+              <li><a href="#horarios">Horários</a></li>
+              <li><a href="#localizacao">Localização</a></li>
+            </ul>
+          </li>
+
+          <!-- VITRINE -->
+          <li class="dropdown">
+            <a href="#vitrine">Vitrine</a>
+            <ul class="dropdown-menu">
+              <li class="submenu">
+                <a href="#acessorios">Acessórios</a>
+                <ul class="sub-dropdown">
+                  <li><a href="#borrifadores">Borrifadores</a></li>
+                  <li><a href="#capas">Capas</a></li>
+                  <li><a href="#lista-completa-acessorios">...</a></li>
+                </ul>
+              </li>
+              <li class="submenu">
+                <a href="#ferramentas">Ferramentas</a>
+                <ul class="sub-dropdown">
+                  <li><a href="#laminas">Lâminas</a></li>
+                  <li><a href="#navalhete">Navalhete</a></li>
+                  <li><a href="#tesouras">Tesouras</a></li>
+                </ul>
+              </li>
+              <li class="submenu">
+                <a href="#maquinas">Máquinas</a>
+                <ul class="sub-dropdown">
+                  <li><a href="#maquinas-cortes">Cortes</a></li>
+                  <li><a href="#acabamentos">Acabamentos</a></li>
+                  <li><a href="#shaver">Shaver</a></li>
+                </ul>
+              </li>
+              <li class="submenu">
+                <a href="#produtos">Produtos</a>
+                <ul class="sub-dropdown">
+                  <li><a href="#cremes">Cremes</a></li>
+                  <li><a href="#geis">Géis</a></li>
+                  <li><a href="#lista-completa-produtos">...</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+          <!-- SERVIÇOS -->
+          <li class="dropdown">
+            <a href="#servicos">Serviços</a>
+            <ul class="dropdown-menu">
+              <li class="submenu">
+                <a href="#cortes">Cortes</a>
+                <ul class="sub-dropdown">
+                  <li><a href="#tipos-cortes">Tipos</a></li>
+                  <li><a href="fotos-cortes.html">Fotos</a></li>
+                  <li><a href="#valores-cortes">Valores</a></li>
+                </ul>
+              </li>
+              <li class="submenu">
+                <a href="#sobrancelhas">Sobrancelhas</a>
+                <ul class="sub-dropdown">
+                  <li><a href="#tipos-sobrancelhas">Tipos</a></li>
+                  <li><a href="#fotos-sobrancelhas">Fotos</a></li>
+                  <li><a href="#valores-sobrancelhas">Valores</a></li>
+                </ul>
+              </li>
+              <li class="submenu">
+                <a href="#barbas">Barbas</a>
+                <ul class="sub-dropdown">
+                  <li><a href="#tipos-barbas">Tipos</a></li>
+                  <li><a href="#fotos-barbas">Fotos</a></li>
+                  <li><a href="#valores-barbas">Valores</a></li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+
+          <!-- AVISOS -->
+          <li><a href="#avisos">Avisos</a></li>
+        </ul>
+      </nav>
+      </div><div class="search-header">
+  <input type="text" placeholder="Buscar..." aria-label="Buscar" />
+  <button class="btn-busca" aria-label="Buscar">🔍</button>
+</div>
+    </header>
+    
+    <!-- Menu Mobile Overlay -->
+    <div id="myNav" class="overlay">
+      <a
+        href="javascript:void(0)"
+        id="btnFechar"
+        class="closebtn"
+        onclick="closeNav()"
+        >&times;</a
+      >
+      <div class="overlay-content">
+        <a href="perfil.html" onclick="closeNav()">Perfil</a>
+        <!-- Link atualizado -->
+        <a href="historico.html" onclick="closeNav()">Histórico</a>
+        <a href="avaliacao.html" onclick="closeNav()">Avaliações</a>
+        <a href="login.html" onclick="closeNav()" id="loginMenuLink">Login</a>
+        <a
+          href="#"
+          onclick="logout(); closeNav()"
+          id="logoutMenuLink"
+          style="display: none"
+          >Logout</a
+        >
+        <a href="configuracao.html">Configurações</a>
+      </div>
+    </div>
 
   <script>
     const moeda = document.getElementById('minha-moeda');
