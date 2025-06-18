@@ -22,7 +22,6 @@
       will-change: transform;
       transform-style: preserve-3d;
     }
-    
     /* Giro infinito */
     .girar-infinito {
       animation: girarInfinito 1s linear infinite;
@@ -40,9 +39,8 @@
 </head>
 <body>
 
-  <!-- ...existing code... -->
-<img src="../src/moeda_bigode.png" alt="Gold coin featuring a mustache illustration spinning in a bright and cheerful setting, no visible text" id="minha-moeda" />
-<!-- ...existing code... -->
+  <!-- Imagem da moeda -->
+  <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/moedamoeda.png" alt="Moeda" id="minha-moeda" />
 
   <script>
     const moeda = document.getElementById('minha-moeda');
@@ -52,7 +50,7 @@
 
       // Redireciona após 5 segundos
       setTimeout(() => {
-        window.location.href = "http://127.0.0.1:5501/Pages/main.html";
+        window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
       }, 5000);
     });
   </script>
