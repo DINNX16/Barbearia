@@ -1,0 +1,48 @@
+/* src/App.css */
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: #000000;
+  font-family: "Playfair Display", serif;
+  color: #ffffff;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+#minha-moeda {
+  width: 150px;
+  height: 150px;
+  will-change: transform;
+  transform-style: preserve-3d;
+}
+
+.girar-infinito {
+  animation: girarInfinito 1s linear infinite;
+}
+
+@keyframes girarInfinito {
+  from {
+    transform: rotateY(0deg);
+  }
+  to {
+    transform: rotateY(360deg);
+  }
+}
+
+#mensagem-loading {
+  margin-top: 20px;
+  font-size: 1.5em;
+  letter-spacing: 2px;
+  color: #ffffff;
+  animation: none;
+}
