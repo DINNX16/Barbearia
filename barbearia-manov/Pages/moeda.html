@@ -3,56 +3,74 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Moeda Girando até Redirecionar</title>
+  <title>Carregando...</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet" />
+
   <style>
-    /* Centraliza tudo no body com Flexbox */
     body {
       margin: 0;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      background-color: #f9f9f9; /* Opcional: cor de fundo leve */
+      background-color: #000000;
+      font-family: "Playfair Display", serif;
+      color: #ffffff;
     }
 
-    /* Estilo da imagem da moeda */
     #minha-moeda {
       width: 150px;
       height: 150px;
       will-change: transform;
       transform-style: preserve-3d;
     }
-    /* Giro infinito */
+
     .girar-infinito {
       animation: girarInfinito 1s linear infinite;
     }
 
     @keyframes girarInfinito {
-      from {
-        transform: rotateY(0deg);
-      }
-      to {
-        transform: rotateY(360deg);
-      }
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+
+    #mensagem-loading {
+      margin-top: 20px;
+      font-size: 1.5em;
+      letter-spacing: 2px;
+      color: #ffffff;
+      animation: none;
     }
   </style>
 </head>
 <body>
+  
+  <!-- Moeda girando -->
+  <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/moedamoeda.png" alt="Moeda girando" id="minha-moeda" />
 
-  <!-- Imagem da moeda -->
-  <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/moedamoeda.png" alt="Moeda" id="minha-moeda" />
+  <!-- Loading -->
+  <div id="mensagem-loading">Loading...</div>
 
   <script>
     const moeda = document.getElementById('minha-moeda');
+    const loadingMsg = document.getElementById('mensagem-loading');
 
     window.addEventListener('load', () => {
       moeda.classList.add('girar-infinito');
 
-      // Redireciona após 5 segundos
+      // Após 5 segundos: esconde elementos e redireciona
       setTimeout(() => {
+        moeda.style.display = 'none';
+        loadingMsg.style.display = 'none';
         window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
       }, 5000);
     });
+
+    const elemento = document.getElementById('ID_DO_ELEMENTO');
+    if (elemento) {
+      elemento.classList.add('NOME_DA_CLASSE');
+    }
   </script>
 
 </body>
