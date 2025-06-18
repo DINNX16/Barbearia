@@ -39,76 +39,38 @@
       margin-top: 20px;
       font-size: 1.5em;
       letter-spacing: 2px;
-      color: #ffffff; /* branco simples */
-      animation: none; /* sem piscar */
-    }
-
-    /* Container Boas-Vindas */
-    #container-boas-vindas {
-      display: none;
-      margin-top: 40px;
-      padding: 30px 50px;
-      border: 2px solid #d4af37;
-      border-radius: 15px;
-      background: rgba(212, 175, 55, 0.05);
-      box-shadow: none; /* sem brilho */
-      text-align: center;
-      animation: aparecerZoom 0.8s ease-out forwards;
-    }
-
-    #container-boas-vindas h1 {
-      font-size: 2.5em;
-      margin: 0;
-      color: #d4af37; /* dourado sólido */
-      text-shadow: none; /* sem sombra */
-    }
-
-    @keyframes aparecerZoom {
-      0% {
-        transform: scale(0.2);
-        opacity: 0;
-      }
-      100% {
-        transform: scale(1);
-        opacity: 1;
-      }
+      color: #ffffff;
+      animation: none;
     }
   </style>
 </head>
 <body>
-
+  
   <!-- Moeda girando -->
   <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/barbearia-manov/assets/moedamoeda.png" alt="Moeda girando" id="minha-moeda" />
 
   <!-- Loading -->
   <div id="mensagem-loading">Loading...</div>
 
-  <!-- Container Boas-Vindas -->
-  <div id="container-boas-vindas">
-    <h1>Bem-vindo(a)!</h1>
-  </div>
-
   <script>
     const moeda = document.getElementById('minha-moeda');
     const loadingMsg = document.getElementById('mensagem-loading');
-    const boasVindas = document.getElementById('container-boas-vindas');
 
     window.addEventListener('load', () => {
       moeda.classList.add('girar-infinito');
 
+      // Após 5 segundos: esconde elementos e redireciona
       setTimeout(() => {
         moeda.style.display = 'none';
         loadingMsg.style.display = 'none';
-
-        // Mostra o container de boas-vindas
-        boasVindas.style.display = 'block';
-
-        // Redireciona depois de alguns segundos
-        setTimeout(() => {
-          window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
-        }, 3000);
+        window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
       }, 5000);
     });
+
+    const elemento = document.getElementById('ID_DO_ELEMENTO');
+    if (elemento) {
+      elemento.classList.add('NOME_DA_CLASSE');
+    }
   </script>
 
 </body>
