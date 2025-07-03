@@ -1,514 +1,670 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agendamento - Barbearia Manóv</title>
-    
+ 
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
     />
-
+ 
     <style>
-        /* =================================== */
-        /* ESTILOS GLOBAIS                     */
-        /* =================================== */
-        :root {
-            --primary: #1a1a1a;
-            --secondary: #d4af37;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --success: #28a745; /* Verde para disponível */
-            --danger: #dc3545;  /* Vermelho para indisponível */
-        }
-
-        body {
-            font-family: "Montserrat", sans-serif;
-            margin: 0;
-            padding: 0;
-            color: var(--primary);
-            background-color: #f5f5f5;
-            padding-bottom: 60px; /* Espaço para o footer */
-        }
-
-        main {
-            padding: 1rem;
-        }
-
-        .header, .footer {
-            background-color: var(--primary);
-            color: white;
-            padding: 1rem;
-            text-align: center;
-        }
-        .header h1 {
-            font-family: "Playfair Display", serif;
-            color: var(--secondary);
-            margin: 0;
-        }
-
-        /* =================================== */
-        /* ESTILOS DA PÁGINA DE AGENDAMENTOS   */
-        /* =================================== */
-        .container-agendamento {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 2rem;
-            background-color: var(--light);
-            border-radius: 8px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
-        }
-
-        .container-agendamento h2 {
-            font-family: "Playfair Display", serif;
-            text-align: center;
-            margin-bottom: 0.5rem;
-            font-size: 2.2rem;
-        }
-
-        .container-agendamento > p {
-            text-align: center;
-            margin-bottom: 2rem;
-            color: #666;
-        }
-
-        .seletor-profissional {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            flex-wrap: wrap;
-        }
-        .seletor-profissional label {
-            font-weight: 500;
-        }
-        .seletor-profissional select {
-            padding: 0.5rem;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            font-size: 1rem;
-            font-family: "Montserrat", sans-serif;
-        }
-        .link-ver-perfil {
-            color: var(--secondary);
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .link-ver-perfil:hover {
-            text-decoration: underline;
-        }
-
-        /* Calendário */
-        .calendario-container {
-            background: #fff;
-            padding: 1.5rem;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-        }
-
-        .calendario-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-        .calendario-header h3 {
-            font-family: "Playfair Display", serif;
-            margin: 0;
-            font-size: 1.5rem;
-        }
-        .btn-nav-calendario {
-            background: none;
-            border: none;
-            font-size: 1.8rem;
-            cursor: pointer;
-            color: var(--primary);
-        }
-
-        .calendario-dias-semana, .calendario-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 5px;
-            text-align: center;
-        }
-
-        .calendario-dias-semana div {
-            font-weight: 700;
-            color: #555;
-            font-size: 0.9rem;
-            padding: 0.5rem 0;
-        }
-
-        .dia-calendario {
-            padding: 0.8rem 0;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: background-color 0.2s, color 0.2s;
-        }
-        .dia-calendario:hover:not(.dia-passado):not(.vazio) {
-            background-color: #f0f0f0;
-        }
-        .dia-calendario.dia-passado {
-            color: #ccc;
-            cursor: not-allowed;
-            text-decoration: line-through;
-        }
-        .dia-calendario.dia-atual {
-            font-weight: 700;
-            border: 2px solid var(--secondary);
-        }
-        .dia-calendario.selecionado {
-            background-color: var(--primary);
-            color: var(--light);
-        }
-        .dia-calendario.vazio {
-            cursor: default;
-        }
-
-        /* Horários */
-        .horarios-container {
-            margin-top: 2rem;
-            padding-top: 2rem;
-            border-top: 1px solid #eee;
-            display: none;
-        }
-        .horarios-container.visivel {
-            display: block;
-        }
-        .horarios-container h4 {
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        .horarios-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 0.8rem;
-            margin-bottom: 1.5rem;
-        }
-        .btn-horario {
-            padding: 0.7rem;
-            border-radius: 4px;
-            border: 1px solid;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .btn-horario.disponivel {
-            background-color: #fff;
-            border-color: var(--success);
-            color: var(--success);
-            cursor: pointer;
-        }
-        .btn-horario.disponivel:hover {
-            background-color: var(--success);
-            color: #fff;
-        }
-        .btn-horario.disponivel.selecionado {
-            background-color: var(--primary);
-            color: #fff;
-            border-color: var(--primary);
-        }
-
-        .btn-horario.indisponivel {
-            background-color: #f8f9fa;
-            border-color: #ddd;
-            color: var(--danger);
-            text-decoration: line-through;
-            cursor: not-allowed;
-        }
-        
-        .btn-confirmar-agendamento {
-            display: block;
-            margin: 1.5rem auto 0;
-            padding: 0.8rem 2rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            background-color: var(--secondary);
-            color: var(--primary);
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .btn-confirmar-agendamento:hover:not(:disabled) {
-            background-color: var(--primary);
-            color: var(--secondary);
-        }
-        .btn-confirmar-agendamento:disabled {
-            background-color: #ccc;
-            color: #666;
-            cursor: not-allowed;
-        }
-
-        /* Modal do Perfil */
-        /* ... (Estilos do modal permanecem os mesmos) ... */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; box-sizing: border-box; }
-        .modal-overlay.visivel { display: flex; }
-        .modal-conteudo { background: white; padding: 2rem; border-radius: 8px; max-width: 500px; width: 100%; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto; }
-        .modal-fechar { position: absolute; top: 10px; right: 15px; background: none; border: none; font-size: 2rem; cursor: pointer; }
-        .modal-foto-profissional { display: block; width: 120px; height: 120px; border-radius: 50%; margin: 0 auto 1rem; object-fit: cover; border: 3px solid var(--secondary); }
-        .modal-nome-profissional { font-family: "Playfair Display", serif; text-align: center; margin-bottom: 1.5rem; }
-        .modal-info-profissional p, .modal-qualificacoes p { margin: 0.5rem 0; }
-        .modal-qualificacoes ul { list-style: none; padding: 0; margin-top: 0.5rem; }
-        .modal-qualificacoes ul li { padding-left: 1.5rem; position: relative; margin-bottom: 0.5rem; }
-        .modal-qualificacoes ul li::before { content: '★'; color: var(--secondary); position: absolute; left: 0; }
-        
+      /* =================================== */
+      /* ESTILOS GLOBAIS                     */
+      /* =================================== */
+      :root {
+        --primary: #1a1a1a;
+        --secondary: #d4af37;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --success: #28a745; /* Verde para disponível */
+        --danger: #dc3545; /* Vermelho para indisponível */
+      }
+ 
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+ 
+      body {
+        font-family: "Montserrat", sans-serif;
+        margin: 0;
+        padding: 0;
+        color: var(--primary);
+        background-color: #f5f5f5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+ 
+      main {
+        flex: 1;
+        padding: 1rem;
+      }
+ 
+      .header {
+        background-color: var(--primary);
+        color: white;
+        padding: 1rem;
+        text-align: center;
+        flex-shrink: 0;
+      }
+      .header h1 {
+        font-family: "Playfair Display", serif;
+        color: var(--secondary);
+        margin: 0;
+      }
+      
+      .footer {
+        background-color: var(--primary);
+        color: white;
+        padding: 1rem;
+        text-align: center;
+        flex-shrink: 0;
+        margin-top: auto;
+      }
+ 
+      /* =================================== */
+      /* ESTILOS DA PÁGINA DE AGENDAMENTOS   */
+      /* =================================== */
+      .container-agendamento {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 2rem;
+        background-color: var(--light);
+        border-radius: 8px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        gap: 2rem;
+      }
+ 
+      .container-agendamento h2 {
+        font-family: "Playfair Display", serif;
+        text-align: center;
+        margin-bottom: 0.5rem;
+        font-size: 2.2rem;
+      }
+ 
+      .container-agendamento > p {
+        text-align: center;
+        margin-bottom: 2rem;
+        color: #666;
+      }
+ 
+      .seletor-profissional {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+      }
+      .seletor-profissional label {
+        font-weight: 500;
+      }
+      .seletor-profissional select {
+        padding: 0.5rem;
+        border-radius: 4px;
+        border: 1px solid #ccc;
+        font-size: 1rem;
+        font-family: "Montserrat", sans-serif;
+      }
+      .link-ver-perfil {
+        color: var(--secondary);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .link-ver-perfil:hover {
+        text-decoration: underline;
+      }
+ 
+      /* Calendário */
+      .calendario-container {
+        background: #fff;
+        padding: 3rem;
+        border: 1px solid #ddd;
+        border-radius: 6px;
+      }
+ 
+      .calendario-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+      }
+      .calendario-header h3 {
+        font-family: "Playfair Display", serif;
+        margin: 0;
+        font-size: 1.5rem;
+      }
+      .btn-nav-calendario {
+        background: none;
+        border: none;
+        font-size: 1.8rem;
+        cursor: pointer;
+        color: var(--primary);
+      }
+ 
+      .calendario-dias-semana,
+      .calendario-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 5px;
+        text-align: center;
+      }
+ 
+      .calendario-dias-semana div {
+        font-weight: 700;
+        color: #555;
+        font-size: 0.9rem;
+        padding: 0.5rem 0;
+      }
+ 
+      .dia-calendario {
+        padding: 0.8rem 0;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: background-color 0.2s, color 0.2s;
+      }
+      .dia-calendario:hover:not(.dia-passado):not(.vazio) {
+        background-color: #f0f0f0;
+      }
+      .dia-calendario.dia-passado {
+        color: #ccc;
+        cursor: not-allowed;
+        text-decoration: line-through;
+      }
+      .dia-calendario.dia-atual {
+        font-weight: 700;
+        border: 2px solid var(--secondary);
+      }
+      .dia-calendario.selecionado {
+        background-color: var(--primary);
+        color: var(--light);
+      }
+      .dia-calendario.vazio {
+        cursor: default;
+      }
+ 
+      /* Horários */
+      .horarios-container {
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid #eee;
+        display: none;
+      }
+      .horarios-container.visivel {
+        display: block;
+      }
+      .horarios-container h4 {
+        margin-bottom: 1rem;
+        text-align: center;
+      }
+      .horarios-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 0.8rem;
+        margin-bottom: 1.5rem;
+      }
+      .btn-horario {
+        padding: 0.7rem;
+        border-radius: 4px;
+        border: 1px solid;
+        font-weight: 500;
+        transition: all 0.2s;
+      }
+ 
+      .btn-horario.disponivel {
+        background-color: #fff;
+        border-color: var(--success);
+        color: var(--success);
+        cursor: pointer;
+      }
+      .btn-horario.disponivel:hover {
+        background-color: var(--success);
+        color: #fff;
+      }
+      .btn-horario.disponivel.selecionado {
+        background-color: var(--primary);
+        color: #fff;
+        border-color: var(--primary);
+      }
+ 
+      .btn-horario.indisponivel {
+        background-color: #f8f9fa;
+        border-color: #ddd;
+        color: var(--danger);
+        text-decoration: line-through;
+        cursor: not-allowed;
+      }
+ 
+      .btn-confirmar-agendamento {
+        display: block;
+        margin: 1.5rem auto 0;
+        padding: 0.8rem 2rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        background-color: var(--secondary);
+        color: var(--primary);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+      }
+      .btn-confirmar-agendamento:hover:not(:disabled) {
+        background-color: var(--primary);
+        color: var(--secondary);
+      }
+      .btn-confirmar-agendamento:disabled {
+        background-color: #ccc;
+        color: #666;
+        cursor: not-allowed;
+      }
+ 
+      /* Modal do Perfil */
+      .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        padding: 1rem;
+        box-sizing: border-box;
+      }
+      .modal-overlay.visivel {
+        display: flex;
+      }
+      .modal-conteudo {
+        background: white;
+        padding: 2rem;
+        border-radius: 8px;
+        max-width: 500px;
+        width: 100%;
+        position: relative;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        max-height: 90vh;
+        overflow-y: auto;
+      }
+      .modal-fechar {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        background: none;
+        border: none;
+        font-size: 2rem;
+        cursor: pointer;
+      }
+      .modal-foto-profissional {
+        display: block;
+        width: 120px;
+        height: 120px;
+        border-radius: 50%;
+        margin: 0 auto 1rem;
+        object-fit: cover;
+        border: 3px solid var(--secondary);
+      }
+      .modal-nome-profissional {
+        font-family: "Playfair Display", serif;
+        text-align: center;
+        margin-bottom: 1.5rem;
+      }
+      .modal-info-profissional p,
+      .modal-qualificacoes p {
+        margin: 0.5rem 0;
+      }
+      .modal-qualificacoes ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 0.5rem;
+      }
+      .modal-qualificacoes ul li {
+        padding-left: 1.5rem;
+        position: relative;
+        margin-bottom: 0.5rem;
+      }
+      .modal-qualificacoes ul li::before {
+        content: "★";
+        color: var(--secondary);
+        position: absolute;
+        left: 0;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <header class="header">
-        <h1>Barbearia Manóv</h1>
+      <h1>Barbearia Manóv</h1>
     </header>
-
+ 
     <main>
-        <div class="container-agendamento">
-            <h2>Faça seu Agendamento</h2>
-            <p>Selecione o profissional e escolha uma data e horário disponíveis.</p>
-
-            <div class="seletor-profissional">
-                <label for="profissional">Profissional:</label>
-                <select id="profissional" name="profissional">
-                    <option value="1">Eduardo M.</option>
-                    <option value="2">Ana L.</option>
-                    <option value="3">Carlos Pereira</option>
-                </select>
-                <a href="#" id="ver-perfil-profissional" class="link-ver-perfil">Ver Perfil</a>
-            </div>
-
-            <div class="calendario-container">
-                <div class="calendario-header">
-                    <button id="prev-month" class="btn-nav-calendario">‹</button>
-                    <h3 id="mes-ano"></h3>
-                    <button id="next-month" class="btn-nav-calendario">›</button>
-                </div>
-                <div class="calendario-dias-semana">
-                    <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
-                </div>
-                <div id="calendario-grid" class="calendario-grid"></div>
-            </div>
-
-            <div id="horarios-disponiveis" class="horarios-container">
-                <h4>Selecione um horário para <span id="data-selecionada-horarios"></span>:</h4>
-                <div id="horarios-grid" class="horarios-grid">
-                    <p>Por favor, selecione uma data no calendário para ver os horários.</p>
-                </div>
-                <button id="btn-confirmar-agendamento" class="btn-confirmar-agendamento" disabled>Confirmar Agendamento</button>
-            </div>
+      <div class="container-agendamento">
+        <h2>Faça seu Agendamento</h2>
+        <p>
+          Selecione o profissional e escolha uma data e horário disponíveis.
+        </p>
+ 
+        <div class="seletor-profissional">
+          <label for="profissional">Profissional:</label>
+          <select id="profissional" name="profissional">
+            <option value="1">Eduardo M.</option>
+            <option value="2">Ana L.</option>
+            <option value="3">Carlos Pereira</option>
+          </select>
+          <a href="#" id="ver-perfil-profissional" class="link-ver-perfil"
+            >Ver Perfil</a
+          >
         </div>
+ 
+        <div class="calendario-container">
+          <div class="calendario-header">
+            <button id="prev-month" class="btn-nav-calendario">‹</button>
+            <h3 id="mes-ano"></h3>
+            <button id="next-month" class="btn-nav-calendario">›</button>
+          </div>
+          <div class="calendario-dias-semana">
+            <div>Dom</div>
+            <div>Seg</div>
+            <div>Ter</div>
+            <div>Qua</div>
+            <div>Qui</div>
+            <div>Sex</div>
+            <div>Sáb</div>
+          </div>
+          <div id="calendario-grid" class="calendario-grid"></div>
+        </div>
+ 
+        <div id="horarios-disponiveis" class="horarios-container">
+          <h4>
+            Selecione um horário para
+            <span id="data-selecionada-horarios"></span>:
+          </h4>
+          <div id="horarios-grid" class="horarios-grid">
+            <p>
+              Por favor, selecione uma data no calendário para ver os horários.
+            </p>
+          </div>
+          <button
+            id="btn-confirmar-agendamento"
+            class="btn-confirmar-agendamento"
+            disabled
+          >
+            Confirmar Agendamento
+          </button>
+        </div>
+      </div>
     </main>
-
+ 
     <div id="modal-profissional" class="modal-overlay">
-        <div class="modal-conteudo">
-            <button class="modal-fechar" id="modal-fechar-btn">&times;</button>
-            <div id="modal-corpo">
-                <img src="https://i.pravatar.cc/150?img=1" alt="Foto do Profissional" class="modal-foto-profissional" />
-                <h3 class="modal-nome-profissional">Eduardo M.</h3>
-                <div class="modal-info-profissional">
-                    <p><strong>Horário de Trabalho:</strong></p>
-                    <p>Segunda a Sábado: 09:00 - 20:00</p>
-                    <p>Intervalo de Almoço: 12:00 - 13:30</p>
-                </div>
-                <div class="modal-qualificacoes">
-                    <p><strong>Qualificações:</strong></p>
-                    <ul>
-                        <li>Especialista em cortes modernos e fade.</li>
-                        <li>Visagismo e harmonização facial.</li>
-                        <li>Mestre em barboterapia.</li>
-                    </ul>
-                </div>
-            </div>
+      <div class="modal-conteudo">
+        <button class="modal-fechar" id="modal-fechar-btn">&times;</button>
+        <div id="modal-corpo">
+          <img
+            src="https://i.pravatar.cc/150?img=1"
+            alt="Foto do Profissional"
+            class="modal-foto-profissional"
+          />
+          <h3 class="modal-nome-profissional">Eduardo M.</h3>
+          <div class="modal-info-profissional">
+            <p><strong>Horário de Trabalho:</strong></p>
+            <p>Segunda a Sábado: 09:00 - 20:00</p>
+            <p>Intervalo de Almoço: 12:00 - 13:30</p>
+          </div>
+          <div class="modal-qualificacoes">
+            <p><strong>Qualificações:</strong></p>
+            <ul>
+              <li>Especialista em cortes modernos e fade.</li>
+              <li>Visagismo e harmonização facial.</li>
+              <li>Mestre em barboterapia.</li>
+            </ul>
+          </div>
         </div>
+      </div>
     </div>
-    
+ 
     <footer class="footer">
-        <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
+      <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
     </footer>
-
+ 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const mesAnoEl = document.getElementById('mes-ano');
-            const calendarioGridEl = document.getElementById('calendario-grid');
-            const prevMonthBtn = document.getElementById('prev-month');
-            const nextMonthBtn = document.getElementById('next-month');
-            const horariosContainerEl = document.getElementById('horarios-disponiveis');
-            const dataSelecionadaHorariosEl = document.getElementById('data-selecionada-horarios');
-            const horariosGridEl = document.getElementById('horarios-grid');
-            const btnConfirmar = document.getElementById('btn-confirmar-agendamento');
-            
-            let dataAtual = new Date(); // Usa a data atual do sistema
-            let horarioSelecionado = null;
-
-            // --- SIMULAÇÃO DE DADOS DO BACKEND ---
-            // Em um cenário real, estes dados viriam de uma API
-            const horariosOcupados = {
-                "6/6/2025": ["09:40", "11:00", "15:00"], // Sexta
-                "7/6/2025": ["10:20", "11:40", "16:20", "17:00"], // Sábado
-            };
-
-            const horarioTrabalho = {
-                inicio: "09:00",
-                fim: "20:00",
-                almocoInicio: "12:20",
-                almocoFim: "13:40"
-            };
-            const duracaoSlot = 40; // Duração de cada agendamento em minutos
-            // --- FIM DA SIMULAÇÃO ---
-
-            function gerarSlotsDeHorario() {
-                const slots = [];
-                let [horaInicio, minInicio] = horarioTrabalho.inicio.split(':').map(Number);
-                let [horaFim, minFim] = horarioTrabalho.fim.split(':').map(Number);
-
-                let tempoAtual = new Date();
-                tempoAtual.setHours(horaInicio, minInicio, 0, 0);
-
-                const tempoFim = new Date();
-                tempoFim.setHours(horaFim, minFim, 0, 0);
-
-                while (tempoAtual < tempoFim) {
-                    slots.push(tempoAtual.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }));
-                    tempoAtual.setMinutes(tempoAtual.getMinutes() + duracaoSlot);
-                }
-                return slots;
+      document.addEventListener("DOMContentLoaded", () => {
+        const mesAnoEl = document.getElementById("mes-ano");
+        const calendarioGridEl = document.getElementById("calendario-grid");
+        const prevMonthBtn = document.getElementById("prev-month");
+        const nextMonthBtn = document.getElementById("next-month");
+        const horariosContainerEl = document.getElementById(
+          "horarios-disponiveis"
+        );
+        const dataSelecionadaHorariosEl = document.getElementById(
+          "data-selecionada-horarios"
+        );
+        const horariosGridEl = document.getElementById("horarios-grid");
+        const btnConfirmar = document.getElementById(
+          "btn-confirmar-agendamento"
+        );
+ 
+        let dataAtual = new Date(); // Usa a data atual do sistema
+        let horarioSelecionado = null;
+ 
+        // --- SIMULAÇÃO DE DADOS DO BACKEND ---
+        // Em um cenário real, estes dados viriam de uma API
+        const horariosOcupados = {
+          "6/6/2025": ["09:40", "11:00", "15:00"], // Sexta
+          "7/6/2025": ["10:20", "11:40", "16:20", "17:00"], // Sábado
+        };
+ 
+        const horarioTrabalho = {
+          inicio: "09:00",
+          fim: "20:00",
+          almocoInicio: "12:20",
+          almocoFim: "13:40",
+        };
+        const duracaoSlot = 40; // Duração de cada agendamento em minutos
+        // --- FIM DA SIMULAÇÃO ---
+ 
+        function gerarSlotsDeHorario() {
+          const slots = [];
+          let [horaInicio, minInicio] = horarioTrabalho.inicio
+            .split(":")
+            .map(Number);
+          let [horaFim, minFim] = horarioTrabalho.fim.split(":").map(Number);
+ 
+          let tempoAtual = new Date();
+          tempoAtual.setHours(horaInicio, minInicio, 0, 0);
+ 
+          const tempoFim = new Date();
+          tempoFim.setHours(horaFim, minFim, 0, 0);
+ 
+          while (tempoAtual < tempoFim) {
+            slots.push(
+              tempoAtual.toLocaleTimeString("pt-BR", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })
+            );
+            tempoAtual.setMinutes(tempoAtual.getMinutes() + duracaoSlot);
+          }
+          return slots;
+        }
+ 
+        const todosOsSlotsDoDia = gerarSlotsDeHorario();
+ 
+        function gerarCalendario(mes, ano) {
+          calendarioGridEl.innerHTML = "";
+          horariosContainerEl.classList.remove("visivel");
+          btnConfirmar.disabled = true;
+ 
+          const primeiroDiaDoMes = new Date(ano, mes, 1).getDay();
+          const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+          const hoje = new Date();
+ 
+          mesAnoEl.textContent = `${new Date(ano, mes).toLocaleString("pt-BR", {
+            month: "long",
+          })} ${ano}`;
+ 
+          for (let i = 0; i < primeiroDiaDoMes; i++) {
+            calendarioGridEl.insertAdjacentHTML(
+              "beforeend",
+              '<div class="dia-calendario vazio"></div>'
+            );
+          }
+ 
+          for (let i = 1; i <= diasNoMes; i++) {
+            const diaEl = document.createElement("div");
+            diaEl.classList.add("dia-calendario");
+            diaEl.textContent = i;
+ 
+            const dataCompleta = new Date(ano, mes, i);
+ 
+            if (dataCompleta.setHours(0, 0, 0, 0) < hoje.setHours(0, 0, 0, 0)) {
+              diaEl.classList.add("dia-passado");
             }
-
-            const todosOsSlotsDoDia = gerarSlotsDeHorario();
-
-            function gerarCalendario(mes, ano) {
-                calendarioGridEl.innerHTML = '';
-                horariosContainerEl.classList.remove('visivel');
-                btnConfirmar.disabled = true;
-                
-                const primeiroDiaDoMes = new Date(ano, mes, 1).getDay();
-                const diasNoMes = new Date(ano, mes + 1, 0).getDate();
-                const hoje = new Date();
-
-                mesAnoEl.textContent = `${new Date(ano, mes).toLocaleString('pt-BR', { month: 'long' })} ${ano}`;
-
-                for (let i = 0; i < primeiroDiaDoMes; i++) {
-                    calendarioGridEl.insertAdjacentHTML('beforeend', '<div class="dia-calendario vazio"></div>');
-                }
-
-                for (let i = 1; i <= diasNoMes; i++) {
-                    const diaEl = document.createElement('div');
-                    diaEl.classList.add('dia-calendario');
-                    diaEl.textContent = i;
-                    
-                    const dataCompleta = new Date(ano, mes, i);
-                    
-                    if (dataCompleta.setHours(0,0,0,0) < hoje.setHours(0,0,0,0)) {
-                        diaEl.classList.add('dia-passado');
-                    }
-                    if (i === new Date().getDate() && mes === new Date().getMonth() && ano === new Date().getFullYear()) {
-                        diaEl.classList.add('dia-atual');
-                    }
-                    
-                    calendarioGridEl.appendChild(diaEl);
-                }
+            if (
+              i === new Date().getDate() &&
+              mes === new Date().getMonth() &&
+              ano === new Date().getFullYear()
+            ) {
+              diaEl.classList.add("dia-atual");
             }
-
-            function selecionarDia(e) {
-                const diaClicado = e.target;
-                if (!diaClicado.classList.contains('dia-calendario') || diaClicado.classList.contains('vazio') || diaClicado.classList.contains('dia-passado')) {
-                    return;
-                }
-                
-                const diaSelecionadoAnterior = calendarioGridEl.querySelector('.selecionado');
-                if (diaSelecionadoAnterior) {
-                    diaSelecionadoAnterior.classList.remove('selecionado');
-                }
-                diaClicado.classList.add('selecionado');
-                
-                const dia = diaClicado.textContent;
-                const data = `${dia}/${dataAtual.getMonth() + 1}/${dataAtual.getFullYear()}`;
-                mostrarHorarios(data);
+ 
+            calendarioGridEl.appendChild(diaEl);
+          }
+        }
+ 
+        function selecionarDia(e) {
+          const diaClicado = e.target;
+          if (
+            !diaClicado.classList.contains("dia-calendario") ||
+            diaClicado.classList.contains("vazio") ||
+            diaClicado.classList.contains("dia-passado")
+          ) {
+            return;
+          }
+ 
+          const diaSelecionadoAnterior =
+            calendarioGridEl.querySelector(".selecionado");
+          if (diaSelecionadoAnterior) {
+            diaSelecionadoAnterior.classList.remove("selecionado");
+          }
+          diaClicado.classList.add("selecionado");
+ 
+          const dia = diaClicado.textContent;
+          const data = `${dia}/${
+            dataAtual.getMonth() + 1
+          }/${dataAtual.getFullYear()}`;
+          mostrarHorarios(data);
+        }
+ 
+        function mostrarHorarios(data) {
+          horariosContainerEl.classList.add("visivel");
+          dataSelecionadaHorariosEl.textContent = data;
+          horariosGridEl.innerHTML = "";
+          btnConfirmar.disabled = true;
+          horarioSelecionado = null;
+ 
+          const ocupados = horariosOcupados[data] || [];
+ 
+          todosOsSlotsDoDia.forEach((horario) => {
+            const btn = document.createElement("button");
+            btn.classList.add("btn-horario");
+            btn.textContent = horario;
+            btn.dataset.horario = horario;
+ 
+            // Verifica se o horário está indisponível
+            let [h, m] = horario.split(":").map(Number);
+            let [hAlmocoInicio, mAlmocoInicio] = horarioTrabalho.almocoInicio
+              .split(":")
+              .map(Number);
+            let [hAlmocoFim, mAlmocoFim] = horarioTrabalho.almocoFim
+              .split(":")
+              .map(Number);
+ 
+            const tempoSlot = h * 60 + m;
+            const tempoAlmocoInicio = hAlmocoInicio * 60 + mAlmocoInicio;
+            const tempoAlmocoFim = hAlmocoFim * 60 + mAlmocoFim;
+ 
+            if (
+              ocupados.includes(horario) ||
+              (tempoSlot >= tempoAlmocoInicio && tempoSlot < tempoAlmocoFim)
+            ) {
+              btn.classList.add("indisponivel");
+              btn.disabled = true;
+            } else {
+              btn.classList.add("disponivel");
             }
-            
-            function mostrarHorarios(data) {
-                horariosContainerEl.classList.add('visivel');
-                dataSelecionadaHorariosEl.textContent = data;
-                horariosGridEl.innerHTML = '';
-                btnConfirmar.disabled = true;
-                horarioSelecionado = null;
-
-                const ocupados = horariosOcupados[data] || [];
-
-                todosOsSlotsDoDia.forEach(horario => {
-                    const btn = document.createElement('button');
-                    btn.classList.add('btn-horario');
-                    btn.textContent = horario;
-                    btn.dataset.horario = horario;
-
-                    // Verifica se o horário está indisponível
-                    let [h, m] = horario.split(':').map(Number);
-                    let [hAlmocoInicio, mAlmocoInicio] = horarioTrabalho.almocoInicio.split(':').map(Number);
-                    let [hAlmocoFim, mAlmocoFim] = horarioTrabalho.almocoFim.split(':').map(Number);
-
-                    const tempoSlot = h * 60 + m;
-                    const tempoAlmocoInicio = hAlmocoInicio * 60 + mAlmocoInicio;
-                    const tempoAlmocoFim = hAlmocoFim * 60 + mAlmocoFim;
-                    
-                    if (ocupados.includes(horario) || (tempoSlot >= tempoAlmocoInicio && tempoSlot < tempoAlmocoFim)) {
-                        btn.classList.add('indisponivel');
-                        btn.disabled = true;
-                    } else {
-                        btn.classList.add('disponivel');
-                    }
-                    
-                    horariosGridEl.appendChild(btn);
-                });
-            }
-            
-            function selecionarHorario(e) {
-                const btnClicado = e.target;
-                if (!btnClicado.classList.contains('disponivel')) return;
-
-                const horarioSelecionadoAnterior = horariosGridEl.querySelector('.selecionado');
-                if (horarioSelecionadoAnterior) {
-                    horarioSelecionadoAnterior.classList.remove('selecionado');
-                }
-
-                btnClicado.classList.add('selecionado');
-                horarioSelecionado = btnClicado.dataset.horario;
-                btnConfirmar.disabled = false;
-            }
-
-            prevMonthBtn.addEventListener('click', () => {
-                dataAtual.setMonth(dataAtual.getMonth() - 1);
-                gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
-            });
-
-            nextMonthBtn.addEventListener('click', () => {
-                dataAtual.setMonth(dataAtual.getMonth() + 1);
-                gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
-            });
-
-            calendarioGridEl.addEventListener('click', selecionarDia);
-            horariosGridEl.addEventListener('click', selecionarHorario);
-            btnConfirmar.addEventListener('click', () => {
-                if (horarioSelecionado) {
-                    const dataAgendamento = calendarioGridEl.querySelector('.selecionado').textContent;
-                    const mesAno = `${dataAtual.getMonth() + 1}/${dataAtual.getFullYear()}`;
-                    alert(`Agendamento confirmado para ${dataAgendamento}/${mesAno} às ${horarioSelecionado}! (Simulação)`);
-                } else {
-                    alert('Por favor, selecione um horário.');
-                }
-            });
-
-            // Lógica do Modal (simplificada)
-            document.getElementById('ver-perfil-profissional').addEventListener('click', (e) => {
-                e.preventDefault();
-                document.getElementById('modal-profissional').classList.add('visivel');
-            });
-            document.getElementById('modal-fechar-btn').addEventListener('click', () => {
-                document.getElementById('modal-profissional').classList.remove('visivel');
-});
-
-            // Iniciar
-            gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+ 
+            horariosGridEl.appendChild(btn);
+          });
+        }
+ 
+        function selecionarHorario(e) {
+          const btnClicado = e.target;
+          if (!btnClicado.classList.contains("disponivel")) return;
+ 
+          const horarioSelecionadoAnterior =
+            horariosGridEl.querySelector(".selecionado");
+          if (horarioSelecionadoAnterior) {
+            horarioSelecionadoAnterior.classList.remove("selecionado");
+          }
+ 
+          btnClicado.classList.add("selecionado");
+          horarioSelecionado = btnClicado.dataset.horario;
+          btnConfirmar.disabled = false;
+        }
+ 
+        prevMonthBtn.addEventListener("click", () => {
+          dataAtual.setMonth(dataAtual.getMonth() - 1);
+          gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
         });
+ 
+        nextMonthBtn.addEventListener("click", () => {
+          dataAtual.setMonth(dataAtual.getMonth() + 1);
+          gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+        });
+ 
+        calendarioGridEl.addEventListener("click", selecionarDia);
+        horariosGridEl.addEventListener("click", selecionarHorario);
+        btnConfirmar.addEventListener("click", () => {
+          if (horarioSelecionado) {
+            const dataAgendamento =
+              calendarioGridEl.querySelector(".selecionado").textContent;
+            const mesAno = `${
+              dataAtual.getMonth() + 1
+            }/${dataAtual.getFullYear()}`;
+            alert(
+              `Agendamento confirmado para ${dataAgendamento}/${mesAno} às ${horarioSelecionado}! (Simulação)`
+            );
+          } else {
+            alert("Por favor, selecione um horário.");
+          }
+        });
+ 
+        // Lógica do Modal (simplificada)
+        document
+          .getElementById("ver-perfil-profissional")
+          .addEventListener("click", (e) => {
+            e.preventDefault();
+            document
+              .getElementById("modal-profissional")
+              .classList.add("visivel");
+          });
+        document
+          .getElementById("modal-fechar-btn")
+          .addEventListener("click", () => {
+            document
+              .getElementById("modal-profissional")
+              .classList.remove("visivel");
+          });
+ 
+        // Iniciar
+        gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+      });
     </script>
-</body>
+  </body>
 </html>

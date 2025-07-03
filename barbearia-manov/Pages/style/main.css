@@ -311,8 +311,6 @@
         color: white;
         text-align: center;
         padding: 1rem;
-        /* A propriedade 'position: fixed' foi removida. */
-        /* Agora ele se comportará como um elemento estático normal. */
         width: 100%;
       }
 
