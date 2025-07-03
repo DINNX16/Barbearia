@@ -3,57 +3,214 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Moeda Girando até Redirecionar</title>
+  <title>Barbearia Manóv - Carregando</title>
   <style>
-    /* Centraliza tudo no body com Flexbox */
     body {
       margin: 0;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      background-color: #f9f9f9; /* Opcional: cor de fundo leve */
+      background: linear-gradient(135deg, #fef7cd, #fed7aa);
+      font-family: 'Arial', sans-serif;
     }
 
-    /* Estilo da imagem da moeda */
+    .container {
+      text-align: center;
+      position: relative;
+    }
+
     #minha-moeda {
-      width: 150px;
-      height: 150px;
+      width: 160px;
+      height: 160px;
       will-change: transform;
       transform-style: preserve-3d;
-    }
-    /* Giro infinito */
-    .girar-infinito {
-      animation: girarInfinito 1s linear infinite;
+      transition: all 0.3s ease;
+      filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
     }
 
-    @keyframes girarInfinito {
+    .girar-suave {
+      animation: girarSuave 1.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes girarSuave {
       from {
-        transform: rotateY(0deg);
+        transform: perspective(1000px) rotateY(0deg);
       }
       to {
-        transform: rotateY(360deg);
+        transform: perspective(1000px) rotateY(360deg);
       }
+    }
+
+    .brilho {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.4), transparent);
+      opacity: 0;
+      animation: brilhar 2s ease-in-out infinite;
+    }
+
+    @keyframes brilhar {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    .loading-text {
+      margin-top: 30px;
+      color: #92400e;
+    }
+
+    .loading-text h2 {
+      font-size: 28px;
+      margin: 0 0 10px 0;
+      font-weight: bold;
+    }
+
+    .loading-text p {
+      font-size: 16px;
+      margin: 0 0 20px 0;
+      opacity: 0.8;
+    }
+
+    .contador {
+      font-size: 36px;
+      font-weight: bold;
+      color: #78350f;
+      margin-bottom: 15px;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-in-out 1s forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .barra-progresso {
+      width: 200px;
+      height: 8px;
+      background: rgba(217, 119, 6, 0.3);
+      border-radius: 4px;
+      overflow: hidden;
+      margin: 0 auto;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-in-out 1s forwards;
+    }
+
+    .barra-preenchimento {
+      height: 100%;
+      background: linear-gradient(90deg, #f59e0b, #ea580c);
+      border-radius: 4px;
+      width: 0%;
+      transition: width 1s ease-out;
+    }
+
+    .pular-btn {
+      margin-top: 25px;
+      padding: 8px 20px;
+      background: rgba(146, 64, 14, 0.1);
+      border: 2px solid rgba(146, 64, 14, 0.3);
+      border-radius: 25px;
+      color: #78350f;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-in-out 2s forwards;
+    }
+
+    .pular-btn:hover {
+      background: rgba(146, 64, 14, 0.2);
+      border-color: rgba(146, 64, 14, 0.5);
+      transform: translateY(-2px);
+    }
+
+    .fade-out {
+      opacity: 0;
+      transform: scale(0.9);
+      transition: all 0.5s ease-out;
     }
   </style>
 </head>
 <body>
+  <div class="container" id="container">
+    <div style="position: relative;">
+      <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/moedamoeda.png" alt="Moeda" id="minha-moeda" />
+      <div class="brilho" id="brilho"></div>
+    </div>
 
-  <!-- Imagem da moeda -->
-  <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/moedamoeda.png" alt="Moeda" id="minha-moeda" />
+    <div class="loading-text">
+      <h2>Barbearia Manóv</h2>
+      <p>Carregando experiência premium...</p>
+      
+      <div class="contador" id="contador">5</div>
+      
+      <div class="barra-progresso">
+        <div class="barra-preenchimento" id="barra"></div>
+      </div>
+      
+      <button class="pular-btn" id="pularBtn" onclick="pularAnimacao()">
+        Pular animação
+      </button>
+    </div>
+  </div>
 
   <script>
-    const moeda = document.getElementById('minha-moeda');
+    let contador = 5;
+    let intervaloConta;
+    let tempoInicio = Date.now();
 
-    window.addEventListener('load', () => {
-      moeda.classList.add('girar-infinito');
+    function iniciarAnimacao() {
+      const moeda = document.getElementById('minha-moeda');
+      const brilho = document.getElementById('brilho');
+      const contadorEl = document.getElementById('contador');
+      const barra = document.getElementById('barra');
+      
+      // Inicia as animações
+      moeda.classList.add('girar-suave');
+      brilho.style.display = 'block';
+      
+      // Atualiza contador e barra
+      intervaloConta = setInterval(() => {
+        contador--;
+        contadorEl.textContent = contador;
+        
+        // Atualiza barra de progresso
+        const progresso = ((5 - contador) / 5) * 100;
+        barra.style.width = progresso + '%';
+        
+        if (contador <= 0) {
+          clearInterval(intervaloConta);
+          redirecionarPagina();
+        }
+      }, 1000);
+    }
 
-      // Redireciona após 5 segundos
+    function redirecionarPagina() {
+      const container = document.getElementById('container');
+      container.classList.add('fade-out');
+      
       setTimeout(() => {
-        window.location.href = "http://127.0.0.1:5500/barbearia-manov/Pages/main.html";
-      }, 5000);
+        // Substitua pela URL da sua página principal
+        window.location.href = "main.html";
+      }, 500);
+    }
+
+    function pularAnimacao() {
+      clearInterval(intervaloConta);
+      redirecionarPagina();
+    }
+
+    // Inicia quando a página carregar
+    window.addEventListener('load', () => {
+      setTimeout(iniciarAnimacao, 200);
     });
   </script>
-
 </body>
 </html>
