@@ -6,731 +6,9 @@
     <title>Barbearia Manóv - Estilo e Tradição</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
-      rel="stylesheet"
+      rel="stylesheet" 
     />
-    <style>
-      :root {
-        --primary: #1a1a1a;
-        --secondary: #d4af37;
-        --light: #f8f9fa;
-        --dark: #212529;
-      }
-
-      body {
-        font-family: "Montserrat", sans-serif;
-        margin: 0;
-        padding: 0;
-        color: var(--primary);
-        background-color: #f5f5f5;
-        padding-bottom: 60px; /* Espaço para o footer */
-      }
-
-      .header {
-        background-color: var(--primary);
-        color: white;
-        padding: 1rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        position: relative;
-      }
-
-      .search-header {
-        display: flex;
-        margin: auto;
-        position: absolute; /*FiXA A BARRA*/
-        top: 60%;
-        right: 5px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-      }
-
-      .search-header input {
-        width: 100%;
-        background: transparent;
-        border: none;
-        border-bottom: 2px solid rgba(255, 255, 255, 0.3); /* Linha inferior sutil */
-        padding: 8px 35px 8px 5px; /* Padding: top, right (para não cobrir o ícone), bottom, left */
-        font-size: 0.95rem;
-        color: var(--light); /* Texto claro */
-        outline: none;
-        transition: border-bottom-color 0.3s ease, box-shadow 0.3s ease;
-      }
-
-      .btn-busca {
-        background-color: var(--secondary);
-        border: none;
-        color: var(--primary);
-        font-size: 1.2rem;
-        padding: 6px 10px;
-        border-radius: 4px;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-      }
-
-.btn-busca:hover {
-  background-color: transparent;
-
-}
-
-
-      .abrir-menu {
-        font-size: 18px;
-        cursor: pointer;
-        position: absolute;
-        left: 1rem;
-        top: 5.8rem;
-        color: white;
-      }
-
-      .logo h1 {
-        font-family: "Playfair Display", serif;
-        color: #db902e;
-        margin: 1rem 0;
-        font-size: 1.8rem;
-        text-align: center;
-      }
-
-      .nav {
-        width: 100%;
-        max-width: 1200px;
-        margin: 0 auto;
-      }
-
-      .nav > ul {
-        display: flex;
-        justify-content: center;
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-      }
-
-      .nav li {
-        position: relative;
-      }
-
-      .nav > ul > li > a {
-        color: white;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 0.75rem 1rem;
-        display: block;
-        transition: all 0.3s ease;
-      }
-
-      .nav > ul > li > a:hover {
-        color: var(--secondary);
-        background-color: rgba(255, 255, 255, 0.1);
-      }
-
-      /* Dropdown Principal */
-      .dropdown-menu {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background-color: var(--primary);
-        min-width: 200px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        z-index: 1000;
-        border-radius: 0 0 5px 5px;
-        padding: 0.5rem 0;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-      }
-
-      .dropdown:hover .dropdown-menu {
-        display: block;
-        opacity: 1;
-        visibility: visible;
-      }
-
-      /* Submenus */
-      .sub-dropdown {
-        display: none;
-        position: absolute;
-        left: 100%;
-        top: 0;
-        background-color: #333;
-        min-width: 160px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
-
-      .submenu {
-        position: relative;
-      }
-
-      .submenu:hover .sub-dropdown {
-        display: block;
-        opacity: 1;
-      }
-
-      /* Estilização dos itens do menu */
-      .dropdown-menu li {
-        padding: 0;
-        margin: 0;
-      }
-
-      .dropdown-menu a {
-        color: white;
-        padding: 0.75rem 1rem;
-        display: block;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        white-space: nowrap;
-      }
-
-      .dropdown-menu a:hover {
-        background-color: var(--secondary);
-        color: var(--primary);
-        padding-left: 1.25rem;
-      }
-
-      /* Seta indicativa */
-      .submenu > a:after {
-        content: "›";
-        margin-left: 0.5rem;
-        display: inline-block;
-      }
-
-      /* Overlay Menu Mobile */
-      .overlay {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color: rgba(0, 0, 0, 0.9);
-        overflow-x: hidden;
-        transition: 0.5s;
-        z-index: 2000;
-      }
-
-      .overlay-content {
-        position: relative;
-        top: 25%;
-        width: 100%;
-        text-align: center;
-      }
-
-      .overlay a {
-        padding: 8px;
-        text-decoration: none;
-        font-size: 1.2rem;
-        color: white;
-        display: block;
-        transition: 0.3s;
-      }
-
-      .overlay a:hover {
-        color: var(--secondary);
-      }
-
-      .closebtn {
-        position: absolute;
-        top: 20px;
-        right: 45px;
-        font-size: 0px;
-        color: white;
-      }
-      /*botão fechar do menu*/
-      #btnFechar {
-        width: 40px;
-        height: 40px;
-        font-size: 50px;
-      }
-
-      /* Estilo para o botão de Sair */
-      #logoutBtn {
-        color: #ff6b6b;
-        font-weight: bold;
-        margin-top: 15px;
-        padding-top: 10px;
-        border-top: 1px solid rgba(255, 255, 255, 0.1);
-      }
-
-      #logoutBtn:hover {
-        color: #ff3838;
-        transform: translateX(5px);
-      }
-
-      .content-section {
-        padding: 2rem 1rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-      }
-
-      .floating-card {
-        background-color: #e0e0e0;
-        border-radius: 25px;
-        padding: 2rem;
-        max-width: 900px;
-        width: 100%;
-        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        display: flex;
-        gap: 2rem;
-        align-items: center;
-      }
-
-      .card-image {
-        flex: 1; 
-        width: 100%; 
-        height: 250px;
-        object-fit: cover; 
-        border-radius: 15px; 
-      }
-
-      .card-text-content {
-        flex: 2; 
-      }
-
-      .card-text-content h3 {
-        font-family: "Playfair Display", serif;
-        font-size: 1.8rem;
-        margin-top: 0;
-        margin-bottom: 1rem;
-        color: var(--primary);
-      }
-
-      .card-text-content p {
-        font-size: 1rem;
-        line-height: 1.6;
-        color: var(--dark);
-      }
-
-      @media (max-width: 768px) {
-        .floating-card {
-          flex-direction: column;
-          padding: 1.5rem;
-        }
-
-        .card-image {
-          width: 100%;
-          height: 200px; 
-        }
-      }
-
-      .footer {
-        background-color: var(--primary);
-        color: white;
-        text-align: center;
-        padding: 1rem;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-      }
-
-
-
-    /*ISSO AQUI É DO CARROSSEL DO FEED, SÓ POR DEUS QUE TÁ RODANDO, NÃO MEXE, OBRIGADO :) */
-
-.carousel-section {
-  padding: 2rem 0; 
-}
-
-.carousel-container {
-  max-width: 1000px; 
-  margin: auto;
-  position: relative; 
-}
-
-.carousel-window {
-  overflow: hidden; 
-}
-
-.carousel-track {
-  display: flex; 
-  gap: 1.5rem; 
-  padding: 1rem; 
-  transition: transform 0.5s ease-in-out; 
-}
-
-.carousel-card {
-  flex: 0 0 300px; 
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-  overflow: hidden; 
-  display: flex;
-  flex-direction: column;
-}
-
-.carousel-card img {
-  width: 100%;
-  height: 180px;
-  object-fit: cover;
-}
-
-.carousel-card-content {
-  padding: 1rem;
-  text-align: center;
-}
-
-.carousel-card-content h4 {
-  font-family: 'Playfair Display', serif;
-  margin: 0 0 0.5rem 0;
-  font-size: 1.2rem;
-}
-
-.carousel-card-content p {
-  font-size: 0.9rem;
-  color: #666;
-  line-height: 1.5;
-}
-
-.carousel-button {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(255, 255, 255, 0.8);
-  border: none;
-  border-radius: 50%;
-  width: 45px;
-  height: 45px;
-  font-size: 1.5rem;
-  font-weight: bold;
-  cursor: pointer;
-  z-index: 10;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-  transition: all 0.2s ease;
-}
-
-.carousel-button:hover {
-  background-color: #fff;
-  transform: translateY(-50%) scale(1.1);
-}
-
-.prev-button {
-  left: -15px;
-}
-
-.next-button {
-  right: -15px;
-}
-
-.carousel-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.4;
-}
-
-/* AQUI TERMINOU O CÓDIGO DO FEED, AGORA PODE MEXER NORMALMENTE, NÃO ME PERGUNTE O QUE CADA COISA FAZ, EU TAMBÉM NAO SEI!*/
-
-
-
-/* css das avaliações*/
-
-.container-avaliacoes {
-  max-width: 1000px;
-  margin: 2rem auto;
-  padding: 2rem;
-  background-color: var(--light);
-  border-radius: 8px;
-  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
-}
-
-.container-avaliacoes h2 {
-
-      .img-focus-top {
-  object-position: center top !important; /* Use !important com cautela ou certifique-se que este seletor é específico o suficiente */
-}
-
-      /* Estilos para a seção do feed (contêiner principal) */
-.vertical-feed {
-  padding: 2rem 1rem;
-  max-width: 1200px; /* Pode ser mais largo agora para acomodar a grade */
-  margin: 0 auto;
-}
-
-.vertical-feed h2 {
-
-  font-family: "Playfair Display", serif;
-  color: var(--primary);
-  text-align: center;
-  margin-bottom: 2rem;
-
-  font-size: 2.2rem;
-}
-
-.filtros-avaliacoes {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  margin-bottom: 1.5rem;
-  gap: 0.5rem;
-}
-
-.filtros-avaliacoes label {
-  font-family: "Montserrat", sans-serif;
-  font-size: 0.9rem;
-  color: var(--dark);
-  font-weight: 500;
-}
-
-.filtros-avaliacoes select {
-  font-family: "Montserrat", sans-serif;
-  padding: 0.5rem 0.8rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  background-color: #fff;
-  cursor: pointer;
-}
-
-.lista-avaliacoes-grid {
-  display: grid;
-  justify-content: center;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 500px)); /* Cria colunas responsivas */
-  gap: 1.5rem; /* Espaçamento entre os cards */
-  margin-bottom: 2rem;
-}
-
-.card-avaliacao {
-  background-color: #ffffff;
-  border: 1px solid #e0e0e0;
-  border-radius: 6px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
-  display: flex;
-  flex-direction: column;
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-.card-avaliacao:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 15px rgba(0,0,0,0.1);
-}
-
-.card-avaliacao-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.nome-avaliador {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 700;
-  color: var(--primary);
-  font-size: 1.1rem;
-}
-
-.data-avaliacao {
-  font-family: "Montserrat", sans-serif;
-  font-size: 0.8rem;
-  color: #777;
-}
-
-.estrelas-avaliacao {
-  margin-bottom: 1rem;
-  font-size: 1.3rem; /* Tamanho das estrelas */
-}
-
-.estrelas-avaliacao span { /* Estilo para as estrelas */
-  color: var(--secondary); /* Cor dourada para estrelas preenchidas */
-  margin-right: 2px;
-}
-/* Para estrelas vazias, você pode usar um caractere diferente ou mudar a cor:
-.estrelas-avaliacao span.vazia { color: #ccc; }
-O JavaScript preencheria isso corretamente com base na nota. */
-
-
-.texto-avaliacao {
-  font-family: "Montserrat", sans-serif;
-  font-size: 0.95rem;
-  line-height: 1.6;
-  color: var(--dark);
-  margin-bottom: 1rem;
-  flex-grow: 1; /* Faz o texto ocupar o espaço disponível */
-}
-
-.avaliacao-servico-info {
-    font-family: "Montserrat", sans-serif;
-    font-size: 0.85rem;
-    color: #555;
-    padding-top: 0.75rem;
-    border-top: 1px dashed #eee;
-    margin-top: auto; /* Empurra para o final do card se o texto for curto */
-}
-.avaliacao-servico-info span {
-    font-weight: 500;
-}
-
-
-.paginacao-avaliacoes {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e0e0e0;
-}
-
-.paginacao-avaliacoes button {
-  font-family: "Montserrat", sans-serif;
-  background-color: var(--primary);
-  color: var(--light);
-  border: 1px solid var(--primary);
-  padding: 0.6rem 1.2rem;
-  border-radius: 4px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-.paginacao-avaliacoes button:hover:not(:disabled) {
-  background-color: var(--secondary);
-  color: var(--primary);
-  border-color: var(--secondary);
-}
-
-.paginacao-avaliacoes button:disabled {
-  background-color: #ccc;
-  color: #666;
-  border-color: #ccc;
-  cursor: not-allowed;
-}
-
-.paginacao-avaliacoes #infoPaginaAvaliacoes {
-  font-family: "Montserrat", sans-serif;
-  font-weight: 500;
-  color: var(--dark);
-}
-
-/* Responsividade para os cards e filtros */
-@media (max-width: 768px) {
-  .container-avaliacoes h2 {
-    font-size: 1.8rem;
-  }
-  .filtros-avaliacoes {
-    flex-direction: column;
-    align-items: flex-start; /* Alinha à esquerda em telas menores */
-  }
-  .filtros-avaliacoes select {
-    width: 100%; /* Ocupa a largura total */
-  }
-  .lista-avaliacoes-grid {
-    grid-template-columns: 1fr; /* Uma coluna em telas menores */
-  }
-}
-
-
-/*terminou as avaliações*/
-
-  font-size: 1.8rem;
-}
-
-/* Novo: Estilos para o contêiner da GRADE */
-.feed-grid-container {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr); /* Cria 3 colunas de largura igual */
-  gap: 1.5rem; /* Espaçamento entre os itens da grade (linhas e colunas) */
-}
-
-/* Estilos para cada item do feed (aplicável a cards e imagens diretas na grade) */
-.feed-item {
-  /* margin-bottom não é mais necessário aqui, o 'gap' da grade cuida do espaçamento vertical */
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-  display: flex; /* Adicionado para ajudar no alinhamento interno se necessário */
-  flex-direction: column; /* Garante que o conteúdo do card empilhe verticalmente */
-}
-
-/* Estilo específico para itens que são apenas imagem */
-.feed-item-image img {
-  width: 100%;
-  height: 100%; /* Faz a imagem tentar preencher a altura do item da grade */
-  object-fit: cover; /* Cobre a área sem distorcer, importante para alturas consistentes */
-  display: block;
-}
-
-/* Estilos para os Cartões de Informação */
-.card img {
-  width: 100%;
-  height: 250px; /* Altura fixa para imagens de cartão para consistência na grade. Ajuste. */
-  object-fit: cover;
-  object-position: center 15%;
-  display: block;
-  /* border-bottom: 1px solid #eee; */ /* Removido ou opcional */
-}
-
-.card-content {
-  padding: 1rem 1.25rem;
-  flex-grow: 1; /* Permite que o card-content cresça para preencher o espaço no feed-item */
-}
-
-.card-content h3 {
-  font-family: "Playfair Display", serif;
-  color: var(--primary);
-  font-size: 1.3rem; /* Ajustado para caber bem na grade */
-  margin-top: 0;
-  margin-bottom: 0.5rem;
-}
-
-.card-content p {
-  font-family: "Montserrat", sans-serif;
-  color: var(--dark);
-  font-size: 0.9rem;
-  line-height: 1.5;
-  margin-bottom: 1rem;
-}
-
-.card-link {
-  display: inline-block;
-  text-decoration: none;
-  color: var(--secondary);
-  font-weight: bold;
-  font-size: 0.85rem; /* Levemente ajustado */
-  padding: 0.4rem 0;
-  transition: color 0.3s ease;
-  margin-top: auto; /* Empurra o link para o final do card-content se houver espaço extra */
-}
-
-.card-link:hover {
-  color: var(--primary);
-  text-decoration: underline;
-}
-
-/* Ajustes de Responsividade para a Grade */
-@media (max-width: 992px) { /* Telas médias, como tablets */
-  .feed-grid-container {
-    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
-    gap: 1rem; /* Espaçamento menor */
-  }
-  .vertical-feed h2 {
-    font-size: 1.6rem;
-  }
-   .card img {
-    height: 180px;
-  }
-}
-
-@media (max-width: 576px) { /* Telas pequenas, como celulares */
-  .feed-grid-container {
-    grid-template-columns: 1fr; /* 1 coluna */
-  }
-   .card-content h3 {
-    font-size: 1.2rem;
-  }
-  .card-content p {
-    font-size: 0.85rem;
-  }
-
-}
-
-
-
-
-    </style>
+    <link rel="stylesheet" href="style/main.css">
   </head>
   <body>
     <header class="header">
@@ -740,7 +18,6 @@ O JavaScript preencheria isso corretamente com base na nota. */
       
       <nav class="nav">
         <ul>
-          <!-- AGENDA -->
           <li class="dropdown">
             <a href="#agenda">Agenda</a>
             <ul class="dropdown-menu">
@@ -749,7 +26,6 @@ O JavaScript preencheria isso corretamente com base na nota. */
             </ul>
           </li>
 
-          <!-- VITRINE -->
           <li class="dropdown">
             <a href="#vitrine">Vitrine</a>
             <ul class="dropdown-menu">
@@ -788,7 +64,6 @@ O JavaScript preencheria isso corretamente com base na nota. */
             </ul>
           </li>
 
-          <!-- SERVIÇOS -->
           <li class="dropdown">
             <a href="#servicos">Serviços</a>
             <ul class="dropdown-menu">
@@ -813,9 +88,6 @@ O JavaScript preencheria isso corretamente com base na nota. */
               </li>
             </ul>
           </li>
-
-
-          <!-- AVISOS -->
 
           <li><a href="#avisos">Avisos</a></li>
         </ul>
@@ -843,7 +115,7 @@ O JavaScript preencheria isso corretamente com base na nota. */
         <div class="floating-card">
           
           <img 
-            src="https://raw.githubusercontent.com/DINNX16/Barbearia/prototipo-feed/main/assets/biografia.png" 
+            src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/biografia.png" 
             alt="Descrição da barbearia ou de um serviço específico" 
             class="card-image">
 
@@ -851,88 +123,88 @@ O JavaScript preencheria isso corretamente com base na nota. */
             <h3>Barbearia Manóv</h3>
             <p>
 A Barbearia Manov nasceu da paixão por proporcionar uma experiência única de cuidado e estilo. Fundada com o objetivo de oferecer um serviço de qualidade, nosso espaço combina o melhor do atendimento personalizado com um ambiente descontraído e moderno.
-
+            </p>
           </div>
 
         </div>
       </section>
 
-
       <section class="carousel-section">
-    <div class="carousel-container">
-        <div class="carousel-window">
-            <div class="carousel-track">
-                <div class="carousel-card">
-                    <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/jovem.png" alt="Corte de cabelo">
-                    <div class="carousel-card-content">
-                        <h4>Cortes Modernos</h4>
-                        <p>Do clássico ao contemporâneo, encontre o estilo que mais combina com você.</p>
+        <div class="carousel-container">
+            <div class="carousel-window">
+                <div class="carousel-track">
+                    <div class="carousel-card">
+                        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/jovem.png" alt="Corte de cabelo">
+                        <div class="carousel-card-content">
+                            <h4>Cortes Modernos</h4>
+                            <p>Do clássico ao contemporâneo, encontre o estilo que mais combina com você.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-card">
+                        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/barba-terapia.png" alt="Cuidado com a barba">
+                        <div class="carousel-card-content">
+                            <h4>Barba Terapia</h4>
+                            <p>Tratamento completo com toalhas quentes, óleos e massagem facial.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-card">
+                        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/produto.png" alt="Produtos para cabelo e barba">
+                        <div class="carousel-card-content">
+                            <h4>Produtos Premium</h4>
+                            <p>As melhores marcas de pomadas, óleos e balms para o seu cuidado diário.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-card">
+                        <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/ambiente-barbearia.png" alt="Ambiente da barbearia">
+                        <div class="carousel-card-content">
+                            <h4>Ambiente Exclusivo</h4>
+                            <p>Um lugar para relaxar, tomar uma cerveja e cuidar do visual com estilo.</p>
+                        </div>
                     </div>
                 </div>
-                <div class="carousel-card">
-                    <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/barba-terapia.png" alt="Cuidado com a barba">
-                    <div class="carousel-card-content">
-                        <h4>Barba Terapia</h4>
-                        <p>Tratamento completo com toalhas quentes, óleos e massagem facial.</p>
-                    </div>
-                </div>
-                <div class="carousel-card">
-                    <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/produto.png" alt="Produtos para cabelo e barba">
-                    <div class="carousel-card-content">
-                        <h4>Produtos Premium</h4>
-                        <p>As melhores marcas de pomadas, óleos e balms para o seu cuidado diário.</p>
-                    </div>
-                </div>
-                <div class="carousel-card">
-                    <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/ambiente-barbearia.png" alt="Ambiente da barbearia">
-                    <div class="carousel-card-content">
-                        <h4>Ambiente Exclusivo</h4>
-                        <p>Um lugar para relaxar, tomar uma cerveja e cuidar do visual com estilo.</p>
-                    </div>
-                </div>
-                </div>
+            </div>
+            <button class="carousel-button prev-button">‹</button>
+            <button class="carousel-button next-button">›</button>
         </div>
-        <button class="carousel-button prev-button">‹</button>
-        <button class="carousel-button next-button">›</button>
-    </div>
-</section>
+      </section>
 
+      <!-- SEÇÃO DE AVALIAÇÕES CORRIGIDA -->
+      <section class="avaliacoes-section">
+        <h2>Avaliações dos Clientes</h2>
+        <div class="avaliacoes-container">
+          <div class="card-avaliacao">
+            <div class="card-avaliacao-header">
+              <span class="nome-avaliador">Carlos S.</span>
+              <span class="data-avaliacao">02/06/2025</span>
+            </div>
+            <div class="estrelas-avaliacao" data-nota="5">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+            </div>
+            <p class="texto-avaliacao">
+              Atendimento impecável e corte exatamente como pedi. O barbeiro Eduardo é um mestre! Ambiente muito agradável. Recomendo demais!
+            </p>
+            <div class="avaliacao-servico-info">
+                <span>Serviço:</span> Corte Masculino Moderno
+            </div>
+          </div>
 
-
-        <div id="lista-avaliacoes" class="lista-avaliacoes-grid">
-      <div class="card-avaliacao">
-        <div class="card-avaliacao-header">
-          <span class="nome-avaliador">Carlos S.</span>
-          <span class="data-avaliacao">02/06/2025</span>
+          <div class="card-avaliacao">
+            <div class="card-avaliacao-header">
+              <span class="nome-avaliador">Fernanda L.</span>
+              <span class="data-avaliacao">28/05/2025</span>
+            </div>
+            <div class="estrelas-avaliacao" data-nota="4">
+              <span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span>
+            </div>
+            <p class="texto-avaliacao">
+              Gostei muito do resultado da barboterapia. Apenas achei que a espera foi um pouco longa, mesmo com horário marcado. Mas o profissionalismo compensou.
+            </p>
+            <div class="avaliacao-servico-info">
+                <span>Serviço:</span> Barboterapia Premium
+            </div>
+          </div>
         </div>
-        <div class="estrelas-avaliacao" data-nota="5">
-          <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-        </div>
-        <p class="texto-avaliacao">
-          Atendimento impecável e corte exatamente como pedi. O barbeiro Eduardo é um mestre! Ambiente muito agradável. Recomendo demais!
-        </p>
-        <div class="avaliacao-servico-info">
-            <span>Serviço:</span> Corte Masculino Moderno
-        </div>
-      </div>
-
-
-            <div class="card-avaliacao">
-        <div class="card-avaliacao-header">
-          <span class="nome-avaliador">Fernanda L.</span>
-          <span class="data-avaliacao">28/05/2025</span>
-        </div>
-        <div class="estrelas-avaliacao" data-nota="4">
-          <span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span>
-        </div>
-        <p class="texto-avaliacao">
-          Gostei muito do resultado da barboterapia. Apenas achei que a espera foi um pouco longa, mesmo com horário marcado. Mas o profissionalismo compensou.
-        </p>
-        <div class="avaliacao-servico-info">
-            <span>Serviço:</span> Barboterapia Premium
-        </div>
-      </div>
-
+      </section>
 
     </main>
 
@@ -940,55 +212,49 @@ A Barbearia Manov nasceu da paixão por proporcionar uma experiência única de 
       <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
     </footer>
 
-
-
-
     <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const track = document.querySelector('.carousel-track');
+        const cards = Array.from(track.children);
+        const nextButton = document.querySelector('.next-button');
+        const prevButton = document.querySelector('.prev-button');
+        
+        const cardWidth = cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
 
-    document.addEventListener('DOMContentLoaded', function() {
-  const track = document.querySelector('.carousel-track');
-  const cards = Array.from(track.children);
-  const nextButton = document.querySelector('.next-button');
-  const prevButton = document.querySelector('.prev-button');
-  
-  const cardWidth = cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
+        let currentIndex = 0;
 
-  let currentIndex = 0;
+        const moveToCard = (targetIndex) => {
+          track.style.transform = 'translateX(-' + cardWidth * targetIndex + 'px)';
+          currentIndex = targetIndex;
+          updateButtons();
+        }
 
-  const moveToCard = (targetIndex) => {
-    track.style.transform = 'translateX(-' + cardWidth * targetIndex + 'px)';
-    currentIndex = targetIndex;
-    updateButtons();
-  }
+        const updateButtons = () => {
+          prevButton.disabled = currentIndex === 0;
+          nextButton.disabled = currentIndex >= cards.length - 1;
+        }
 
-  const updateButtons = () => {
-    prevButton.disabled = currentIndex === 0;
-    nextButton.disabled = currentIndex >= cards.length - 1;
-  }
+        prevButton.addEventListener('click', e => {
+          if (currentIndex > 0) {
+            moveToCard(currentIndex - 1);
+          }
+        });
 
-  prevButton.addEventListener('click', e => {
-    if (currentIndex > 0) {
-      moveToCard(currentIndex - 1);
-    }
-  });
+        nextButton.addEventListener('click', e => {
+          const remainingCards = cards.length - (currentIndex + 1);
+          if (remainingCards > 0) {
+             moveToCard(currentIndex + 1);
+          }
+        });
 
-  nextButton.addEventListener('click', e => {
-    const remainingCards = cards.length - (currentIndex + 1);
-    if (remainingCards > 0) {
-       moveToCard(currentIndex + 1);
-    }
-  });
+        updateButtons();
 
-  updateButtons();
-
-  window.addEventListener('resize', () => {
-      const newCardWidth = cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
-      moveToCard(currentIndex);
-});
-    });
-    
-
-
+        window.addEventListener('resize', () => {
+            const newCardWidth = cards[0].getBoundingClientRect().width + parseInt(getComputedStyle(track).gap);
+            moveToCard(currentIndex);
+        });
+      });
+      
       function openNav() {
         document.getElementById("myNav").style.width = "50%";
       }
