@@ -1,0 +1,353 @@
+/* Pages/avisos.css */
+
+/* Regra universal para box-sizing */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+/* Variáveis de Cores: ALINHADAS COM A PÁGINA PRINCIPAL E ADICIONAIS NECESSÁRIAS */
+:root {
+    --primary: #1a1a1a;        /* Fundo header, texto body principal */
+    --secondary: #d4af37;      /* Dourado (destaque, títulos, hover) - Usado para o h1 do header */
+    --light: #f8f9fa;          /* Texto claro em fundo escuro, tags claras */
+    --dark: #212529;           /* Texto escuro para fundos claros */
+    --success: #28a745;        /* Verde (promoção) */
+    --danger: #dc3545;         /* Vermelho (fechamento) */
+
+    /* Variáveis específicas para avisos (se não existirem na principal) */
+    --text-color: var(--dark); /* Cor do texto dentro dos avisos */
+    --background-body: #f5f5f5; /* Fundo da página, AGORA CONSISTENTE com a principal */
+    --card-background: #ffffff;
+    --border-subtle: #e9ecef;
+    --hover-background: #f2ead2;
+    --date-color: #888;         /* Cor da data */
+
+    --button-bg: #6c757d;
+    --button-bg-hover: #5a6268;
+    --button-text: var(--light);
+}
+
+/* Estilos base do HTML/Body */
+html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-body);
+}
+
+body {
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--primary);
+    background-color: var(--background-body);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    
+    /* Propriedades para Overscroll */
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+}
+
+main {
+    flex: 1;
+    padding: 1rem;
+}
+
+/* Estilos do Cabeçalho */
+.header {
+    background-color: var(--primary);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    position: relative; 
+    flex-shrink: 0;
+}
+
+/* Título H1 dentro do Header */
+.header h1 {
+    font-family: "Playfair Display", serif;
+    color: var(--secondary);
+    margin: 1rem 0;
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+/* Container principal dos avisos */
+.avisos-container {
+    width: 100%;
+    max-width: 900px;
+    margin: 2rem 0 2rem 2rem; 
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    padding: 25px 0;
+    overflow: hidden;
+    text-align: left; 
+}
+
+/* Título da Seção de Avisos */
+.section-header {
+    padding: 0 25px 20px;
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 20px;
+}
+
+.section-header h1 {
+    color: var(--primary);
+    font-size: 1.8em;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+ 
+/* Lista de Avisos */
+.avisos-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.aviso-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 25px;
+    border-bottom: 1px solid var(--border-subtle);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+}
+
+.aviso-item:last-child {
+    border-bottom: none;
+}
+
+.aviso-item:hover {
+    background-color: var(--hover-background);
+    box-shadow: inset 4px 0 0 0 var(--secondary);
+}
+
+/* Ícone do Aviso */
+.aviso-icon-wrapper {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 15px;
+    overflow: hidden;
+    background-color: var(--border-subtle); 
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.aviso-icon-wrapper img {
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
+    border-radius: 50%;
+}
+
+.aviso-icon-wrapper i {
+    font-size: 1.2em;
+    color: var(--primary);
+}
+
+/* Conteúdo do Aviso */
+.aviso-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.aviso-content h2 {
+    margin: 0 0 5px 0;
+    font-size: 1.1em;
+    color: var(--dark);
+    font-weight: 600;
+}
+
+.aviso-content p {
+    margin: 0;
+    font-size: 0.9em;
+    color: var(--text-color);
+    line-height: 1.5;
+}
+
+.aviso-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.8em;
+    color: var(--date-color);
+    margin-top: 5px;
+}
+
+.aviso-meta .data {
+    font-weight: 500;
+}
+    
+.aviso-meta .tag {
+    background-color: var(--border-subtle);
+    color: var(--dark);
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.75em;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Cores das tags (etiquetas) com base no tipo */
+.aviso-item.promocao .aviso-meta .tag {
+    background-color: var(--success);
+    color: var(--light);
+}
+
+.aviso-item.fechado .aviso-meta .tag {
+    background-color: var(--danger);
+    color: var(--light);
+}
+    
+.aviso-item.horario .aviso-meta .tag {
+    background-color: var(--secondary);
+    color: var(--light);
+}
+/* Cores dos ícones Font Awesome, se usados */
+.aviso-item.promocao .aviso-icon-wrapper i { color: var(--success); } 
+.aviso-item.fechado .aviso-icon-wrapper i { color: var(--danger); }
+.aviso-item.horario .aviso-icon-wrapper i { color: var(--secondary); }
+
+
+/* Botão Carregar Mais */
+.load-more-button {
+    display: block;
+    width: calc(100% - 50px);
+    max-width: 300px;
+    margin: 25px auto;
+    padding: 12px 25px;
+    background-color: var(--button-bg);
+    color: var(--button-text);
+    border: 0;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.load-more-button:hover {
+    background-color: var(--button-bg-hover);
+    transform: translateY(-2px);
+}
+
+.load-more-button:active {
+    transform: translateY(0);
+}
+
+/* ESTILOS DO RODAPÉ */
+.footer {
+    background-color: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 2.1rem 0;
+    width: 100%;
+    flex-shrink: 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.footer p {
+    margin: 0;
+    font-size: 1em; /* Tamanho padrão para desktop */
+}
+
+
+@media (max-width: 768px) {
+    .header h1 {
+        font-size: 2.2rem;
+    }
+
+    main {
+        padding: 1rem 0.5rem;
+    }
+    .avisos-container {
+        margin: 1.5rem auto;
+        padding: 15px 0;
+    }
+    .section-header {
+        padding: 0 15px 15px;
+    }
+    .section-header h1 {
+        font-size: 1.5em;
+    }
+    .aviso-item {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px;
+    }
+    .aviso-icon-wrapper {
+        width: 28px;
+        height: 28px;
+        margin-right: 0;
+        margin-bottom: 8px;
+    }
+    .aviso-icon-wrapper img {
+        width: 80%;
+        height: 80%;
+    }
+    .aviso-icon-wrapper i {
+        font-size: 1em;
+    }
+    .aviso-content h2 {
+            font-size: 1.05em;
+    }
+    .aviso-content p {
+            font-size: 0.85em;
+    }
+    .aviso-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        margin-top: 10px;
+        width: 100%;
+    }
+    .aviso-meta .tag {
+        margin-top: 5px;
+    }
+    .load-more-button {
+        width: calc(100% - 30px);
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+   
+    .footer {
+        background-color: var(--primary);
+        color: white;
+        text-align: center;
+        padding: 2rem 0;
+        font-size: 1rem; /* Mantido */
+    }
+
+    .footer p {
+        margin: 0;
+        font-size: 1rem; 
+    }
+}
+
+@media (max-width: 480px) {
+    /* HEADER H1 PARA TELAS MUITO PEQUENAS: AINDA MAIOR */
+    .header h1 {
+        font-size: 1.8rem;
+    }
+    .avisos-container {
+        margin: 1rem auto;
+    }
+    .section-header h1 {
+        font-size: 1.3em;
+    }
+}
