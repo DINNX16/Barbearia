@@ -595,7 +595,7 @@
     <header class="header">
         <span class="abrir-menu" onclick="openNav()">☰ Menu</span>
         <div class="logo">
-            <h1>Barbearia Manóv - Ferramentas Pro</h1>
+            <h1>Barbearia Manóv</h1>
         </div>
         <nav class="nav">
             <ul>
@@ -606,29 +606,56 @@
                 </li>
                 <li class="dropdown"><a href="#vitrine">Vitrine</a>
                     <ul class="dropdown-menu">
-                        <li class="submenu"><a href="#">Ferramentas</a>
+                        <li class="submenu"><a href="ferramentas.html">Ferramentas</a>
                             <ul class="sub-dropdown">
-                                <li><a href="#">Máquinas</a></li>
-                                <li><a href="#">Tesouras</a></li>
+                                <li><a href="ferramentas.html">Máquinas</a></li>
+                                <li><a href="ferramentas.html">Tesouras</a></li>
                             </ul>
                         </li>
-                         <li class="submenu"><a href="#">Acessórios</a>
+                         <li class="submenu"><a href="acessorios.html">Acessórios</a>
                             <ul class="sub-dropdown">
-                                <li><a href="#">Pentes</a></li>
-                                <li><a href="#">Borrifadores</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-                <li class="dropdown"><a href="#servicos">Serviços</a>
-                    <ul class="dropdown-menu">
-                        <li class="submenu"><a href="#">Cortes</a>
-                            <ul class="sub-dropdown">
-                                <li><a href="#">Tipos</a></li>
+                                <li><a href="acessorios.html">Pentes</a></li>
+                                <li><a href="acessorios.html">Borrifadores</a></li>
                             </ul>
                         </li>
                     </ul>
                 </li>
+
+              <li class="dropdown">
+                <a href="#servicos">Serviços</a>
+                <ul class="dropdown-menu">
+                  <li class="submenu">
+                    <a href="#cortes">Cortes</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="fotos-cortes.html">Tipos</a></li>
+                    </ul>
+                  </li>
+
+                  <li class="submenu">
+                    <a href="#sobrancelhas">Sobrancelhas</a>
+                    <ul class="sub-dropdown">
+                      <li>
+                        <a
+                          href="#tipos-sobrancelhas"
+                          onclick="showContent('sobrancelhas')"
+                          >Tipos</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="submenu">
+                    <a href="#barbas">Barbas</a>
+                    <ul class="sub-dropdown">
+                      <li>
+                        <a href="#tipos-barbas" onclick="showContent('barbas')"
+                          >Tipos</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+
                 <li><a href="#avisos">Avisos</a></li>
             </ul>
         </nav>
