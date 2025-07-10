@@ -97,7 +97,7 @@
                 <a href="#agenda">Agenda</a>
                 <ul class="dropdown-menu">
                   <li><a href="agenda.html">Horários</a></li>
-                  <li><a href="#localizacao">Localização</a></li>
+                  <!--<li><a href="#localizacao">Localização</a></li> ainda vamos utilizar?-->
                 </ul>
               </li>
 
@@ -152,13 +152,23 @@
                   <li class="submenu">
                     <a href="#sobrancelhas">Sobrancelhas</a>
                     <ul class="sub-dropdown">
-                      <li><a href="#tipos-sobrancelhas">Tipos</a></li>
+                      <li>
+                        <a
+                          href="#tipos-sobrancelhas"
+                          onclick="showContent('sobrancelhas')"
+                          >Tipos</a
+                        >
+                      </li>
                     </ul>
                   </li>
                   <li class="submenu">
                     <a href="#barbas">Barbas</a>
                     <ul class="sub-dropdown">
-                      <li><a href="#tipos-barbas">Tipos</a></li>
+                      <li>
+                        <a href="#tipos-barbas" onclick="showContent('barbas')"
+                          >Tipos</a
+                        >
+                      </li>
                     </ul>
                   </li>
                 </ul>
