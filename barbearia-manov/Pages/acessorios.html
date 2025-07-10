@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Acessórios e Filtros - Barbearia Manóv</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #d4af37;
+            --light: #f8f9fa;
+            --dark: #212529;
+        }
+
+        /* ===== ESTILOS GERAIS E HEADER ===== */
+        body {
+            font-family: "Montserrat", sans-serif;
+            margin: 0;
+            padding: 0;
+            color: var(--primary);
+            background-color: #f5f5f5;
+        }
+
+        .header {
+            background-color: var(--primary);
+            color: #fff;
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, .1);
+            position: relative;
+        }
+
+        .search-header {
+            position: absolute;
+            top: 60%;
+            right: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-header input {
+            width: 200px;
+            background: 0 0;
+            border: none;
+            border-bottom: 2px solid rgba(255, 255, 255, .3);
+            padding: 8px 5px;
+            font-size: .95rem;
+            color: var(--light);
+            outline: 0;
+            transition: border-bottom-color .3s ease;
+        }
+
+        .search-header input:focus {
+            border-bottom-color: var(--secondary);
+        }
+
+        .search-header input::placeholder {
+            color: rgba(255, 255, 255, .7);
+        }
+
+        .btn-busca {
+            background-color: var(--secondary);
+            border: none;
+            color: var(--primary);
+            font-size: 1.2rem;
+            padding: 6px 10px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color .3s ease;
+        }
+
+        .btn-busca:hover {
+            background-color: #f4d03f;
+        }
+
+        .abrir-menu {
+            font-size: 18px;
+            cursor: pointer;
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #fff;
+            z-index: 10;
+        }
+
+        .logo h1 {
+            font-family: "Playfair Display", serif;
+            color: var(--secondary);
+            margin: 1rem 0;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .nav {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .nav>ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            flex-wrap: wrap;
+            gap: .5rem;
+        }
+
+        .nav li {
+            position: relative;
+        }
+
+        .nav>ul>li>a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+            padding: .75rem 1rem;
+            display: block;
+            transition: all .3s ease;
+        }
+
+        .nav>ul>li>a:hover {
+            color: var(--secondary);
+            background-color: rgba(255, 255, 255, .1);
+        }
+
+        .dropdown-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background-color: var(--primary);
+            min-width: 200px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, .3);
+            z-index: 1000;
+            border-radius: 0 0 5px 5px;
+            padding: .5rem 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity .3s ease, visibility .3s ease;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .sub-dropdown {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background-color: #333;
+            min-width: 160px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, .3);
+            opacity: 0;
+            transition: opacity .3s ease;
+        }
+
+        .submenu {
+            position: relative;
+        }
+
+        .submenu:hover .sub-dropdown {
+            display: block;
+            opacity: 1;
+        }
+
+        .dropdown-menu a {
+            color: #fff;
+            padding: .75rem 1rem;
+            display: block;
+            text-decoration: none;
+            transition: all .3s ease;
+            white-space: nowrap;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: var(--secondary);
+            color: var(--primary);
+            padding-left: 1.25rem;
+        }
+
+        .submenu>a:after {
+            content: "›";
+            margin-left: .5rem;
+            display: inline-block;
+        }
+
+        .overlay {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, .9);
+            overflow-x: hidden;
+            transition: .5s;
+            z-index: 2000;
+        }
+
+        .overlay-content {
+            position: relative;
+            top: 25%;
+            width: 100%;
+            text-align: center;
+        }
+
+        .overlay a {
+            padding: 8px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            color: #fff;
+            display: block;
+            transition: .3s;
+        }
+
+        .overlay a:hover {
+            color: var(--secondary);
+        }
+
+        .closebtn {
+            position: absolute;
+            top: 20px;
+            right: 45px;
+            font-size: 40px;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .main-content {
+            min-height: 70vh;
+            padding: 2rem 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer {
+            background-color: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            width: 100%;
+            margin-top: auto;
+        }
+
+        /* ===== ESTILOS DOS FILTROS ===== */
+        .filters-section {
+            background: #fff;
+            margin: 0 auto 2rem;
+            max-width: 1200px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, .1);
+            overflow: hidden;
+        }
+
+        .filters-header {
+            background: linear-gradient(135deg, var(--primary) 0%, #333 100%);
+            color: #fff;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .filters-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: .5rem;
+            color: var(--secondary);
+        }
+
+        .filters-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            padding: 2rem;
+            background: #fff;
+        }
+
+        .filter-group {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .filter-group-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .filter-options {
+            display: flex;
+            flex-direction: column;
+            gap: .8rem;
+        }
+
+        .filter-option {
+            display: flex;
+            align-items: center;
+            gap: .75rem;
+        }
+
+        .filter-option input[type=checkbox],
+        .filter-option input[type=radio] {
+            width: 18px;
+            height: 18px;
+            accent-color: var(--secondary);
+            cursor: pointer;
+        }
+
+        .filter-option label {
+            cursor: pointer;
+            font-size: .9rem;
+        }
+
+        .price-inputs {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .price-input {
+            flex: 1;
+            width: 100%;
+            padding: .75rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: .9rem;
+        }
+
+        .filter-actions {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem 2rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-filter {
+            flex: 1;
+            padding: .75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .btn-apply {
+            background: var(--secondary);
+            color: #fff;
+        }
+
+        .btn-clear {
+            background: #6c757d;
+            color: #fff;
+        }
+
+        .results-count {
+            padding: 1rem 2rem;
+            background: #d4edda;
+            color: #155724;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* ===== ESTILOS DO CARROSSEL ===== */
+        .carousel-section,
+        .expandable-section {
+            margin-bottom: 3rem;
+        }
+
+        .carousel-title {
+            font-family: "Playfair Display", serif;
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid var(--secondary);
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+            position: relative;
+        }
+
+        .carousel-container,
+        .expandable-container {
+            position: relative;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, .1);
+            overflow: hidden;
+        }
+
+        .carousel-wrapper {
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform .5s ease-in-out;
+            gap: 20px;
+        }
+
+        .product-card {
+            flex-shrink: 0;
+            width: 280px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, .1);
+            overflow: hidden;
+            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .product-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, .15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, var(--secondary) 0%, #f4d03f 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 48px;
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .product-price {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--secondary);
+        }
+
+        .btn-buy {
+            background: var(--secondary);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, .9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 20px;
+            z-index: 10;
+        }
+
+        .nav-prev {
+            left: 10px;
+        }
+
+        .nav-next {
+            right: 10px;
+        }
+
+        /* ===== ESTILOS PARA TABELA EXPANSÍVEL ===== */
+        .expandable-container {
+            max-height: 410px;
+            /* Altura inicial para mostrar apenas a primeira linha e padding */
+            transition: max-height 0.7s ease-in-out;
+        }
+
+        .expandable-container.expanded {
+            max-height: 2000px;
+            /* Altura grande para caber todo o conteúdo */
+        }
+
+        .expandable-wrapper {
+            padding: 30px;
+            padding-bottom: 60px;
+            /* Espaço para o botão "Expandir" não cobrir o último card */
+        }
+
+        .expandable-product-grid {
+            /* Estado inicial: linha flexível com scroll horizontal */
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            /* Esconde a barra de rolagem visualmente */
+            -ms-overflow-style: none;
+            /* IE and Edge */
+            scrollbar-width: none;
+            /* Firefox */
+        }
+
+        .expandable-product-grid::-webkit-scrollbar {
+            display: none;
+            /* Chrome, Safari and Opera */
+        }
+
+        .expanded .expandable-product-grid {
+            /* Estado expandido: transforma em grade */
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            overflow-x: visible;
+            justify-items: center;
+            /* Centraliza os cards se a última linha não for completa */
+        }
+
+        .btn-expand {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            z-index: 11;
+            transition: background-color 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-expand:hover {
+            background-color: var(--dark);
+        }
+
+        .btn-expand .arrow {
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            display: inline-block;
+            padding: 3px;
+            transform: rotate(45deg);
+            transition: transform 0.3s ease;
+        }
+
+        .expanded .btn-expand .arrow {
+            transform: rotate(-135deg);
+        }
+
+        .expandable-container::after {
+            /* Gradiente para indicar mais conteúdo */
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, white, rgba(255, 255, 255, 0));
+            z-index: 10;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .expanded::after {
+            opacity: 0;
+        }
+
+
+        @media (max-width: 768px) {
+            .search-header {
+                display: none;
+            }
+
+            .abrir-menu {
+                top: 40%;
+            }
+
+            .filters-container {
+                flex-direction: column;
+            }
+
+            .expandable-product-grid {
+                justify-content: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <span class="abrir-menu" onclick="openNav()">☰ Menu</span>
+        <div class="logo">
+            <h1>Barbearia Manóv</h1>
+        </div>
+        <nav class="nav">
+            <ul>
+                <li class="dropdown"><a href="agenda.html">Agenda</a>
+                    <ul class="dropdown-menu">
+                        <li><a href="agenda.html">Horários</a></li>
+                    </ul>
+                </li>
+
+              <li class="dropdown">
+                <a href="#vitrine">Vitrine</a>
+                <ul class="dropdown-menu">
+                  <li class="submenu">
+                    <a href="acessorios.html">Acessórios</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="acessorios.html">Borrifadores</a></li>
+                      <li><a href="acessorios.html">Capas</a></li>
+                      <li><a href="acessorios.html">...</a></li>
+                    </ul>
+                  </li>
+                  <li class="submenu">
+                    <a href="ferramentas.html">Ferramentas</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="ferramentas.html">Lâminas</a></li>
+                      <li><a href="ferramentas.html">Navalhete</a></li>
+                      <li><a href="ferramentas.html">Tesouras</a></li>
+                    </ul>
+                  </li>
+ 
+                </ul>
+              </li>
+
+              <li class="dropdown">
+                <a href="#servicos">Serviços</a>
+                <ul class="dropdown-menu">
+                  <li class="submenu">
+                    <a href="#cortes">Cortes</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="fotos-cortes.html">Tipos</a></li>
+                    </ul>
+                  </li>
+
+                  <li class="submenu">
+                    <a href="#sobrancelhas">Sobrancelhas</a>
+                    <ul class="sub-dropdown">
+                      <li>
+                        <a
+                          href="#tipos-sobrancelhas"
+                          onclick="showContent('sobrancelhas')"
+                          >Tipos</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="submenu">
+                    <a href="#barbas">Barbas</a>
+                    <ul class="sub-dropdown">
+                      <li>
+                        <a href="#tipos-barbas" onclick="showContent('barbas')"
+                          >Tipos</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+                <li><a href="avisos.html">Avisos</a></li>
+            </ul>
+        </nav>
+        <div class="search-header">
+            <input type="text" placeholder="Buscar..." aria-label="Buscar" />
+            <button class="btn-busca" aria-label="Buscar">🔍</button>
+        </div>
+    </header>
+
+    <div id="myNav" class="overlay">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+        <div class="overlay-content">
+            <a href="perfil.html">Perfil</a>
+            <a href="historico.html">Histórico</a>
+            <a href="avaliacao.html">Avaliações</a>
+            <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="filters-section">
+            <div class="filters-header">
+                <h2 class="filters-title">🔍 Filtros Avançados</h2>
+            </div>
+            <div class="results-count" id="resultsCount"></div>
+            <div class="filters-container">
+                <div class="filter-group">
+                    <h3 class="filter-group-title">Categoria</h3>
+                    <div class="filter-options">
+                        <div class="filter-option"><input type="checkbox" id="pomadas" name="category" value="pomadas" /><label for="pomadas">Pomadas</label></div>
+                        <div class="filter-option"><input type="checkbox" id="oleos" name="category" value="oleos" /><label for="oleos">Óleos e Shampoos</label></div>
+                        <div class="filter-option"><input type="checkbox" id="ferramentas" name="category" value="ferramentas" /><label for="ferramentas">Ferramentas</label></div>
+                        <div class="filter-option"><input type="checkbox" id="acessorios" name="category" value="acessorios" /><label for="acessorios">Acessórios</label></div>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h3 class="filter-group-title">Faixa de Preço</h3>
+                    <div class="price-inputs">
+                        <input type="number" class="price-input" id="minPrice" placeholder="Min R$" min="0" />
+                        <input type="number" class="price-input" id="maxPrice" placeholder="Max R$" min="0" />
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <h3 class="filter-group-title">Marca</h3>
+                    <div class="filter-options">
+                        <div class="filter-option"><input type="checkbox" id="qod" name="brand" value="QOD" /><label for="qod">QOD Barber Shop</label></div>
+                        <div class="filter-option"><input type="checkbox" id="uppercut" name="brand" value="Uppercut" /><label for="uppercut">Uppercut</label></div>
+                        <div class="filter-option"><input type="checkbox" id="trueman" name="brand" value="TrueMan" /><label for="trueman">TrueMan</label></div>
+                    </div>
+                </div>
+            </div>
+            <div class="filter-actions">
+                <button class="btn-filter btn-apply" onclick="applyFilters()">Aplicar Filtros</button>
+                <button class="btn-filter btn-clear" onclick="clearFilters()">Limpar Tudo</button>
+            </div>
+        </div>
+
+        <div id="carousels-wrapper">
+            <div class="carousel-section">
+                <h2 class="carousel-title">Acessórios em Destaque</h2>
+                <div class="carousel-container">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-track" id="carousel-track-1"></div>
+                        <button class="carousel-nav nav-prev" onclick="moveSlide(-1, 0)">&#8249;</button>
+                        <button class="carousel-nav nav-next" onclick="moveSlide(1, 0)">&#8250;</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div id="no-results" style="display:none; text-align:center; padding: 40px; background: white; border-radius: 12px; margin: 20px;">
+            <h3>Nenhum produto encontrado.</h3>
+            <p>Tente alterar ou limpar os filtros.</p>
+        </div>
+
+        <div class="expandable-section">
+            <h2 class="carousel-title">Destaques da Loja</h2>
+            <div class="expandable-container" id="expandable-container-1">
+                <div class="expandable-wrapper" id="expandable-wrapper-1">
+                </div>
+                <button class="btn-expand" onclick="toggleExpand('expandable-container-1', this)">
+                    <span id="expand-btn-text">Expandir</span> <i class="arrow"></i>
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // --- FUNÇÕES DE MENU E NAVEGAÇÃO ---
+        function openNav() {
+            document.getElementById("myNav").style.width = "50%";
+        }
+
+        function closeNav() {
+            document.getElementById("myNav").style.width = "0%";
+        }
+
+        function performSearch() {
+            const searchTerm = document.querySelector('.search-header input').value;
+            if (searchTerm.trim()) {
+                alert(`Buscando por: ${searchTerm}`);
+            }
+        }
+
+        // --- BANCO DE DADOS DE PRODUTOS (Exemplo) ---
+        const masterProductsAcessorios = [{
+            id: 1,
+            title: "Pomada Clássica",
+            price: "45.90",
+            category: "pomadas",
+            brand: "QOD",
+            icon: "💧"
+        }, {
+            id: 2,
+            title: "Óleo para Barba",
+            price: "35.90",
+            category: "oleos",
+            brand: "TrueMan",
+            icon: "🧴"
+        }, {
+            id: 3,
+            title: "Pente de Madeira",
+            price: "19.90",
+            category: "acessorios",
+            brand: "Uppercut",
+            icon: "🪮"
+        }, {
+            id: 4,
+            title: "Gel Fixador",
+            price: "25.90",
+            category: "pomadas",
+            brand: "TrueMan",
+            icon: "💧"
+        }, {
+            id: 5,
+            title: "Shampoo Anticaspa",
+            price: "29.90",
+            category: "oleos",
+            brand: "QOD",
+            icon: "🧴"
+        }, {
+            id: 6,
+            title: "Cera Modeladora",
+            price: "32.90",
+            category: "pomadas",
+            brand: "Uppercut",
+            icon: "🕯️"
+        }, ];
+        const masterProductsFerramentas = [{
+            id: 7,
+            title: "Máquina Profissional",
+            price: "299.90",
+            category: "ferramentas",
+            brand: "QOD",
+            icon: "✂️"
+        }, {
+            id: 8,
+            title: "Navalhete de Aço",
+            price: "55.00",
+            category: "ferramentas",
+            brand: "Uppercut",
+            icon: "🔪"
+        }, {
+            id: 9,
+            title: "Tesoura Fio Navalha",
+            price: "120.00",
+            category: "ferramentas",
+            brand: "TrueMan",
+            icon: "✂️"
+        }, {
+            id: 10,
+            title: "Borrifador de Alumínio",
+            price: "25.00",
+            category: "acessorios",
+            brand: "QOD",
+            icon: "💨"
+        }, {
+            id: 11,
+            title: "Capa de Corte",
+            price: "49.90",
+            category: "acessorios",
+            brand: "TrueMan",
+            icon: "👕"
+        }, {
+            id: 12,
+            title: "Pincéis Profissionais",
+            price: "89.90",
+            category: "ferramentas",
+            brand: "Uppercut",
+            icon: "🖌️"
+        }, ];
+        const tableProducts = [{
+            id: 13,
+            title: "Loção Pós-Barba",
+            price: "42.50",
+            icon: "🌿"
+        }, {
+            id: 14,
+            title: "Balm Modelador",
+            price: "38.00",
+            icon: "✨"
+        }, {
+            id: 15,
+            title: "Escova de Cerdas",
+            price: "22.00",
+            icon: "🖌️"
+        }, {
+            id: 16,
+            title: "Pó Modelador",
+            price: "55.00",
+            icon: "💨"
+        }, {
+            id: 17,
+            title: "Spray de Brilho",
+            price: "33.70",
+            icon: "💧"
+        }, {
+            id: 18,
+            title: "Kit Viagem",
+            price: "99.90",
+            icon: "✈️"
+        }, {
+            id: 19,
+            title: "Toalha Quente",
+            price: "15.00",
+            icon: "🧖"
+        }, {
+            id: 20,
+            title: "Tônico Capilar",
+            price: "65.00",
+            icon: "🌱"
+        }, ];
+
+        let allCarousels = [[...masterProductsAcessorios], [...masterProductsFerramentas]];
+        let currentSlides = [0, 0];
+
+        // --- FUNÇÕES DE RENDERIZAÇÃO ---
+        function createProductCard(product) {
+            return `
+                <div class="product-card">
+                  <div class="product-image">${product.icon}</div>
+                  <div class="product-info">
+                    <h3 class="product-title">${product.title}</h3>
+                    <div class="product-price">
+                      <span class="price">R$ ${parseFloat(product.price).toFixed(2).replace('.',',')}</span>
+                      <button class="btn-buy">Comprar</button>
+                    </div>
+                  </div>
+                </div>`;
+        }
+
+        // --- LÓGICA DO CARROSSEL ---
+        function initCarousel(carouselIndex) {
+            const products = allCarousels[carouselIndex];
+            const track = document.getElementById(`carousel-track-${carouselIndex + 1}`);
+            if (track) {
+                track.innerHTML = products.length > 0 ? products.map(createProductCard).join("") : `<p style="padding: 20px; text-align: center; width: 100%;">Nenhum produto aqui.</p>`;
+                currentSlides[carouselIndex] = 0;
+                track.style.transform = "translateX(0px)";
+            }
+        }
+
+        function moveSlide(direction, carouselIndex) {
+            const track = document.getElementById(`carousel-track-${carouselIndex + 1}`);
+            const products = allCarousels[carouselIndex];
+            const cardWidth = 300; // Largura do card + gap
+            const visibleCards = Math.floor(track.parentElement.offsetWidth / cardWidth);
+            const maxSlides = Math.max(0, products.length - visibleCards);
+
+            let newIndex = currentSlides[carouselIndex] + direction;
+            if (newIndex < 0) {
+                newIndex = 0;
+            } else if (newIndex > maxSlides) {
+                newIndex = maxSlides;
+            }
+            currentSlides[carouselIndex] = newIndex;
+            track.style.transform = `translateX(-${newIndex * cardWidth}px)`;
+        }
+
+        // --- LÓGICA DOS FILTROS ---
+        function applyFilters() {
+            const minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
+            const maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
+            const selectedCategories = Array.from(document.querySelectorAll('input[name="category"]:checked')).map(el => el.value);
+            const selectedBrands = Array.from(document.querySelectorAll('input[name="brand"]:checked')).map(el => el.value);
+
+            const filterFunction = product => {
+                const price = parseFloat(product.price);
+                const categoryMatch = selectedCategories.length === 0 || selectedCategories.includes(product.category);
+                const brandMatch = selectedBrands.length === 0 || !product.brand || selectedBrands.includes(product.brand);
+                const priceMatch = price >= minPrice && price <= maxPrice;
+                return categoryMatch && brandMatch && priceMatch;
+            };
+
+            allCarousels[0] = masterProductsAcessorios.filter(filterFunction);
+            allCarousels[1] = masterProductsFerramentas.filter(filterFunction);
+
+            initCarousel(0);
+            initCarousel(1);
+            updateResults();
+        }
+
+        function clearFilters() {
+            document.querySelectorAll('input[type="checkbox"], input[type="radio"]').forEach(el => el.checked = false);
+            document.getElementById("minPrice").value = "";
+            document.getElementById("maxPrice").value = "";
+
+            allCarousels = [[...masterProductsAcessorios], [...masterProductsFerramentas]];
+            initCarousel(0);
+            initCarousel(1);
+            updateResults();
+        }
+
+        function updateResults() {
+            const totalFound = allCarousels.flat().length;
+            document.getElementById("resultsCount").innerHTML = `🎯 <strong>${totalFound}</strong> produtos encontrados`;
+
+            const carouselsWrapper = document.getElementById("carousels-wrapper");
+            const noResultsDiv = document.getElementById("no-results");
+
+            carouselsWrapper.style.display = totalFound > 0 ? "block" : "none";
+            noResultsDiv.style.display = totalFound > 0 ? "none" : "block";
+        }
+
+
+        // ===== LÓGICA DA SEÇÃO EXPANSÍVEL =====
+        function initExpandableTable() {
+            const wrapper = document.getElementById('expandable-wrapper-1');
+            if (!wrapper) return;
+
+            // Cria um único contêiner para todos os produtos
+            const gridHTML = `
+              <div class="expandable-product-grid">
+                ${tableProducts.map(createProductCard).join('')}
+              </div>
+            `;
+            wrapper.innerHTML = gridHTML;
+        }
+
+        function toggleExpand(containerId, buttonEl) {
+            const container = document.getElementById(containerId);
+            const buttonText = buttonEl.querySelector('span');
+            container.classList.toggle('expanded');
+
+            if (container.classList.contains('expanded')) {
+                buttonText.textContent = 'Recolher';
+            } else {
+                buttonText.textContent = 'Expandir';
+            }
+        }
+
+        // --- INICIALIZAÇÃO E EVENTOS ---
+        document.addEventListener('DOMContentLoaded', function() {
+            initCarousel(0);
+            initCarousel(1);
+            initExpandableTable(); // Inicializa a nova seção
+            updateResults();
+
+            document.querySelector('.search-header input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+            document.querySelector('.btn-busca').addEventListener('click', performSearch);
+        });
+    </script>
+</body>
+
+</html>
