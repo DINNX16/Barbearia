@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avisos - Barbearia Manóv</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="style/avisos.css">
+
+    </head>
+<body>
+    <header class="header">
+        <a href="main.html" style="text-decoration: none; color: inherit;">
+            <h1>Barbearia Manóv</h1>
+        </a>
+    </header>
+
+    <main>
+        <div class="avisos-container">
+            <div class="section-header">
+                <h1>Novidades e Avisos</h1>
+            </div>
+            <ul id="avisos-list" class="avisos-list">
+                </ul>
+
+            <button id="load-more-btn" class="load-more-button">
+                Carregar Mais
+            </button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
+    </footer>
+
+    <script>
+        // Dados dos avisos (pode vir de um backend no futuro)
+        const allAvisosData = [
+            { id: 1, titulo: "Nova Promoção Chegando!", descricao: "Prepare-se para a nossa incrível 'Promoção Bigode de Respeito'! A partir do dia 15 de Julho, todos os serviços de barba terão 20% de desconto!", data: "1 semana atrás", tag: "Promoção", tipo: "promocao", icon: "../assets/icones_tela_avisos/promocao.png" },
+            { id: 2, titulo: "Atenção: Estaremos Fechados", descricao: "Informamos que a barbearia estará fechada nos dias 20 e 21 de Julho para manutenção e treinamento da equipe.", data: "2 dias atrás", tag: "Urgente", tipo: "fechado", icon: "../assets/icones_tela_avisos/aviso_urgente.png" },
+            { id: 3, titulo: "Horário de Atendimento Especial", descricao: "No dia 18 de Julho, atenderemos em horário reduzido, das 09:00 às 15:00, devido a um evento especial.", data: "3 dias atrás", tag: "Horário", tipo: "horario", icon: "../assets/icones_tela_avisos/horario.png" },
+            { id: 4, titulo: "Novos Horários de Atendimento", descricao: "A partir de 1º de Agosto, nossos horários de atendimento serão: Segunda a Sexta: 09:00 - 19:00, Sábados: 08:00 - 17:00. Domingos e Feriados: Fechado.", data: "4 semanas atrás", tag: "Informação", tipo: "", icon: "../assets/icones_tela_avisos/cortes.png" },
+            { id: 5, titulo: "Conheça Nossos Novos Talentos!", descricao: "Recebemos novos barbeiros na equipe! Agende seu horário e experimente os serviços de nossos profissionais recém-chegados.", data: "1 mês atrás", tag: "Novidades", tipo: "", icon: "../assets/icones_tela_avisos/new.png" },
+            { id: 6, titulo: "Dia do Cliente com Desconto Extra!", descricao: "Fique atento às nossas redes sociais no dia 15 de Setembro. Teremos um desconto surpresa exclusivo para nossos clientes mais fiéis!", data: "2 meses atrás", tag: "Promoção", tipo: "promocao", icon: "../assets/icones_tela_avisos/promocao.png" },
+            { id: 7, titulo: "Dicas de Cuidado com a Barba", descricao: "Confira em nosso blog as melhores dicas para manter sua barba sempre impecável. Produtos, técnicas e muito mais!", data: "3 meses atrás", tag: "Dicas", tipo: "", icon: "../assets/icones_tela_avisos/bigode.png" },
+            { id: 8, titulo: "Seu Estilo em Destaque!", descricao: "Poste uma foto do seu corte ou barba feita na Barbearia Manóv nos marque e apareça em nossas redes sociais!", data: "4 meses atrás", tag: "Redes sociais", tipo: "", icon: "../assets/icones_tela_avisos/cortes.png" }
+        ];
+
+        let avisosExibidosPorCarga = 4; // Avisos a exibir a cada clique
+        let proximoIndiceAviso = 0; // Próximo índice a ser carregado
+
+        // Função para criar um elemento de item de aviso
+        function criarAvisoItem(aviso) {
+            const listItem = document.createElement('li');
+            listItem.className = `aviso-item ${aviso.tipo || ''}`;
+
+            let iconContent;
+            // Prioriza imagem PNG, depois Font Awesome, senão deixa vazio ou usa padrão.
+            if (aviso.icon && aviso.icon.endsWith('.png')) { // Verifica se é um caminho PNG
+                iconContent = `<img src="${aviso.icon}" alt="Ícone ${aviso.tag}">`;
+            } else if (aviso.icon && aviso.icon.startsWith('fa')) { // Verifica se é classe Font Awesome
+                iconContent = `<i class="${aviso.icon}"></i>`;
+            } else {
+                iconContent = ``; // Ou coloque um ícone padrão aqui se quiser
+            }
+
+            listItem.innerHTML = `
+                <div class="aviso-icon-wrapper">
+                    ${iconContent}
+                </div>
+                <div class="aviso-content">
+                    <h2>${aviso.titulo}</h2>
+                    <p>${aviso.descricao}</p>
+                    <div class="aviso-meta">
+                        <span class="data">${aviso.data}</span>
+                        <span class="tag">${aviso.tag}</span>
+                    </div>
+                </div>
+            `;
+            return listItem;
+        }
+
+        // Função para carregar e exibir os avisos
+        function carregarAvisos() {
+            const avisosList = document.getElementById('avisos-list');
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            
+            const avisosParaAdicionar = allAvisosData.slice(proximoIndiceAviso, proximoIndiceAviso + avisosExibidosPorCarga);
+
+            avisosParaAdicionar.forEach(aviso => {
+                const item = criarAvisoItem(aviso);
+                avisosList.appendChild(item);
+            });
+
+            proximoIndiceAviso += avisosParaAdicionar.length; // Atualiza o índice para a próxima carga
+
+            // Esconde o botão se todos os avisos já foram exibidos
+            if (proximoIndiceAviso >= allAvisosData.length) {
+                loadMoreBtn.style.display = 'none';
+            } else {
+                loadMoreBtn.style.display = 'block';
+            }
+        }
+
+        // Event listener para carregar avisos na inicialização e no clique do botão
+        document.addEventListener('DOMContentLoaded', () => {
+            carregarAvisos(); // Carrega os primeiros avisos ao carregar a página
+
+            const loadMoreBtn = document.getElementById('load-more-btn');
+            if (loadMoreBtn) {
+                loadMoreBtn.addEventListener('click', carregarAvisos); // Chama a função para carregar mais
+            }
+        });
+
+    </script>
+</body>
+</html>
