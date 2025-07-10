@@ -1,4 +1,28 @@
     
+            function openNav() {
+        document.getElementById("myNav").style.width = "50%";
+      }
+
+      function closeNav() {
+        document.getElementById("myNav").style.width = "0%";
+      }
+
+      // NOVO SCRIPT PARA MOSTRAR/ESCONDER CONTEÚDO
+      function showContent(sectionId) {
+        // Esconde todas as seções de conteúdo
+        var sections = document.querySelectorAll(".content-section");
+        sections.forEach(function (section) {
+          section.classList.remove("active");
+        });
+
+        // Mostra a seção clicada
+        var activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+          activeSection.classList.add("active");
+        }
+      }
+      
+      
       // ANIMAÇÃO DE LOADING SIMPLES
       let contador = 3;
 
