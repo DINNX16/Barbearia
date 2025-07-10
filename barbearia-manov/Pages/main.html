@@ -8,214 +8,291 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="style/main.css" />
   </head>
   <body>
     <!-- TELA DE LOADING SIMPLES -->
-    <div id="loading" style="
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100vh;
-      background: linear-gradient(135deg, #fef7cd, #fed7aa);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      font-family: 'Montserrat', sans-serif;
-      transition: opacity 0.5s ease;
-    ">
-      <img id="moeda" src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/moedamoeda.png"
-           alt="Moeda" style="
-           width: 150px;
-           height: 150px;
-           animation: girar 1.5s linear infinite;
-           filter: drop-shadow(0 5px 15px rgba(0,0,0,0.3));
-      ">
-      <h2 style="color: #92400e; margin-top: 20px; font-size: 24px;">Barbearia Manóv</h2>
-      <p style="color: #78350f; font-size: 16px;">Carregando...</p>
-      <div id="contador" style="color: #78350f; font-size: 32px; font-weight: bold; margin-top: 10px;">3</div>
+    <div
+      id="loading"
+      style="
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: linear-gradient(135deg, #fef7cd, #fed7aa);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 9999;
+        font-family: 'Montserrat', sans-serif;
+        transition: opacity 0.5s ease;
+      "
+    >
+      <img
+        id="moeda"
+        src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/moedamoeda.png"
+        alt="Moeda"
+        style="
+          width: 150px;
+          height: 150px;
+          animation: girar 1.5s linear infinite;
+          filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+        "
+      />
+      <h2 style="color: #92400e; margin-top: 20px; font-size: 24px">
+        Barbearia Manóv
+      </h2>
+      <p style="color: #78350f; font-size: 16px">Carregando...</p>
+      <div
+        id="contador"
+        style="
+          color: #78350f;
+          font-size: 32px;
+          font-weight: bold;
+          margin-top: 10px;
+        "
+      >
+        3
+      </div>
     </div>
- 
+
     <style>
       @keyframes girar {
-        from { transform: perspective(1000px) rotateY(0deg); }
-        to { transform: perspective(1000px) rotateY(360deg); }
+        from {
+          transform: perspective(1000px) rotateY(0deg);
+        }
+        to {
+          transform: perspective(1000px) rotateY(360deg);
+        }
       }
-     
-      body { margin: 0; }
-     
+
+      body {
+        margin: 0;
+      }
+
       .conteudo-principal {
         opacity: 0;
         transition: opacity 0.5s ease;
       }
-     
+
       .conteudo-principal.mostrar {
         opacity: 1;
       }
     </style>
- 
+
     <!-- SEU CONTEÚDO ORIGINAL -->
     <div class="conteudo-principal" id="conteudo">
       <header class="header">
         <span class="abrir-menu" onclick="openNav()">☰ Menu</span>
         <div class="logo">
-          <h1>Barbearia Manóv</h1>
-       
-        <nav class="nav">
-          <ul>
-            <li class="dropdown">
-              <a href="#agenda">Agenda</a>
-              <ul class="dropdown-menu">
-                <li><a href="agenda.html">Horários</a></li>
-                <li><a href="#localizacao">Localização</a></li>
-              </ul>
-            </li>
- 
-            <li class="dropdown">
-              <a href="#vitrine">Vitrine</a>
-              <ul class="dropdown-menu">
-                <li class="submenu">
-                  <a href="#acessorios">Acessórios</a>
-                  <ul class="sub-dropdown">
-                    <li><a href="#borrifadores">Borrifadores</a></li>
-                    <li><a href="#capas">Capas</a></li>
-                    <li><a href="#lista-completa-acessorios">...</a></li>
-                  </ul>
-                </li>
-                <li class="submenu">
-                  <a href="#ferramentas">Ferramentas</a>
-                  <ul class="sub-dropdown">
-                    <li><a href="#laminas">Lâminas</a></li>
-                    <li><a href="#navalhete">Navalhete</a></li>
-                    <li><a href="#tesouras">Tesouras</a></li>
-                  </ul>
-                </li>
-                <li class="submenu">
-                  <a href="#maquinas">Máquinas</a>
-                  <ul class="sub-dropdown">
-                    <li><a href="#maquinas-cortes">Cortes</a></li>
-                    <li><a href="#acabamentos">Acabamentos</a></li>
-                    <li><a href="#shaver">Shaver</a></li>
-                  </ul>
-                </li>
-                <li class="submenu">
-                  <a href="#produtos">Produtos</a>
-                  <ul class="sub-dropdown">
-                    <li><a href="#cremes">Cremes</a></li>
-                    <li><a href="#geis">Géis</a></li>
-                    <li><a href="#lista-completa-produtos">...</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
- 
-            <li class="dropdown">
-              <a href="#servicos">Serviços</a>
-              <ul class="dropdown-menu">
-                <li class="submenu">
-                  <a href="#cortes">Cortes</a>
-                  <ul class="sub-dropdown">
-                    <li><a href="fotos-cortes.html">Tipos</a></li>
-                  </ul>
-                </li>
-               
-                <li class="submenu">
-                  <a href="#sobrancelhas">Sobrancelhas</a>
-                  <ul class="sub-dropdown">
-                    <li><a href="#tipos-sobrancelhas">Tipos</a></li>
-                  </ul>
-                </li>
-                <li class="submenu">
-                  <a href="#barbas">Barbas</a>
-                  <ul class="sub-dropdown">
-                    <li><a href="#tipos-barbas">Tipos</a></li>
-                  </ul>
-                </li>
-              </ul>
-            </li>
- 
-            <li><a href="#avisos">Avisos</a></li>
-          </ul>
-        </nav>
-        </div><div class="search-header">
+          <a href="main.html" style="text-decoration: none; color: inherit">
+            <h1>Barbearia Manóv</h1>
+          </a>
+
+          <nav class="nav">
+            <ul>
+              <li class="dropdown">
+                <a href="#agenda">Agenda</a>
+                <ul class="dropdown-menu">
+                  <li><a href="agenda.html">Horários</a></li>
+                  <!--<li><a href="#localizacao">Localização</a></li> ainda vamos utilizar?-->
+                </ul>
+              </li>
+
+              <li class="dropdown">
+                <a href="#vitrine">Vitrine</a>
+                <ul class="dropdown-menu">
+                  <li class="submenu">
+                    <a href="#acessorios">Acessórios</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="#borrifadores">Borrifadores</a></li>
+                      <li><a href="#capas">Capas</a></li>
+                      <li><a href="#lista-completa-acessorios">...</a></li>
+                    </ul>
+                  </li>
+                  <li class="submenu">
+                    <a href="#ferramentas">Ferramentas</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="#laminas">Lâminas</a></li>
+                      <li><a href="#navalhete">Navalhete</a></li>
+                      <li><a href="#tesouras">Tesouras</a></li>
+                    </ul>
+                  </li>
+                  <li class="submenu">
+                    <a href="#maquinas">Máquinas</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="#maquinas-cortes">Cortes</a></li>
+                      <li><a href="#acabamentos">Acabamentos</a></li>
+                      <li><a href="#shaver">Shaver</a></li>
+                    </ul>
+                  </li>
+                  <li class="submenu">
+                    <a href="#produtos">Produtos</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="#cremes">Cremes</a></li>
+                      <li><a href="#geis">Géis</a></li>
+                      <li><a href="#lista-completa-produtos">...</a></li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+
+              <li class="dropdown">
+                <a href="#servicos">Serviços</a>
+                <ul class="dropdown-menu">
+                  <li class="submenu">
+                    <a href="#cortes">Cortes</a>
+                    <ul class="sub-dropdown">
+                      <li><a href="fotos-cortes.html">Tipos</a></li>
+                    </ul>
+                  </li>
+
+                  <li class="submenu">
+                    <a href="#sobrancelhas">Sobrancelhas</a>
+                    <ul class="sub-dropdown">
+                      <li>
+                        <a
+                          href="#tipos-sobrancelhas"
+                          onclick="showContent('sobrancelhas')"
+                          >Tipos</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                  <li class="submenu">
+                    <a href="#barbas">Barbas</a>
+                    <ul class="sub-dropdown">
+                      <li>
+                        <a href="#tipos-barbas" onclick="showContent('barbas')"
+                          >Tipos</a
+                        >
+                      </li>
+                    </ul>
+                  </li>
+                </ul>
+              </li>
+
+              <li><a href="avisos.html">Avisos</a></li>
+            </ul>
+          </nav>
+        </div>
+        <div class="search-header">
           <input type="text" placeholder="Buscar..." aria-label="Buscar" />
           <button class="btn-busca" aria-label="Buscar">🔍</button>
         </div>
       </header>
-     
+
       <div id="myNav" class="overlay">
-        <a href="javascript:void(0)" id="btnFechar" class="closebtn" onclick="closeNav()">&times;</a>
+        <a
+          href="javascript:void(0)"
+          id="btnFechar"
+          class="closebtn"
+          onclick="closeNav()"
+          >&times;</a
+        >
         <div class="overlay-content">
           <a href="perfil.html" onclick="closeNav()">Perfil</a>
           <a href="historico.html" onclick="closeNav()">Histórico</a>
           <a href="avaliacao.html" onclick="closeNav()">Avaliações</a>
           <a href="login.html" onclick="closeNav()" id="loginMenuLink">Login</a>
-          <a href="#" onclick="logout(); closeNav()" id="logoutMenuLink" style="display: none">Logout</a>
+          <a
+            href="#"
+            onclick="logout(); closeNav()"
+            id="logoutMenuLink"
+            style="display: none"
+            >Logout</a
+          >
           <a href="configuracao.html">Configurações</a>
         </div>
       </div>
- 
+
       <main>
         <section class="content-section">
           <div class="floating-card">
-           
             <img
               src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/biografia.png"
               alt="Descrição da barbearia ou de um serviço específico"
-              class="card-image">
- 
+              class="card-image"
+            />
+
             <div class="card-text-content">
               <h3>Barbearia Manóv</h3>
               <p>
-A Barbearia Manov nasceu da paixão por proporcionar uma experiência única de cuidado e estilo. Fundada com o objetivo de oferecer um serviço de qualidade, nosso espaço combina o melhor do atendimento personalizado com um ambiente descontraído e moderno.
+                A Barbearia Manov nasceu da paixão por proporcionar uma
+                experiência única de cuidado e estilo. Fundada com o objetivo de
+                oferecer um serviço de qualidade, nosso espaço combina o melhor
+                do atendimento personalizado com um ambiente descontraído e
+                moderno.
               </p>
             </div>
- 
           </div>
         </section>
- 
+
         <section class="carousel-section">
           <div class="carousel-container">
-              <div class="carousel-window">
-                  <div class="carousel-track">
-                      <div class="carousel-card">
-                          <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/jovem.png" alt="Corte de cabelo">
-                          <div class="carousel-card-content">
-                              <h4>Cortes Modernos</h4>
-                              <p>Do clássico ao contemporâneo, encontre o estilo que mais combina com você.</p>
-                          </div>
-                      </div>
-                      <div class="carousel-card">
-                          <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/barba-terapia.png" alt="Cuidado com a barba">
-                          <div class="carousel-card-content">
-                              <h4>Barba Terapia</h4>
-                              <p>Tratamento completo com toalhas quentes, óleos e massagem facial.</p>
-                          </div>
-                      </div>
-                      <div class="carousel-card">
-                          <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/produto.png" alt="Produtos para cabelo e barba">
-                          <div class="carousel-card-content">
-                              <h4>Produtos Premium</h4>
-                              <p>As melhores marcas de pomadas, óleos e balms para o seu cuidado diário.</p>
-                          </div>
-                      </div>
-                      <div class="carousel-card">
-                          <img src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/ambiente-barbearia.png" alt="Ambiente da barbearia">
-                          <div class="carousel-card-content">
-                              <h4>Ambiente Exclusivo</h4>
-                              <p>Um lugar para relaxar, tomar uma cerveja e cuidar do visual com estilo.</p>
-                          </div>
-                      </div>
+            <div class="carousel-window">
+              <div class="carousel-track">
+                <div class="carousel-card">
+                  <img
+                    src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/jovem.png"
+                    alt="Corte de cabelo"
+                  />
+                  <div class="carousel-card-content">
+                    <h4>Cortes Modernos</h4>
+                    <p>
+                      Do clássico ao contemporâneo, encontre o estilo que mais
+                      combina com você.
+                    </p>
                   </div>
+                </div>
+                <div class="carousel-card">
+                  <img
+                    src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/barba-terapia.png"
+                    alt="Cuidado com a barba"
+                  />
+                  <div class="carousel-card-content">
+                    <h4>Barba Terapia</h4>
+                    <p>
+                      Tratamento completo com toalhas quentes, óleos e massagem
+                      facial.
+                    </p>
+                  </div>
+                </div>
+                <div class="carousel-card">
+                  <img
+                    src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/produto.png"
+                    alt="Produtos para cabelo e barba"
+                  />
+                  <div class="carousel-card-content">
+                    <h4>Produtos Premium</h4>
+                    <p>
+                      As melhores marcas de pomadas, óleos e balms para o seu
+                      cuidado diário.
+                    </p>
+                  </div>
+                </div>
+                <div class="carousel-card">
+                  <img
+                    src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/ambiente-barbearia.png"
+                    alt="Ambiente da barbearia"
+                  />
+                  <div class="carousel-card-content">
+                    <h4>Ambiente Exclusivo</h4>
+                    <p>
+                      Um lugar para relaxar, tomar uma cerveja e cuidar do
+                      visual com estilo.
+                    </p>
+                  </div>
+                </div>
               </div>
-              <button class="carousel-button prev-button">‹</button>
-              <button class="carousel-button next-button">›</button>
+            </div>
+            <button class="carousel-button prev-button">‹</button>
+            <button class="carousel-button next-button">›</button>
           </div>
         </section>
- 
+
         <!-- SEÇÃO DE AVALIAÇÕES CORRIGIDA -->
         <section class="avaliacoes-section">
           <h2>Avaliações dos Clientes</h2>
@@ -226,85 +303,89 @@ A Barbearia Manov nasceu da paixão por proporcionar uma experiência única de 
                 <span class="data-avaliacao">02/06/2025</span>
               </div>
               <div class="estrelas-avaliacao" data-nota="5">
-                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                <span>★</span><span>★</span><span>★</span><span>★</span
+                ><span>★</span>
               </div>
               <p class="texto-avaliacao">
-                Atendimento impecável e corte exatamente como pedi. O barbeiro Eduardo é um mestre! Ambiente muito agradável. Recomendo demais!
+                Atendimento impecável e corte exatamente como pedi. O barbeiro
+                Eduardo é um mestre! Ambiente muito agradável. Recomendo demais!
               </p>
               <div class="avaliacao-servico-info">
-                  <span>Serviço:</span> Corte Masculino Moderno
+                <span>Serviço:</span> Corte Masculino Moderno
               </div>
             </div>
- 
+
             <div class="card-avaliacao">
               <div class="card-avaliacao-header">
                 <span class="nome-avaliador">Fernanda L.</span>
                 <span class="data-avaliacao">28/05/2025</span>
               </div>
               <div class="estrelas-avaliacao" data-nota="4">
-                <span>★</span><span>★</span><span>★</span><span>★</span><span>☆</span>
+                <span>★</span><span>★</span><span>★</span><span>★</span
+                ><span>☆</span>
               </div>
               <p class="texto-avaliacao">
-                Gostei muito do resultado da barboterapia. Apenas achei que a espera foi um pouco longa, mesmo com horário marcado. Mas o profissionalismo compensou.
+                Gostei muito do resultado da barboterapia. Apenas achei que a
+                espera foi um pouco longa, mesmo com horário marcado. Mas o
+                profissionalismo compensou.
               </p>
               <div class="avaliacao-servico-info">
-                  <span>Serviço:</span> Barboterapia Premium
+                <span>Serviço:</span> Barboterapia Premium
               </div>
             </div>
           </div>
         </section>
- 
       </main>
- 
+
       <footer class="footer">
         <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
       </footer>
     </div>
- 
+
     <script>
       // ANIMAÇÃO DE LOADING SIMPLES
       let contador = 3;
-     
+
       function iniciarLoading() {
-        let contadorEl = document.getElementById('contador');
-       
+        let contadorEl = document.getElementById("contador");
+
         let intervalo = setInterval(() => {
           contador--;
           contadorEl.textContent = contador;
-         
+
           if (contador <= 0) {
             clearInterval(intervalo);
             // Esconde loading
-            document.getElementById('loading').style.opacity = '0';
+            document.getElementById("loading").style.opacity = "0";
             setTimeout(() => {
-              document.getElementById('loading').style.display = 'none';
-              document.getElementById('conteudo').classList.add('mostrar');
+              document.getElementById("loading").style.display = "none";
+              document.getElementById("conteudo").classList.add("mostrar");
             }, 500);
           }
         }, 1000);
       }
- 
+
       // SCRIPT ORIGINAL DO CAROUSEL
       // NOVO SCRIPT PARA O CARROSSEL INFINITO
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         // Inicia o loading da página
         setTimeout(iniciarLoading, 500);
- 
+
         // --- Início da lógica do Carrossel Infinito ---
-        const track = document.querySelector('.carousel-track');
-        const nextButton = document.querySelector('.next-button');
-        const prevButton = document.querySelector('.prev-button');
-       
+        const track = document.querySelector(".carousel-track");
+        const nextButton = document.querySelector(".next-button");
+        const prevButton = document.querySelector(".prev-button");
+
         // Clona todos os cards para criar o efeito de loop
         const cards = Array.from(track.children);
-        cards.forEach(card => {
+        cards.forEach((card) => {
           const clone = card.cloneNode(true);
           track.appendChild(clone);
         });
- 
+
         let currentIndex = 0;
         let isMoving = false; // Variável para evitar múltiplos cliques durante a transição
- 
+
         function getCardWidth() {
           // Calcula a largura do card + o espaçamento (gap)
           const cardStyle = window.getComputedStyle(cards[0]);
@@ -313,79 +394,81 @@ A Barbearia Manov nasceu da paixão por proporcionar uma experiência única de 
           const cardGap = parseFloat(trackStyle.gap) || 0; // Pega o valor do 'gap' do CSS
           return cardWidth + cardGap;
         }
- 
+
         function updatePosition() {
           // Atualiza a posição do carrossel com uma transição suave
-          track.style.transition = 'transform 0.6s ease-in-out';
+          track.style.transition = "transform 0.6s ease-in-out";
           const cardWidth = getCardWidth();
           track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
         }
- 
+
         function handleNext() {
           if (isMoving) return; // Se já estiver em movimento, ignora o clique
           isMoving = true;
-         
+
           currentIndex++;
           updatePosition();
         }
- 
+
         function handlePrev() {
           if (isMoving) return;
           isMoving = true;
-         
+
           if (currentIndex === 0) {
             // Se estiver no primeiro item, salta para o final (no clone) sem animação
             const cardWidth = getCardWidth();
-            track.style.transition = 'none';
+            track.style.transition = "none";
             currentIndex = cards.length; // Move para o início da seção de clones
-            track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
- 
+            track.style.transform = `translateX(-${
+              currentIndex * cardWidth
+            }px)`;
+
             // Força o navegador a aplicar a mudança antes de continuar
             setTimeout(() => {
               currentIndex--;
               updatePosition();
             }, 20); // Um pequeno delay garante a transição correta
- 
           } else {
             currentIndex--;
             updatePosition();
           }
         }
- 
+
         // Adiciona o listener para o final da transição
-        track.addEventListener('transitionend', () => {
+        track.addEventListener("transitionend", () => {
           isMoving = false; // Permite o próximo clique
- 
+
           // Verifica se chegou ao final da lista (no início dos clones)
           if (currentIndex >= cards.length) {
             // Salta de volta para o início real sem animação
-            track.style.transition = 'none';
+            track.style.transition = "none";
             currentIndex = 0;
             const cardWidth = getCardWidth();
-            track.style.transform = `translateX(-${currentIndex * cardWidth}px)`;
+            track.style.transform = `translateX(-${
+              currentIndex * cardWidth
+            }px)`;
           }
         });
- 
+
         // Adiciona os eventos de clique aos botões
-        nextButton.addEventListener('click', handleNext);
-        prevButton.addEventListener('click', handlePrev);
- 
+        nextButton.addEventListener("click", handleNext);
+        prevButton.addEventListener("click", handlePrev);
+
         // Atualiza a largura do card caso a janela seja redimensionada
-        window.addEventListener('resize', () => {
+        window.addEventListener("resize", () => {
           updatePosition();
         });
       });
-     
-     
+
       function openNav() {
         document.getElementById("myNav").style.width = "50%";
       }
- 
+
       function closeNav() {
         document.getElementById("myNav").style.width = "0%";
       }
     </script>
- 
+
     <script src="auth.js"></script>
   </body>
 </html>

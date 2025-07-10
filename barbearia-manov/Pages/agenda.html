@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agendamento - Barbearia Manóv</title>
- 
+
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
     />
- 
+
     <style>
       /* =================================== */
       /* ESTILOS GLOBAIS                     */
@@ -22,14 +22,14 @@
         --success: #28a745; /* Verde para disponível */
         --danger: #dc3545; /* Vermelho para indisponível */
       }
- 
+
       html,
       body {
         height: 100%;
         margin: 0;
         padding: 0;
       }
- 
+
       body {
         font-family: "Montserrat", sans-serif;
         margin: 0;
@@ -40,12 +40,12 @@
         display: flex;
         flex-direction: column;
       }
- 
+
       main {
         flex: 1;
         padding: 1rem;
       }
- 
+
       .header {
         background-color: var(--primary);
         color: white;
@@ -58,7 +58,7 @@
         color: var(--secondary);
         margin: 0;
       }
-     
+
       .footer {
         background-color: var(--primary);
         color: white;
@@ -67,7 +67,7 @@
         flex-shrink: 0;
         margin-top: auto;
       }
- 
+
       /* =================================== */
       /* ESTILOS DA PÁGINA DE AGENDAMENTOS   */
       /* =================================== */
@@ -80,20 +80,20 @@
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
         gap: 2rem;
       }
- 
+
       .container-agendamento h2 {
         font-family: "Playfair Display", serif;
         text-align: center;
         margin-bottom: 0.5rem;
         font-size: 2.2rem;
       }
- 
+
       .container-agendamento > p {
         text-align: center;
         margin-bottom: 2rem;
         color: #666;
       }
- 
+
       .seletor-profissional {
         display: flex;
         align-items: center;
@@ -120,7 +120,7 @@
       .link-ver-perfil:hover {
         text-decoration: underline;
       }
- 
+
       /* Calendário */
       .calendario-container {
         background: #fff;
@@ -128,7 +128,7 @@
         border: 1px solid #ddd;
         border-radius: 6px;
       }
- 
+
       .calendario-header {
         display: flex;
         justify-content: space-between;
@@ -147,7 +147,7 @@
         cursor: pointer;
         color: var(--primary);
       }
- 
+
       .calendario-dias-semana,
       .calendario-grid {
         display: grid;
@@ -155,14 +155,14 @@
         gap: 5px;
         text-align: center;
       }
- 
+
       .calendario-dias-semana div {
         font-weight: 700;
         color: #555;
         font-size: 0.9rem;
         padding: 0.5rem 0;
       }
- 
+
       .dia-calendario {
         padding: 0.8rem 0;
         border-radius: 50%;
@@ -188,7 +188,7 @@
       .dia-calendario.vazio {
         cursor: default;
       }
- 
+
       /* Horários */
       .horarios-container {
         margin-top: 2rem;
@@ -216,7 +216,7 @@
         font-weight: 500;
         transition: all 0.2s;
       }
- 
+
       .btn-horario.disponivel {
         background-color: #fff;
         border-color: var(--success);
@@ -232,7 +232,7 @@
         color: #fff;
         border-color: var(--primary);
       }
- 
+
       .btn-horario.indisponivel {
         background-color: #f8f9fa;
         border-color: #ddd;
@@ -240,7 +240,7 @@
         text-decoration: line-through;
         cursor: not-allowed;
       }
- 
+
       .btn-confirmar-agendamento {
         display: block;
         margin: 1.5rem auto 0;
@@ -263,7 +263,7 @@
         color: #666;
         cursor: not-allowed;
       }
- 
+
       /* Modal do Perfil */
       .modal-overlay {
         display: none;
@@ -340,16 +340,20 @@
   </head>
   <body>
     <header class="header">
-      <h1>Barbearia Manóv</h1>
+      <div class="logo">
+        <a href="main.html" style="text-decoration: none; color: inherit">
+          <h1>Barbearia Manóv</h1>
+        </a>
+      </div>
     </header>
- 
+
     <main>
       <div class="container-agendamento">
         <h2>Faça seu Agendamento</h2>
         <p>
           Selecione o profissional e escolha uma data e horário disponíveis.
         </p>
- 
+
         <div class="seletor-profissional">
           <label for="profissional">Profissional:</label>
           <select id="profissional" name="profissional">
@@ -361,7 +365,7 @@
             >Ver Perfil</a
           >
         </div>
- 
+
         <div class="calendario-container">
           <div class="calendario-header">
             <button id="prev-month" class="btn-nav-calendario">‹</button>
@@ -379,7 +383,7 @@
           </div>
           <div id="calendario-grid" class="calendario-grid"></div>
         </div>
- 
+
         <div id="horarios-disponiveis" class="horarios-container">
           <h4>
             Selecione um horário para
@@ -400,7 +404,7 @@
         </div>
       </div>
     </main>
- 
+
     <div id="modal-profissional" class="modal-overlay">
       <div class="modal-conteudo">
         <button class="modal-fechar" id="modal-fechar-btn">&times;</button>
@@ -427,11 +431,11 @@
         </div>
       </div>
     </div>
- 
+
     <footer class="footer">
       <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
     </footer>
- 
+
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const mesAnoEl = document.getElementById("mes-ano");
@@ -448,17 +452,17 @@
         const btnConfirmar = document.getElementById(
           "btn-confirmar-agendamento"
         );
- 
+
         let dataAtual = new Date(); // Usa a data atual do sistema
         let horarioSelecionado = null;
- 
+
         // --- SIMULAÇÃO DE DADOS DO BACKEND ---
         // Em um cenário real, estes dados viriam de uma API
         const horariosOcupados = {
           "6/6/2025": ["09:40", "11:00", "15:00"], // Sexta
           "7/6/2025": ["10:20", "11:40", "16:20", "17:00"], // Sábado
         };
- 
+
         const horarioTrabalho = {
           inicio: "09:00",
           fim: "20:00",
@@ -467,20 +471,20 @@
         };
         const duracaoSlot = 40; // Duração de cada agendamento em minutos
         // --- FIM DA SIMULAÇÃO ---
- 
+
         function gerarSlotsDeHorario() {
           const slots = [];
           let [horaInicio, minInicio] = horarioTrabalho.inicio
             .split(":")
             .map(Number);
           let [horaFim, minFim] = horarioTrabalho.fim.split(":").map(Number);
- 
+
           let tempoAtual = new Date();
           tempoAtual.setHours(horaInicio, minInicio, 0, 0);
- 
+
           const tempoFim = new Date();
           tempoFim.setHours(horaFim, minFim, 0, 0);
- 
+
           while (tempoAtual < tempoFim) {
             slots.push(
               tempoAtual.toLocaleTimeString("pt-BR", {
@@ -492,36 +496,36 @@
           }
           return slots;
         }
- 
+
         const todosOsSlotsDoDia = gerarSlotsDeHorario();
- 
+
         function gerarCalendario(mes, ano) {
           calendarioGridEl.innerHTML = "";
           horariosContainerEl.classList.remove("visivel");
           btnConfirmar.disabled = true;
- 
+
           const primeiroDiaDoMes = new Date(ano, mes, 1).getDay();
           const diasNoMes = new Date(ano, mes + 1, 0).getDate();
           const hoje = new Date();
- 
+
           mesAnoEl.textContent = `${new Date(ano, mes).toLocaleString("pt-BR", {
             month: "long",
           })} ${ano}`;
- 
+
           for (let i = 0; i < primeiroDiaDoMes; i++) {
             calendarioGridEl.insertAdjacentHTML(
               "beforeend",
               '<div class="dia-calendario vazio"></div>'
             );
           }
- 
+
           for (let i = 1; i <= diasNoMes; i++) {
             const diaEl = document.createElement("div");
             diaEl.classList.add("dia-calendario");
             diaEl.textContent = i;
- 
+
             const dataCompleta = new Date(ano, mes, i);
- 
+
             if (dataCompleta.setHours(0, 0, 0, 0) < hoje.setHours(0, 0, 0, 0)) {
               diaEl.classList.add("dia-passado");
             }
@@ -532,11 +536,11 @@
             ) {
               diaEl.classList.add("dia-atual");
             }
- 
+
             calendarioGridEl.appendChild(diaEl);
           }
         }
- 
+
         function selecionarDia(e) {
           const diaClicado = e.target;
           if (
@@ -546,36 +550,36 @@
           ) {
             return;
           }
- 
+
           const diaSelecionadoAnterior =
             calendarioGridEl.querySelector(".selecionado");
           if (diaSelecionadoAnterior) {
             diaSelecionadoAnterior.classList.remove("selecionado");
           }
           diaClicado.classList.add("selecionado");
- 
+
           const dia = diaClicado.textContent;
           const data = `${dia}/${
             dataAtual.getMonth() + 1
           }/${dataAtual.getFullYear()}`;
           mostrarHorarios(data);
         }
- 
+
         function mostrarHorarios(data) {
           horariosContainerEl.classList.add("visivel");
           dataSelecionadaHorariosEl.textContent = data;
           horariosGridEl.innerHTML = "";
           btnConfirmar.disabled = true;
           horarioSelecionado = null;
- 
+
           const ocupados = horariosOcupados[data] || [];
- 
+
           todosOsSlotsDoDia.forEach((horario) => {
             const btn = document.createElement("button");
             btn.classList.add("btn-horario");
             btn.textContent = horario;
             btn.dataset.horario = horario;
- 
+
             // Verifica se o horário está indisponível
             let [h, m] = horario.split(":").map(Number);
             let [hAlmocoInicio, mAlmocoInicio] = horarioTrabalho.almocoInicio
@@ -584,11 +588,11 @@
             let [hAlmocoFim, mAlmocoFim] = horarioTrabalho.almocoFim
               .split(":")
               .map(Number);
- 
+
             const tempoSlot = h * 60 + m;
             const tempoAlmocoInicio = hAlmocoInicio * 60 + mAlmocoInicio;
             const tempoAlmocoFim = hAlmocoFim * 60 + mAlmocoFim;
- 
+
             if (
               ocupados.includes(horario) ||
               (tempoSlot >= tempoAlmocoInicio && tempoSlot < tempoAlmocoFim)
@@ -598,36 +602,36 @@
             } else {
               btn.classList.add("disponivel");
             }
- 
+
             horariosGridEl.appendChild(btn);
           });
         }
- 
+
         function selecionarHorario(e) {
           const btnClicado = e.target;
           if (!btnClicado.classList.contains("disponivel")) return;
- 
+
           const horarioSelecionadoAnterior =
             horariosGridEl.querySelector(".selecionado");
           if (horarioSelecionadoAnterior) {
             horarioSelecionadoAnterior.classList.remove("selecionado");
           }
- 
+
           btnClicado.classList.add("selecionado");
           horarioSelecionado = btnClicado.dataset.horario;
           btnConfirmar.disabled = false;
         }
- 
+
         prevMonthBtn.addEventListener("click", () => {
           dataAtual.setMonth(dataAtual.getMonth() - 1);
           gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
         });
- 
+
         nextMonthBtn.addEventListener("click", () => {
           dataAtual.setMonth(dataAtual.getMonth() + 1);
           gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
         });
- 
+
         calendarioGridEl.addEventListener("click", selecionarDia);
         horariosGridEl.addEventListener("click", selecionarHorario);
         btnConfirmar.addEventListener("click", () => {
@@ -644,7 +648,7 @@
             alert("Por favor, selecione um horário.");
           }
         });
- 
+
         // Lógica do Modal (simplificada)
         document
           .getElementById("ver-perfil-profissional")
@@ -661,11 +665,10 @@
               .getElementById("modal-profissional")
               .classList.remove("visivel");
           });
- 
+
         // Iniciar
         gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
       });
     </script>
   </body>
 </html>
- 
