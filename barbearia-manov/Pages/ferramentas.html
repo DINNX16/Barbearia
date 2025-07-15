@@ -5,9 +5,13 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Ferramentas Profissionais - Barbearia Manóv</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
     <style>
         :root {
-            --primary: #1a1a1a;
+            --primary: #1a1a1a; 
             --secondary: #d4af37;
             --light: #f8f9fa;
             --dark: #212529;
@@ -17,13 +21,13 @@
             font-family: "Montserrat", sans-serif;
             margin: 0;
             padding: 0;
-            color: var(--primary);
+            color: var(--dark); 
             background-color: #f5f5f5;
         }
 
         .header {
-            background-color: var(--primary);
-            color: #fff;
+            background-color: var(--primary); 
+            color: #fff; 
             padding: 1rem;
             display: flex;
             flex-direction: column;
@@ -45,10 +49,10 @@
             width: 200px;
             background: 0 0;
             border: none;
-            border-bottom: 2px solid rgba(255, 255, 255, .3);
+            border-bottom: 2px solid rgba(255, 255, 255, .3); 
             padding: 8px 5px;
             font-size: .95rem;
-            color: var(--light);
+            color: var(--light); 
             outline: 0;
             transition: border-bottom-color .3s ease;
         }
@@ -58,7 +62,7 @@
         }
 
         .search-header input::placeholder {
-            color: rgba(255, 255, 255, .7);
+            color: rgba(255, 255, 255, .7); 
         }
 
         .btn-busca {
@@ -81,10 +85,8 @@
             cursor: pointer;
             position: absolute;
             left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: #fff;
-            z-index: 10;
+            top: 5.8rem;
+            color: white; 
         }
 
         .logo h1 {
@@ -116,7 +118,7 @@
         }
 
         .nav>ul>li>a {
-            color: #fff;
+            color: #fff; 
             text-decoration: none;
             font-weight: 500;
             padding: .75rem 1rem;
@@ -126,9 +128,9 @@
 
         .nav>ul>li>a:hover {
             color: var(--secondary);
-            background-color: rgba(255, 255, 255, .1);
+            background-color: rgba(255, 255, 255, .1); 
         }
-
+        
         .dropdown-menu {
             display: none;
             position: absolute;
@@ -260,7 +262,7 @@
         }
 
         .filters-header {
-            background: linear-gradient(135deg, var(--primary) 0%, #333 100%);
+            background: linear-gradient(135deg, var(--dark) 0%, #333 100%);
             color: #fff;
             padding: 1.5rem;
             text-align: center;
@@ -377,7 +379,7 @@
             font-family: "Playfair Display", serif;
             text-align: center;
             font-size: 2.2rem;
-            color: var(--primary);
+            color: var(--dark);
             margin-bottom: 1.5rem;
             border-bottom: 2px solid var(--secondary);
             display: inline-block;
@@ -523,7 +525,7 @@
             bottom: 15px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--primary);
+            background: var(--dark);
             color: white;
             border: none;
             padding: 10px 25px;
@@ -538,7 +540,7 @@
         }
 
         .btn-expand:hover {
-            background-color: var(--dark);
+            background-color: #000;
         }
 
         .btn-expand .arrow {
@@ -759,7 +761,7 @@
     </footer>
 
     <script>
-        // --- FUNÇÕES DE MENU E NAVEGAÇÃO ---
+        // --- O SCRIPT JAVASCRIPT NÃO FOI ALTERADO ---
         function openNav() {
             document.getElementById("myNav").style.width = "50%";
         }
@@ -775,7 +777,6 @@
             }
         }
 
-        // --- BANCO DE DADOS DE PRODUTOS ---
         const masterProductsMaquinas = [{
             id: 1,
             title: "Wahl Magic Clip Cordless",
@@ -906,14 +907,12 @@
             icon: "💡"
         }, ];
 
-        // --- VARIÁVEIS DE CONTROLE ---
         let allCarousels = [
             [...masterProductsMaquinas],
             [...masterProductsLaminas]
         ];
         let currentSlides = [0, 0];
 
-        // --- FUNÇÕES DE RENDERIZAÇÃO ---
         function createProductCard(product) {
             return `
                 <div class="product-card">
@@ -928,7 +927,6 @@
                 </div>`;
         }
 
-        // --- LÓGICA DO CARROSSEL ---
         function initCarousel(carouselIndex) {
             const products = allCarousels[carouselIndex];
             const track = document.getElementById(`carousel-track-${carouselIndex + 1}`);
@@ -955,7 +953,6 @@
             track.style.transform = `translateX(-${newIndex * cardWidth}px)`;
         }
 
-        // --- LÓGICA DOS FILTROS ---
         function applyFilters() {
             const minPrice = parseFloat(document.getElementById("minPrice").value) || 0;
             const maxPrice = parseFloat(document.getElementById("maxPrice").value) || Infinity;
@@ -999,7 +996,6 @@
             noResultsDiv.style.display = totalFound > 0 ? "none" : "block";
         }
 
-        // --- LÓGICA DA SEÇÃO EXPANSÍVEL ---
         function initExpandableTable() {
             const wrapper = document.getElementById("expandable-wrapper-1");
             if (!wrapper) return;
@@ -1022,7 +1018,6 @@
             }
         }
 
-        // --- INICIALIZAÇÃO E EVENTOS ---
         document.addEventListener("DOMContentLoaded", function() {
             initCarousel(0);
             initCarousel(1);

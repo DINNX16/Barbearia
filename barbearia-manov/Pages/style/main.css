@@ -74,7 +74,7 @@
  
       .logo h1 {
         font-family: "Playfair Display", serif;
-        color: #db902e;
+        color: var(--secondary);
         margin: 1rem 0;
         font-size: 1.8rem;
         text-align: center;
