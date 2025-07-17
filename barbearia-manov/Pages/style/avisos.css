@@ -8,7 +8,7 @@
 /* Variáveis de Cores: ALINHADAS COM A PÁGINA PRINCIPAL E ADICIONAIS NECESSÁRIAS */
 :root {
     --primary: #1a1a1a;        /* Fundo header, texto body principal */
-    --secondary: #d4af37;      /* Dourado (destaque, títulos, hover) - Usado para o h1 do header */
+    --secondary: #db902e;      /* Dourado (destaque, títulos, hover) - Usado para o h1 do header */
     --light: #f8f9fa;          /* Texto claro em fundo escuro, tags claras */
     --dark: #212529;           /* Texto escuro para fundos claros */
     --success: #28a745;        /* Verde (promoção) */
