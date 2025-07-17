@@ -76,14 +76,12 @@
       }
 
       .abrir-menu {
-        font-size: 18px;
-        cursor: pointer;
-        position: absolute;
-        left: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: #fff;
-        z-index: 10;
+            font-size: 18px;
+            cursor: pointer;
+            position: absolute;
+            left: 1rem;
+            top: 5.8rem;
+            color: white; 
       }
 
       .logo h1 {
@@ -587,10 +585,79 @@
           justify-content: flex-start;
         }
       }
+
+        @keyframes girar {
+    from {
+      transform: perspective(1000px) rotateY(0deg);
+    }
+    to {
+      transform: perspective(1000px) rotateY(360deg);
+    }
+  }
+
+  body {
+    margin: 0;
+  }
+
+  .conteudo-principal {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+
+  .conteudo-principal.mostrar {
+    opacity: 1;
+  }
     </style>
   </head>
 
   <body>
+
+    <div
+  id="loading"
+  style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background: linear-gradient(135deg, #fef7cd, #fed7aa);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    font-family: 'Montserrat', sans-serif;
+    transition: opacity 0.5s ease;
+  "
+>
+  <img
+    id="moeda"
+    src="https://raw.githubusercontent.com/DINNX16/Barbearia/main/barbearia-manov/assets/moedamoeda.png"
+    alt="Moeda"
+    style="
+      width: 150px;
+      height: 150px;
+      animation: girar 1.5s linear infinite;
+      filter: drop-shadow(0 5px 15px rgba(0, 0, 0, 0.3));
+    "
+  />
+  <h2 style="color: #92400e; margin-top: 20px; font-size: 24px">
+    Barbearia Manóv
+  </h2>
+  <p style="color: #78350f; font-size: 16px">Carregando...</p>
+  <div
+    id="contador"
+    style="
+      color: #78350f;
+      font-size: 32px;
+      font-weight: bold;
+      margin-top: 10px;
+    "
+  >
+    3
+  </div>
+</div>
+
     <header class="header">
       <span class="abrir-menu" onclick="openNav()">☰ Menu</span>
       <div class="logo">
@@ -864,6 +931,35 @@
     </footer>
 
     <script>
+
+      let contador = 3;
+
+function iniciarLoading() {
+  let contadorEl = document.getElementById("contador");
+
+  let intervalo = setInterval(() => {
+    contador--;
+    contadorEl.textContent = contador;
+
+    if (contador <= 0) {
+      clearInterval(intervalo);
+      // Esconde loading
+      document.getElementById("loading").style.opacity = "0";
+      setTimeout(() => {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("conteudo").classList.add("mostrar");
+      }, 500);
+    }
+  }, 1000);
+}
+
+// Apenas executa se o elemento de loading existir na página
+if (document.getElementById("loading")) {
+  // Adia o início do loading para garantir que a página renderizou
+  setTimeout(iniciarLoading, 100);
+}   
+
+
       // --- FUNÇÕES DE MENU E NAVEGAÇÃO ---
       function openNav() {
         document.getElementById("myNav").style.width = "50%";
@@ -1193,6 +1289,8 @@
           .querySelector(".btn-busca")
           .addEventListener("click", performSearch);
       });
+
+      
     </script>
   </body>
 </html>
