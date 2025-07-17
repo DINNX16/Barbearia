@@ -7,10 +7,42 @@
     <style>
       :root {
         --primary: #1a1a1a;
-        --secondary: #d4af37;
+        --secondary: #db902e;
         --light: #f8f9fa;
         --dark: #212529;
       }
+      body {
+        font-family: "Montserrat", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: var(--light);
+        color: var(--dark);
+      }
+     .header {
+    background-color: var(--primary);
+    color: white;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 2px 11px rgba(0, 0, 0, 0.1);
+    position: relative; 
+    flex-shrink: 0;
+    width: 100%; /* A
+    dicione esta linha */
+    
+
+}
+
+/* Título H1 dentro do Header */
+.header h1 {
+    font-family: "Playfair Display", serif;
+    color: var(--secondary);
+    margin: 1rem 0;
+    font-size: 1.8rem;
+    text-align: center;
+}
+ 
 .container-avaliacoes {
   max-width: 1000px;
   margin: 2rem auto;
@@ -191,6 +223,12 @@ O JavaScript preencheria isso corretamente com base na nota. */
     </style>
 </head>
 <body>
+    <header class="header">
+        <a href="main.html" style="text-decoration: none; color: inherit;">
+            <h1>Barbearia Manóv</h1>
+        </a>
+    </header>
+
     <main>
   <div class="container-avaliacoes">
     <h2>O que Nossos Clientes Dizem</h2>
