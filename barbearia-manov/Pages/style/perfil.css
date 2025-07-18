@@ -1,0 +1,443 @@
+      :root {
+        --primary: #1a1a1a;
+        --secondary: #d4af37;
+        --light: #f8f9fa;
+        --dark: #212529;
+        --gray: #6c757d;
+      }
+
+      body {
+        font-family: "Montserrat", sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f5f5f5;
+        color: var(--primary);
+      }
+
+      .header {
+        background-color: var(--primary);
+        color: white;
+        padding: 1rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .logo {
+        text-align: center;
+      }
+
+      .logo h1 {
+        font-family: "Playfair Display", serif;
+        color: #db902e;
+        margin: 0;
+        font-size: 1.8rem;
+      }
+
+      .container {
+        max-width: 1200px;
+        margin: 2rem auto;
+        padding: 0 1rem;
+      }
+
+      .profile-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: white;
+        border-radius: 10px;
+        padding: 2rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+      }
+
+      .profile-pic {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 5px solid var(--secondary);
+        margin-bottom: 1rem;
+      }
+
+      .user-info {
+        text-align: center;
+      }
+
+      .user-name {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0.5rem 0;
+      }
+
+      .user-email {
+        color: var(--gray);
+        margin-bottom: 1rem;
+      }
+
+      .edit-profile {
+        background-color: var(--secondary);
+        color: var(--primary);
+        border: none;
+        padding: 0.5rem 1.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .edit-profile:hover {
+        background-color: #e0b52b;
+      }
+
+      .profile-sections {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      @media (min-width: 992px) {
+        .profile-sections {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+
+      .section {
+        background-color: white;
+        border-radius: 10px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+
+      .section-title {
+        font-family: "Playfair Display", serif;
+        color: var(--secondary);
+        border-bottom: 2px solid var(--secondary);
+        padding-bottom: 0.5rem;
+        margin-top: 0;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .section-title i {
+        margin-right: 0.5rem;
+      }
+
+      .history-item {
+        padding: 1rem 0;
+        border-bottom: 1px solid #eee;
+      }
+
+      .history-item:last-child {
+        border-bottom: none;
+      }
+
+      .service-name,
+      .product-name {
+        /* Adicionado .product-name para compras */
+        font-weight: 600;
+        margin-bottom: 0.25rem;
+      }
+
+      .service-date,
+      .purchase-date {
+        /* Adicionado .purchase-date para compras */
+        color: var(--gray);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .service-price,
+      .purchase-price {
+        /* Adicionado .purchase-price para compras */
+        font-weight: 600;
+        color: var(--secondary);
+      }
+
+      .status {
+        display: inline-block;
+        padding: 0.25rem 0.5rem;
+        border-radius: 5px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+
+      .status-completed,
+      .status-entregue {
+        /* Adicionado .status-entregue */
+        background-color: #d4edda;
+        color: #155724;
+      }
+
+      .status-upcoming,
+      .status-agendado {
+        /* Adicionado .status-agendado */
+        background-color: #fff3cd;
+        color: #856404;
+      }
+
+      .status-cancelled,
+      .status-cancelado {
+        /* Adicionado .status-cancelado */
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+
+      .footer {
+        background-color: var(--primary);
+        color: white;
+        text-align: center;
+        padding: 1rem;
+        margin-top: 2rem;
+      }
+
+      .empty-message {
+        color: var(--gray);
+        text-align: center;
+        padding: 2rem 0;
+        font-style: italic;
+      }
+
+      .abrir-menu {
+        font-size: 18px;
+        cursor: pointer;
+        position: absolute;
+        left: 1rem;
+        top: 5.8rem;
+        color: white;
+}
+
+.search-header {
+    display: flex;
+    margin: auto;
+    position: absolute;
+    top: 60%;
+    right: 5px;
+    align-items: center;
+    gap: 8px;
+}
+
+.search-header input {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 8px 35px 8px 5px;
+    font-size: 0.95rem;
+    color: var(--light);
+    outline: none;
+    transition: border-bottom-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.btn-busca {
+    background-color: #db902e; /* Cor secundária do seu tema */
+    border: none;
+    color: var(--primary);
+    font-size: 1.2rem;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.nav {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0.5rem auto 0; /* Adicionado margem superior */
+}
+
+.nav > ul {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.nav li {
+    position: relative;
+}
+
+.nav > ul > li > a {
+    color: white;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.75rem 1rem;
+    display: block;
+    transition: all 0.3s ease;
+}
+
+.nav > ul > li > a:hover {
+    color: #db902e;
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: var(--primary);
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    border-radius: 0 0 5px 5px;
+    padding: 0.5rem 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+    opacity: 1;
+    visibility: visible;
+}
+
+.sub-dropdown {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background-color: #333;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.submenu {
+    position: relative;
+}
+
+.submenu:hover .sub-dropdown {
+    display: block;
+    opacity: 1;
+}
+
+.dropdown-menu li {
+    padding: 0;
+    margin: 0;
+}
+
+.dropdown-menu a {
+    color: white;
+    padding: 0.75rem 1rem;
+    display: block;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.dropdown-menu a:hover {
+    background-color: #db902e;
+    color: var(--primary);
+    padding-left: 1.25rem;
+}
+
+.submenu > a:after {
+    content: "›";
+    margin-left: 0.5rem;
+    display: inline-block;
+}
+
+.overlay {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    overflow-x: hidden;
+    transition: 0.5s;
+    z-index: 2000;
+}
+
+.overlay-content {
+    position: relative;
+    top: 25%;
+    width: 100%;
+    text-align: center;
+}
+
+.overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.overlay a:hover {
+    color: #db902e;
+}
+
+.closebtn {
+    position: absolute;
+    top: 20px;
+    right: 45px;
+    font-size: 40px; /* Reduzido para melhor aparência */
+    color: white;
+    cursor: pointer;
+}
+
+ .profile-pic-container {
+    position: relative; /* Essencial para posicionar a sobreposição */
+    width: 150px;
+    height: 150px;
+    margin-bottom: 1rem;
+}
+
+/* Sobreposição de edição para a foto */
+.edit-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(50, 50, 50, 0.6); /* Fundo cinza semi-transparente */
+    border-radius: 50%; /* Para combinar com a foto arredondada */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 2.5rem;
+    cursor: pointer;
+    backdrop-filter: blur(3px); /* Efeito de desfoque no fundo */
+    -webkit-backdrop-filter: blur(3px); /* Suporte para Safari */
+    
+    /* Inicialmente invisível e com transição suave */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+/* Ícone de lápis para o nome de usuário */
+.edit-name-icon {
+    display: none; /* Inicialmente escondido */
+    margin-left: 0.75rem;
+    color: var(--gray);
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.edit-name-icon:hover {
+    color: var(--secondary);
+}
+
+/* Classe de controle: quando o modo de edição está ativo */
+.profile-header.editing .edit-overlay {
+    opacity: 1;
+    visibility: visible;
+}
+
+.profile-header.editing .edit-name-icon {
+    display: inline-block; /* Mostra o ícone ao lado do nome */
+}
+
+/* Para garantir que o nome e o ícone fiquem alinhados */
+.user-info .user-name {
+    display: inline-block; /* Alinha o h2 com o ícone */
+}
