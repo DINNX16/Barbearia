@@ -1,0 +1,268 @@
+/* Definição de Variáveis de Cores e Fontes */
+:root {
+    --primary-color: #dc8c19;
+    --primary-color-dark: #9f4509;
+    --background-color: #f6f5f7;
+    --container-bg: #fff;
+    --text-color: #333;
+    --light-gray: #eee;
+    --white: #FFFFFF;
+
+    --font-body: 'Montserrat', sans-serif;
+    --font-heading: 'Playfair Display', serif;
+}
+
+/* Reset Básico e Estilos Globais */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--background-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-family: var(--font-body);
+    min-height: 100vh;
+    padding: 20px 0;
+}
+
+h1, h2, h3 {
+    font-family: var(--font-heading);
+    font-weight: 700;
+    color: var(--text-color);
+}
+
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    max-width: 600px;
+    line-height: 1.4;
+}
+
+p {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.5px;
+    margin: 15px 0 20px;
+}
+
+/* Container Principal */
+.container {
+    background-color: var(--container-bg);
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 520px;
+}
+
+/* Containers dos Formulários (Seleção e Cadastro) */
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 40px;
+}
+
+.type-select-container {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+
+.sign-up-container {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+}
+
+form {
+    background-color: var(--container-bg);
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Inputs e Campos de Formulário */
+input, select, textarea {
+    background-color: var(--light-gray);
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+    border-radius: 5px;
+    outline: none;
+    transition: box-shadow 0.2s;
+}
+
+input:focus, select:focus, textarea:focus {
+    box-shadow: 0 0 0 2px var(--primary-color);
+}
+
+/* Botões */
+button {
+    border-radius: 20px;
+    border: 1px solid var(--primary-color);
+    background-color: var(--primary-color);
+    color: var(--white);
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in, background-color 0.2s;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:active {
+    transform: scale(0.95);
+}
+
+button:hover {
+    background-color: var(--primary-color-dark);
+}
+
+button.ghost {
+    background-color: transparent;
+    border-color: var(--white);
+}
+
+button.ghost:hover {
+     background-color: rgba(255,255,255,0.1);
+}
+
+/* Botões de Seleção de Tipo de Usuário */
+.user-type-btn {
+    width: 100%;
+    text-align: center;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid var(--light-gray);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s;
+    background-color: transparent;
+    color: var(--text-color);
+}
+
+.user-type-btn:hover {
+    border-color: var(--primary-color);
+    background-color: #fafafa;
+}
+
+.user-type-btn i {
+    font-size: 30px;
+    margin-bottom: 10px;
+    color: var(--primary-color);
+}
+
+.user-type-btn p {
+    margin: 5px 0 0;
+    font-size: 12px;
+}
+
+/* Estrutura do Overlay */
+.overlay-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: transform 0.6s ease-in-out;
+    z-index: 100;
+}
+
+.overlay {
+    background: linear-gradient(to right, var(--primary-color), var(--primary-color-dark));
+    color: var(--white);
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-panel {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    text-align: center;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    transform: translateX(0);
+    transition: transform 0.6s ease-in-out;
+}
+
+.overlay-panel h1, .overlay-panel p {
+    color: var(--white);
+}
+
+.overlay-left {
+    transform: translateX(-20%);
+}
+
+.overlay-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+/* Animações com a classe .right-panel-active */
+.container.right-panel-active .type-select-container {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+.container.right-panel-active .sign-up-container {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: show 0.6s;
+}
+
+.container.right-panel-active .overlay-container {
+    transform: translateX(-100%);
+}
+
+.container.right-panel-active .overlay {
+    transform: translateX(50%);
+}
+
+.container.right-panel-active .overlay-left {
+    transform: translateX(0);
+}
+
+.container.right-panel-active .overlay-right {
+    transform: translateX(20%);
+}
+
+@keyframes show {
+    0%, 49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+    50%, 100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Avisos - Barbearia Manóv</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="/barbearia-manov/Pages/style/gerenciamento_de_avisos.css">
+
+</head>
+<body>
+    <header class="header">
+        <a href="main.html" style="text-decoration: none; color: inherit;">
+            <h1>Barbearia Manóv</h1>
+        </a>
+    </header>
+
+    <main>
+        <div class="admin-container">
+            <div class="form-section">
+                <h2 class="section-title">Adicionar Aviso</h2>
+                <form id="aviso-form">
+                    <input type="hidden" id="aviso-id">
+                    <div class="form-group">
+                        <label for="titulo">Título:</label>
+                        <input type="text" id="titulo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="descricao">Descrição:</label>
+                        <textarea id="descricao" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tag">Tag (Exibição):</label>
+                        <input type="text" id="tag">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="tipo-aviso">Tipo de Aviso (para Estilo e Ícone):</label>
+                        <select id="tipo-aviso" required>
+                            <option class="escolher_icone" value="">Selecione um tipo</option>
+                            <option class="escolher_icone" value="promocao">Promoção</option>
+                            <option class="escolher_icone" value="fechado">Fechado</option>
+                            <option class="escolher_icone" value="horario">Horário</option>
+                            <option class="escolher_icone" value="informacao">Informação Geral</option>
+                            <option class="escolher_icone" value="urgente">Urgente</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group icon-selection-group">
+                        <label>Ícone Selecionado:</label>
+                        <div id="selected-icon-preview" class="selected-icon-preview">
+                            <img src="../assets/icones_tela_avisos/cortes.png" alt="Ícone Padrão">
+                        </div>
+                        <button type="button" class="btn-select-icon" id="open-icon-gallery-btn">Escolher Ícone</button>
+                        <input type="hidden" id="selected-icon-path">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="link-redirecionamento">Link de Redirecionamento (URL):</label>
+                        <input type="url" id="link-redirecionamento" placeholder="horario_funcionamento.html ou https://...">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="data-expiracao">Data de Expiração (Opcional):</label>
+                        <div class="custom-date-time-inputs">
+                            <input type="text" id="custom-date-input" placeholder="DD/MM/AAAA" readonly>
+                            <input type="text" id="custom-time-input" placeholder="HH:MM" readonly>
+                        </div>
+                        <input type="hidden" id="data-expiracao-iso">
+                    </div>
+
+                    <div class="form-group">
+                        <input type="checkbox" id="ativo" checked>
+                        <label for="ativo" style="display: inline-block;">Aviso Ativo</label>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-form btn-save">Salvar Aviso</button>
+                        <button type="button" class="btn-form btn-clear" id="btn-clear-form">Limpar Formulário</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="list-section">
+                <h2 class="section-title">Avisos Cadastrados</h2>
+                <table class="avisos-admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Descrição</th>
+                            <th>Tag</th>
+                            <th>Tipo</th>
+                            <th>Ativo</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="avisos-table-body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
+    </footer>
+
+    <div id="icon-gallery-modal" class="icon-gallery-modal">
+        <div class="icon-gallery-content">
+            <span class="close-modal-btn">&times;</span>
+            <h3 class="section-title" style="text-align: center; font-size: 1.5em;">Escolha um Ícone</h3>
+            <div id="icon-grid" class="icon-grid">
+            </div>
+        </div>
+    </div>
+
+    <div id="custom-date-modal" class="custom-date-modal">
+        <div class="custom-modal-content">
+            <span class="close-custom-modal-btn" data-modal="date">&times;</span>
+            <h3 class="section-title">Selecione a Data</h3>
+            <div class="date-picker-controls">
+                <select id="date-picker-day"></select>
+                <select id="date-picker-month"></select>
+                <select id="date-picker-year"></select>
+            </div>
+            <button class="btn-form btn-save" id="confirm-date-selection">Confirmar</button>
+        </div>
+    </div>
+
+    <div id="custom-time-modal" class="custom-time-modal">
+        <div class="custom-modal-content">
+            <span class="close-custom-modal-btn" data-modal="time">&times;</span>
+            <h3 class="section-title">Selecione a Hora</h3>
+            <div class="time-picker-controls">
+                <select id="time-picker-hour"></select>
+                <select id="time-picker-minute"></select>
+            </div>
+            <button class="btn-form btn-save" id="confirm-time-selection">Confirmar</button>
+        </div>
+    </div>
+
+<script src="/barbearia-manov/Pages/js/ger.js"></script>
+</body>
+</html>

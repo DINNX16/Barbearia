@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cadastro - Barbearia Manóv</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="/barbearia-manov/Pages/style/style.css" />
+  </head>
+  <body>
+    <h2>
+      Por que o barbeiro nunca perde uma discussão? Porque ele sempre corta a
+      conversa. 😉
+    </h2>
+
+    <div class="container" id="container">
+      <div class="form-container type-select-container">
+        <h1>Cadastre-se como:</h1>
+
+        <button class="user-type-btn" data-type="client">
+          <i class="fas fa-user"></i>
+          <h3>Cliente</h3>
+          <p>Agende serviços e acompanhe seu histórico</p>
+        </button>
+
+        <button class="user-type-btn" data-type="professional">
+          <i class="fas fa-cut"></i>
+          <h3>Profissional</h3>
+          <p>Ofereça seus serviços e gerencie sua agenda</p>
+        </button>
+
+        <button class="user-type-btn" data-type="owner">
+          <i class="fas fa-store"></i>
+          <h3>Proprietário</h3>
+          <p>Gerencie seu estabelecimento e equipe</p>
+        </button>
+      </div>
+
+      <div class="form-container sign-up-container">
+        <form id="signupForm">
+          <div id="formContent"></div>
+          <button type="submit">Cadastrar</button>
+        </form>
+      </div>
+
+      <div class="overlay-container">
+        <div class="overlay">
+          <div class="overlay-panel overlay-left">
+            <h1>Cadastro Realizado!</h1>
+            <p>Seja bem-vindo à Barbearia Manóv. Faça o login para começar.</p>
+            <button class="ghost" id="loginRedirectBtn">Entrar</button>
+          </div>
+          <div class="overlay-panel overlay-right">
+            <h1>Já tem uma conta?</h1>
+            <p>
+              Faça login para acessar sua área pessoal e gerenciar seus
+              agendamentos.
+            </p>
+            <button class="ghost" id="loginBtn">Entrar</button>
+          </div>
+        </div>
+      </div>
+
+      </div>
+    </div>
+
+    <script src="/barbearia-manov/Pages/js/script.js"></script>
+  </body>
+</html>
