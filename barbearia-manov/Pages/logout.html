@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Barbearia Manóv</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link rel="stylesheet" href="/barbearia-manov/Pages/style/style_dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="logo">
+            Barbearia Manóv
+        </div>
+        <nav class="user-nav">
+            <div class="user-menu" id="userMenuTrigger">
+                <span id="userName">Carregando...</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <a href="perfil.html">Minha Conta</a>
+                <a href="agenda.html">Meus Agendamentos</a>
+                <hr>
+                <a href="#" id="logoutButton">Sair</a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="dashboard-container">
+        <h1 id="welcomeMessage"></h1>
+        <p id="dashboardDescription"></p>
+        
+        <div class="content-placeholder">
+            <p id="dashboardContent"></p>
+        </div>
+    </div>
+
+    <script src="script_dashboard.js"></script>
+</body>
+</html>
+
+    <script src="/barbearia-manov/Pages/style/style_dashboard.css"></script>
+</body>
+</html>
