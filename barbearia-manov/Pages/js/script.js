@@ -71,9 +71,8 @@ document.addEventListener("DOMContentLoaded", () => {
    * Redireciona para a página de login.
    */
   function redirectToLogin() {
-    // Em um projeto real, você pode ter uma rota '/login'
-    window.location.href = "/Pages/login.html";
-    // window.location.href = '/login.html';
+    // Volta para a pasta raiz (barbearia-manov) e entra em Pages/login.html
+    window.location.href = "../Pages/login.html";
   }
 
   // --- OUVINTES DE EVENTOS (EVENT LISTENERS) ---
@@ -126,10 +125,10 @@ document.addEventListener("DOMContentLoaded", () => {
     container.classList.remove("right-panel-active");
 
     // Limpa o formulário após o "sucesso"
-        setTimeout(() => {
-            redirectToLogin();
-        }, 800); // Espera a animação terminar e então redireciona.
-    });
+    setTimeout(() => {
+      redirectToLogin();
+    }, 800); // Espera a animação terminar e então redireciona.
+  });
 
   // Adiciona evento de clique aos botões de redirecionamento para login
   loginRedirectBtn.addEventListener("click", redirectToLogin);
