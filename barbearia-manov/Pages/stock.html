@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciamento de Estoque - Barbearia</title>
+    <link href="style/stock.css" rel="stylesheet"> 
+</head>
+<body class="pagina-estoque">
+    <header class="cabecalho-principal">
+        <div class="cabecalho-conteudo">
+            <a href="main.html" class="nome-barbearia-link">
+                <h1 class="nome-barbearia">Barbearia Manov</h1>
+            </a>
+            </div>
+    </header>
+
+    <div id="app" class="container-principal">
+        <h1 class="titulo-pagina">Gerenciamento de Estoque</h1>
+
+        <div class="layout-grid area-resumo-alertas">
+            <div class="cartao-info cartao-resumo-geral">
+                <h2 class="titulo-cartao">Resumo Geral do Estoque</h2>
+                <p class="texto-resumo">Total de Produtos: <span id="total-products">0</span></p>
+                <p class="detalhe-resumo">Valor Total (Venda): <span id="total-value-sale">R$ 0,00</span></p>
+                <p class="detalhe-resumo">Valor Total (Custo): <span id="total-value-cost">R$ 0,00</span></p>
+            </div>
+
+            <div class="cartao-info cartao-exibicao-alertas">
+                <h2 class="titulo-cartao">Alertas Importantes</h2>
+                <div id="stock-alerts" class="lista-alertas">
+                    <p class="mensagem-carregamento">Carregando alertas...</p>
+                </div>
+                <div class="secao-configuracao-alertas">
+                    <h3 class="titulo-configuracao">Configuração de Alertas de Validade</h3>
+                    <div class="grupo-input-configuracao">
+                        <label for="days-before-expiry" class="label-configuracao">Avisar com (dias) de antecedência:</label>
+                        <input type="number" id="days-before-expiry" name="days_before_expiry" min="1" max="365" required
+                            class="campo-input-configuracao">
+                        <button id="save-expiry-setting-button" class="botao-acao botao-primario">
+                            Salvar Configuração
+                        </button>
+                    </div>
+                    <p id="expiry-setting-status" class="mensagem-status"></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="cartao-info area-acoes-busca">
+            <div class="grupo-input-busca">
+                <input
+                    type="text"
+                    id="search-input"
+                    placeholder="Buscar produto por nome..."
+                    class="campo-texto-input"
+                />
+                <button id="search-button" class="botao-acao botao-primario">
+                    Buscar
+                </button>
+            </div>
+            <div class="grupo-botoes-acao">
+                <button id="add-product-button" class="botao-acao botao-sucesso">
+                    Adicionar Novo Produto
+                </button>
+                <button id="register-movement-button" class="botao-acao botao-info">
+                    Registrar Movimentação
+                </button>
+                <button id="export-report-button" class="botao-acao botao-secundario">
+                    Exportar Relatório
+                </button>
+            </div>
+        </div>
+
+        <div class="cartao-info secao-listagem-produtos">
+            <h2 class="titulo-cartao">Lista de Produtos</h2>
+            <div id="product-list-container" class="container-tabela-responsiva">
+                <p class="mensagem-carregamento">Carregando produtos...</p>
+            </div>
+        </div>
+
+        <div id="product-modal-container"></div>
+        <div id="movement-modal-container"></div>
+        <div id="promotion-modal-container"></div>
+
+    </div>
+
+    <footer class="rodape-pagina">
+        <div class="rodape-conteudo">
+            <p class="texto-rodape">&copy; 2025 Barbearia Manov. Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="./js/stock.js" defer></script>
+</body>
+</html>
