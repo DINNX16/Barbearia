@@ -211,6 +211,23 @@
         padding: 2rem 0;
         font-style: italic;
       }
+
+      .btn-section {
+        background-color: var(--secondary);
+        color: var(--primary);
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+        text-decoration: none;
+        display: inline-block;
+      }
+
+      .btn-section:hover {
+        background-color: #e0b52b;
+      }
     </style>
   </head>
   <body>
@@ -252,6 +269,16 @@
           </div>
         </div>
 
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-notes-medical"></i> Formulário de Anamnese
+          </h3>
+          <p style="color: var(--gray); margin-bottom: 1rem;">
+            Para garantir um atendimento seguro e personalizado, por favor, preencha ou atualize suas informações de saúde.
+          </p>
+            <a href="anamnese.html" class="btn-section">Acessar Formulário</a>
+        </div>
+        
         <div class="section">
           <h3 class="section-title">
             <i class="fas fa-cut"></i> Últimos Serviços
