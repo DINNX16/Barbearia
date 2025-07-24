@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meu Perfil - Barbearia Manóv</title>
+
+  <script>
+    /* (function () {
+      const userString = localStorage.getItem('currentUser');
+      let user = null;
+      if (userString) {
+        try {
+          user = JSON.parse(userString);
+        } catch (e) {
+          console.error("Erro ao ler dados do usuário, acesso negado.", e);
+          user = null;
+        }
+      }
+      const isOwner = user && user.role === 'PROPRIETARIO';
+      if (!isOwner) {
+        console.warn("Acesso negado. Usuário não é o proprietário. Redirecionando...");
+        window.location.href = 'login.html'; // Mude para sua página de login, se necessário
+      }
+    })(); */
+  </script>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+  <style>
+    :root {
+      --primary: #1a1a1a;
+      --secondary: #d4af37;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --gray: #6c757d;
+    }
+
+    body {
+      font-family: "Montserrat", sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f5f5f5;
+      color: var(--primary);
+    }
+
+    .header {
+      background-color: var(--primary);
+      color: white;
+      padding: 1rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .logo {
+      text-align: center;
+    }
+
+    .logo h1 {
+      font-family: "Playfair Display", serif;
+      color: #db902e;
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 2rem auto;
+      padding: 0 1rem;
+    }
+
+    .profile-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background-color: white;
+      border-radius: 10px;
+      padding: 2rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    .profile-pic {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 5px solid var(--secondary);
+      margin-bottom: 1rem;
+    }
+
+    .user-info {
+      text-align: center;
+    }
+
+    .user-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0.5rem 0;
+    }
+
+    .user-email {
+      color: var(--gray);
+      margin-bottom: 1rem;
+    }
+
+    .edit-profile {
+      background-color: var(--secondary);
+      color: var(--primary);
+      border: none;
+      padding: 0.5rem 1.5rem;
+      border-radius: 5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .edit-profile:hover {
+      background-color: #e0b52b;
+    }
+
+    .profile-sections {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+
+    @media (min-width: 992px) {
+      .profile-sections {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .section {
+      background-color: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .section-title {
+      font-family: "Playfair Display", serif;
+      color: var(--secondary);
+      border-bottom: 2px solid var(--secondary);
+      padding-bottom: 0.5rem;
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .section-title i {
+      margin-right: 0.5rem;
+    }
+
+    .footer {
+      background-color: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      margin-top: 2rem;
+    }
+
+    /* --- Estilos para os links de gerenciamento --- */
+    .management-link {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      margin: 0.5rem 0;
+      border-radius: 8px;
+      text-decoration: none;
+      color: var(--dark);
+      background-color: #f8f9fa;
+      transition: background-color 0.3s, transform 0.2s;
+      border: 1px solid #eee;
+    }
+
+    .management-link:hover {
+      background-color: #e9ecef;
+      transform: translateX(5px);
+    }
+
+    .management-link i {
+      color: var(--secondary);
+      width: 40px;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+
+    .management-link .link-text {
+      font-weight: 600;
+    }
+
+    .data-viewer-tabs {
+      display: flex;
+      border-bottom: 2px solid #eee;
+      margin-bottom: 1.5rem;
+    }
+
+    .tab-btn {
+      font-family: 'Montserrat', sans-serif;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--gray);
+      position: relative;
+      transition: color 0.3s ease;
+    }
+
+    .tab-btn:after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: var(--secondary);
+      transform: scaleX(0);
+      transition: transform 0.3s ease;
+    }
+
+    .tab-btn.active {
+      color: var(--primary);
+    }
+
+    .tab-btn.active:after {
+      transform: scaleX(1);
+    }
+
+    /* Estilos para a tabela de dados */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+
+    .data-table th {
+      background-color: #f8f9fa;
+      font-weight: 700;
+      color: var(--dark);
+    }
+
+    .data-table tr:hover {
+      background-color: #f8f9fa;
+    }
+
+    /* Mensagem de carregando... */
+    #data-viewer-content .loading-message {
+      color: var(--gray);
+      text-align: center;
+      padding: 2rem;
+      font-style: italic;
+    }
+
+    .modal-overlay {
+      display: none;
+      /* Escondido por padrão */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* O conteúdo do modal */
+    .modal-content {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      width: 90%;
+      max-width: 800px;
+      max-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      animation: slide-down 0.5s ease-out;
+    }
+
+    @keyframes slide-down {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .modal-header h2 {
+      margin: 0;
+      font-family: 'Playfair Display', serif;
+      color: var(--primary);
+    }
+
+    .close-button {
+      border: none;
+      background: transparent;
+      font-size: 2.5rem;
+      font-weight: 300;
+      color: var(--gray);
+      cursor: pointer;
+      line-height: 1;
+      padding: 0;
+    }
+
+    .modal-body {
+      overflow-y: auto;
+    }
+
+    .chart-controls {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .chart-tab-btn {
+      font-family: 'Montserrat', sans-serif;
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      background-color: #f8f9fa;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .chart-tab-btn:hover {
+      background-color: #e2e6ea;
+      border-color: #b0b6bc;
+    }
+
+    .chart-tab-btn.active {
+      background-color: var(--secondary);
+      color: white;
+      border-color: var(--secondary);
+    }
+
+    .chart-container {
+      position: relative;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+
+<body>
+  <header class="header">
+    <div class="logo">
+      <a href="main.html" style="text-decoration: none; color: inherit">
+        <h1>Barbearia Manóv</h1>
+      </a>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="profile-header">
+      <img src="https://i.pinimg.com/736x/b4/73/34/b4733443a216c5a5248e7751a14a6822.jpg"
+        alt="Foto de perfil do proprietário" class="profile-pic" id="profile-pic-display" />
+      <div class="user-info">
+        <h2 class="user-name" id="user-name-display">Carregando...</h2>
+        <p class="user-email" id="user-email-display">Carregando...</p>
+        <button class="edit-profile">Editar Perfil</button>
+      </div>
+    </div>
+
+    <div class="profile-sections">
+
+      <div class="section">
+        <h3 class="section-title">
+          <i class="fas fa-cogs"></i> Painel de Controle
+        </h3>
+        <a href="gerenciamento-feed.html" class="management-link">
+          <i class="fas fa-newspaper"></i>
+          <span class="link-text">Gerenciar Feed de Notícias</span>
+        </a>
+        <a href="gerenciamento-produtos.html" class="management-link">
+          <i class="fas fa-shopping-bag"></i>
+          <span class="link-text">Gerenciar Produtos</span>
+        </a>
+        <a href="gerenciamento-produtos.html" class="management-link">
+          <i class="fas fa-cut"></i>
+          <span class="link-text">Gerenciar Serviços e Cortes</span>
+        </a>
+      </div>
+
+      <div class="section">
+        <h3 class="section-title">
+          <i class="fas fa-chart-bar"></i> Estatísticas Rápidas
+        </h3>
+        <div id="estatisticas-list">
+          <p>Carregando estatísticas...</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="section">
+    <h3 class="section-title">
+      <i class="fas fa-database"></i> Resumo do Banco de Dados
+    </h3>
+
+    <div class="data-viewer-tabs">
+      <button class="tab-btn active" data-type="products">Produtos</button>
+      <button class="tab-btn" data-type="clients">Clientes</button>
+      <button class="tab-btn" data-type="services">Serviços</button>
+    </div>
+
+    <div id="data-viewer-content">
+      <p>Selecione uma aba para visualizar os dados.</p>
+    </div>
+  </div>
+
+
+  <footer class="footer">
+    <p>
+      © <span id="current-year">2023</span> Barbearia Manóv - Todos os
+      direitos reservados
+    </p>
+  </footer>
+
+  <div id="billing-modal" class="modal-overlay">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Análise de Faturamento</h2>
+        <button id="close-billing-modal" class="close-button">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="chart-controls">
+          <button class="chart-tab-btn active" data-month="current">Este Mês</button>
+          <button class="chart-tab-btn" data-month="past-1">Mês Passado</button>
+          <button class="chart-tab-btn" data-month="past-2">2 Meses Atrás</button>
+        </div>
+        <div class="chart-container">
+          <canvas id="billing-chart"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/proprietario-perfil.js"></script>
+</body>
+
+</html>
