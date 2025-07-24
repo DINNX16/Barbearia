@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Formulário de Anamnese - Barbearia Manóv</title>
+    <title>Preferências de Produtos - Barbearia Manóv</title>
     <link
       href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
       rel="stylesheet"
@@ -13,7 +13,6 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
     <style>
-      /* --- Estilos Globais (Herdados da página de perfil) --- */
       :root {
         --primary: #1a1a1a;
         --secondary: #d4af37;
@@ -28,6 +27,9 @@
         padding: 0;
         background-color: #f5f5f5;
         color: var(--primary);
+        /* NOVO: Adiciona um espaço no final da página com a altura do rodapé.
+           Isso impede que o rodapé fixo cubra o final do formulário. */
+        padding-bottom: 80px;
       }
 
       .header {
@@ -35,9 +37,6 @@
         color: white;
         padding: 1rem;
         box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      .logo {
         text-align: center;
       }
 
@@ -48,8 +47,9 @@
         font-size: 1.8rem;
       }
 
+      /* O container e a section voltam ao normal (rolam com a página) */
       .container {
-        max-width: 800px; /* Um pouco mais estreito para formulários */
+        max-width: 800px;
         margin: 2rem auto;
         padding: 0 1rem;
       }
@@ -76,79 +76,56 @@
         margin-right: 0.75rem;
       }
 
+      /* MUDANÇA PRINCIPAL: Deixando o rodapé fixo */
       .footer {
         background-color: var(--primary);
         color: white;
         text-align: center;
         padding: 1rem;
-        margin-top: 2rem;
+        
+        position: fixed;  /* Fixa o rodapé na tela */
+        bottom: 0;        /* Alinha na parte inferior */
+        left: 0;          /* Garante que ocupe a largura toda */
+        width: 100%;
+        z-index: 1000;    /* Deixa ele acima de outros elementos */
       }
 
-      /* --- Estilos Específicos para o Formulário de Anamnese --- */
+      /* Estilos do formulário (sem alteração) */
       .form-group {
         margin-bottom: 1.5rem;
       }
 
       .form-group label {
         display: block;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
         font-weight: 600;
         color: var(--dark);
       }
-
-      .form-group label .required-star {
-        color: #e74c3c;
-        margin-left: 4px;
-      }
-
-      .form-group textarea {
-        width: 100%;
-        padding: 0.75rem;
-        border-radius: 5px;
-        border: 1px solid #ccc;
-        font-family: "Montserrat", sans-serif;
-        font-size: 1rem;
-        box-sizing: border-box; /* Garante que padding não afete a largura */
-        min-height: 100px;
-        resize: vertical;
-      }
-
-      .form-group textarea:focus {
-        border-color: var(--secondary);
-        outline: none;
-        box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
-      }
-
-      .consent-group {
-        display: flex;
-        align-items: flex-start;
-        margin: 2rem 0;
-      }
-
-      .consent-group input[type="checkbox"] {
-        margin-top: 5px;
-        margin-right: 1rem;
-        width: 20px;
-        height: 20px;
-        flex-shrink: 0;
-      }
-
-      #signature-pad-container {
-        margin-bottom: 1.5rem;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+      
+      .checkbox-group {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 0.75rem;
       }
       
-      canvas#signature-pad {
-        border: 2px dashed var(--gray);
+      .checkbox-label {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        padding: 0.5rem;
         border-radius: 5px;
-        cursor: crosshair;
-        background-color: #fff;
+        transition: background-color 0.2s;
       }
-
-      .signature-buttons {
-          margin-top: 0.5rem;
+      
+      .checkbox-label:hover {
+        background-color: #f0f0f0;
+      }
+      
+      .checkbox-label input[type="checkbox"] {
+        margin-right: 0.75rem;
+        width: 18px;
+        height: 18px;
+        accent-color: var(--secondary);
       }
 
       .action-button {
@@ -161,25 +138,11 @@
         cursor: pointer;
         transition: all 0.3s;
         font-size: 1rem;
+        margin-top: 1rem;
       }
 
       .action-button:hover {
         background-color: #e0b52b;
-      }
-      
-      .action-button.clear-btn {
-          background-color: var(--gray);
-          color: white;
-      }
-      
-      .action-button.clear-btn:hover {
-          background-color: #5a6268;
-      }
-
-      #submit-button:disabled {
-        background-color: #ccc;
-        color: #666;
-        cursor: not-allowed;
       }
     </style>
   </head>
@@ -195,68 +158,29 @@
     <div class="container">
       <div class="section">
         <h2 class="section-title">
-          <i class="fas fa-notes-medical"></i>
-          Formulário de Anamnese
+          <i class="fas fa-shield-alt"></i>
+          Recomendações Personalizadas
         </h2>
         <p style="color: var(--gray); margin-top: -1rem; margin-bottom: 2rem;">
-          Sua segurança é nossa prioridade. Por favor, preencha as informações abaixo com atenção.
+          Para garantir a melhor experiência, nos informe se você tem sensibilidade a algum dos componentes abaixo. Assim, podemos ocultar os produtos que não são ideais para você.
         </p>
 
-        <form id="anamnese-form">
+        <form id="alergias-form">
           <div class="form-group">
-            <label for="alergias">
-              Alergias (Ex: a produtos químicos, tinturas, cosméticos, etc.)
-              <span class="required-star">*</span>
-            </label>
-            <textarea
-              id="alergias"
-              rows="4"
-              required
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="historico">
-              Histórico de Reações a Produtos Químicos ou Tratamentos Anteriores (Ex: irritação, vermelhidão, queda de cabelo)
-              <span class="required-star">*</span>
-            </label>
-            <textarea
-              id="historico"
-              rows="4"
-              required
-            ></textarea>
-          </div>
-
-          <div class="form-group">
-            <label for="condicoes">
-              Condições de Saúde Relevantes (Ex: doenças de pele, gravidez, problemas circulatórios, uso de medicamentos)
-            </label>
-            <textarea
-              id="condicoes"
-              rows="4"
-            ></textarea>
-          </div>
-
-          <div class="consent-group">
-            <input type="checkbox" id="consent-checkbox" required />
-            <label for="consent-checkbox">
-              Eu declaro que li, entendi e concordo com os riscos associados ao procedimento químico a ser realizado e dou meu consentimento.
-            </label>
-          </div>
-
-          <div class="form-group" id="signature-pad-container">
-            <label for="signature-pad">
-              Assinatura Digital de Consentimento
-              <span class="required-star">*</span>
-            </label>
-            <canvas id="signature-pad" width="400" height="200"></canvas>
-            <div class="signature-buttons">
-                <button type="button" id="clear-signature" class="action-button clear-btn">Limpar</button>
+            <label>Selecione os componentes aos quais você possui alergia:</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label"><input type="checkbox" name="alergia" value="sulfatos" />Sulfatos</label>
+              <label class="checkbox-label"><input type="checkbox" name="alergia" value="parabenos" />Parabenos</label>
+              <label class="checkbox-label"><input type="checkbox" name="alergia" value="oleo_mineral" />Óleo Mineral</label>
+              <label class="checkbox-label"><input type="checkbox" name="alergia" value="silicones" />Silicones</label>
+              <label class="checkbox-label"><input type="checkbox" name="alergia" value="fragrancias_sinteticas" />Fragrâncias Sintéticas</label>
+              <label class="checkbox-label"><input type="checkbox" name="alergia" value="corantes" />Corantes Artificiais</label>
+              <label class="checkbox-label"><input type="checkbox" name="alergia" value="alcool" />Álcool</label>
             </div>
           </div>
 
-          <button type="submit" id="submit-button" class="action-button" disabled>
-            Salvar Anamnese
+          <button type="submit" id="submit-button" class="action-button">
+            Salvar Preferências
           </button>
         </form>
       </div>
@@ -271,123 +195,41 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        // --- ELEMENTOS DO DOM ---
-        const form = document.getElementById("anamnese-form");
-        const alergiasInput = document.getElementById("alergias");
-        const historicoInput = document.getElementById("historico");
-        const consentCheckbox = document.getElementById("consent-checkbox");
-        const submitButton = document.getElementById("submit-button");
+        const form = document.getElementById("alergias-form");
+        const checkboxes = document.querySelectorAll('input[name="alergia"]');
 
-        // --- LÓGICA DA ASSINATURA DIGITAL ---
-        const canvas = document.getElementById("signature-pad");
-        const clearButton = document.getElementById("clear-signature");
-        const ctx = canvas.getContext("2d");
-        let isDrawing = false;
-        let isSignatureProvided = false;
-
-        // Ajusta a resolução do canvas para telas de alta densidade
-        const dpr = window.devicePixelRatio || 1;
-        const rect = canvas.getBoundingClientRect();
-        canvas.width = rect.width * dpr;
-        canvas.height = rect.height * dpr;
-        ctx.scale(dpr, dpr);
-        ctx.lineWidth = 2;
-        ctx.lineCap = "round";
-        ctx.strokeStyle = "black";
-
-        function startDrawing(e) {
-          isDrawing = true;
-          draw(e); // Começa a desenhar imediatamente
+        function carregarPreferenciasSalvas() {
+          const alergiasSalvas = localStorage.getItem('alergiasUsuario');
+          if (alergiasSalvas) {
+            const listaAlergias = JSON.parse(alergiasSalvas);
+            checkboxes.forEach(checkbox => {
+              if (listaAlergias.includes(checkbox.value)) {
+                checkbox.checked = true;
+              }
+            });
+          }
         }
+        
+        carregarPreferenciasSalvas();
 
-        function stopDrawing() {
-          isDrawing = false;
-          ctx.beginPath(); // Reseta o caminho para a próxima linha
-        }
-
-        function draw(e) {
-          if (!isDrawing) return;
-          
-          // Previne o scroll da página em dispositivos móveis
+        form.addEventListener("submit", (e) => {
           e.preventDefault();
 
-          // Posição do mouse ou toque
-          const x = (e.clientX || e.touches[0].clientX) - canvas.getBoundingClientRect().left;
-          const y = (e.clientY || e.touches[0].clientY) - canvas.getBoundingClientRect().top;
-          
-          ctx.lineTo(x, y);
-          ctx.stroke();
-          ctx.beginPath();
-          ctx.moveTo(x, y);
-          
-          // Marca que a assinatura foi iniciada
-          if (!isSignatureProvided) {
-            isSignatureProvided = true;
-            checkFormValidity();
-          }
-        }
-
-        // Event Listeners para o Canvas
-        canvas.addEventListener("mousedown", startDrawing);
-        canvas.addEventListener("mousemove", draw);
-        canvas.addEventListener("mouseup", stopDrawing);
-        canvas.addEventListener("mouseleave", stopDrawing);
-        canvas.addEventListener("touchstart", startDrawing);
-        canvas.addEventListener("touchmove", draw);
-        canvas.addEventListener("touchend", stopDrawing);
-
-        // Limpar Assinatura
-        clearButton.addEventListener("click", () => {
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          isSignatureProvided = false;
-          checkFormValidity(); // Revalida o formulário
-        });
-
-        // --- VALIDAÇÃO DO FORMULÁRIO ---
-        function checkFormValidity() {
-          const isAlergiasValid = alergiasInput.value.trim() !== "";
-          const isHistoricoValid = historicoInput.value.trim() !== "";
-          const isConsentChecked = consentCheckbox.checked;
-
-          // Habilita o botão apenas se todos os campos obrigatórios estiverem preenchidos
-          if (isAlergiasValid && isHistoricoValid && isConsentChecked && isSignatureProvided) {
-            submitButton.disabled = false;
-          } else {
-            submitButton.disabled = true;
-          }
-        }
-
-        // Adiciona listeners para validar em tempo real
-        alergiasInput.addEventListener("input", checkFormValidity);
-        historicoInput.addEventListener("input", checkFormValidity);
-        consentCheckbox.addEventListener("change", checkFormValidity);
-
-        // --- ENVIO DO FORMULÁRIO ---
-        form.addEventListener("submit", (e) => {
-          e.preventDefault(); // Impede o envio real do formulário
-
-          // Aqui, você pode obter a imagem da assinatura
-          const signatureDataUrl = canvas.toDataURL("image/png");
-          
-          // Exibe um alerta de sucesso (substitua pela lógica de envio para o servidor)
-          alert("Anamnese salva com sucesso!");
-          
-          console.log("Dados a serem enviados:", {
-              alergias: alergiasInput.value,
-              historico: historicoInput.value,
-              condicoes: document.getElementById("condicoes").value,
-              consentimento: consentCheckbox.checked,
-              assinatura: signatureDataUrl
+          const alergiasSelecionadas = [];
+          checkboxes.forEach((checkbox) => {
+            if (checkbox.checked) {
+              alergiasSelecionadas.push(checkbox.value);
+            }
           });
 
-          // Opcional: Limpar o formulário após o envio
-          form.reset();
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          isSignatureProvided = false;
-          checkFormValidity();
+          localStorage.setItem(
+            "alergiasUsuario",
+            JSON.stringify(alergiasSelecionadas)
+          );
+
+          alert("Suas preferências foram salvas com sucesso!");
         });
 
-        // Atualiza o ano no rodapé
         document.getElementById("current-year").textContent = new Date().getFullYear();
       });
     </script>
