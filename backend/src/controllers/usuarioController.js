@@ -1,17 +1,20 @@
 // src/controllers/usuarioController.js
+const bcrypt = require('bcryptjs'); // Para hash de senha
 
-const usuarioController = {};
+const usuarioController = {}; // Objeto que irá conter todas as funções do controlador
 
 // Função para obter todos os usuários
 usuarioController.getAllUsers = async (req, res) => {
   try {
-    const models = req.app.get('models');
-    const users = await models.Usuario.findAll({
+    const prisma = req.app.get('prisma'); // Acessa a instância do PrismaClient
+    const users = await prisma.usuario.findMany({
       // Inclui os detalhes da Pessoa e Credencial associadas ao usuário
-      include: [
-        { model: models.Pessoa, as: 'detalhesPessoais' },
-        { model: models.CredencialUsuario, as: 'credencial', attributes: ['tipo_autenticacao', 'data_ultima_alteracao_senha'] } // Não inclua hash_senha por segurança
-      ]
+      include: {
+        pessoa: true, // Nome da relação no schema.prisma
+        credencial_usuario: { // Nome da relação no schema.prisma
+          select: { tipo_autenticacao: true, data_ultima_alteracao_senha: true }
+        }
+      }
     });
     res.status(200).json(users);
   } catch (error) {
@@ -23,13 +26,14 @@ usuarioController.getAllUsers = async (req, res) => {
 // Função para obter um usuário por ID
 usuarioController.getUserById = async (req, res) => {
   try {
-    const models = req.app.get('models');
+    const prisma = req.app.get('prisma');
     const { id } = req.params;
-    const user = await models.Usuario.findByPk(id, {
-      include: [
-        { model: models.Pessoa, as: 'detalhesPessoais' },
-        { model: models.CredencialUsuario, as: 'credencial', attributes: ['tipo_autenticacao', 'data_ultima_alteracao_senha'] }
-      ]
+    const user = await prisma.usuario.findUnique({ // findUnique para buscar por PK
+      where: { id_usuario: parseInt(id) }, // Converte o ID da URL para inteiro
+      include: {
+        pessoa: true,
+        credencial_usuario: { select: { tipo_autenticacao: true, data_ultima_alteracao_senha: true } }
+      }
     });
 
     if (!user) {
@@ -45,82 +49,88 @@ usuarioController.getUserById = async (req, res) => {
 
 // Função para criar um novo usuário e seu perfil específico (Cliente, Profissional, Proprietario)
 usuarioController.createUser = async (req, res) => {
-  // Dados recebidos do corpo da requisição
-  // IMPORTANTE: O frontend deve enviar todos esses campos necessários no JSON do corpo.
   const {
     email,
-    tipo_usuario,       // 'cliente', 'profissional', 'proprietario'
-    hash_senha,         // Senha (será hasheada em um app real)
+    tipo_usuario,
+    senha, // Campo 'senha' do frontend
     nome_completo,
     celular,
-    cpf,                // Opcional para Pessoa, mas necessário para perfis específicos em alguns cenários
-    genero,             // Opcional para Pessoa
-    foto_perfil,        // Opcional para Pessoa
-    id_endereco,        // Opcional para Pessoa (FK para a tabela Endereco geral)
-
-    // Campos específicos para Profissional (se tipo_usuario for 'profissional')
+    cpf,
+    genero,
+    foto_perfil,
+    id_endereco,
     especializacao,
     biografia,
     observacoes,
-
-    // Campos específicos para Proprietario (se tipo_usuario for 'proprietario')
     cnpj
   } = req.body;
 
   try {
-    const models = req.app.get('models');
-    const result = await models.sequelize.transaction(async (t) => {
-      // 1. Criar o Usuário
-      const newUser = await models.Usuario.create({
-        email,
-        tipo_usuario, // Pega o tipo_usuario do body
-      }, { transaction: t });
+    const prisma = req.app.get('prisma');
 
-      // 2. Criar a Credencial do Usuário
-      // Em produção, a senha DEVE ser hasheada (ex: com bcryptjs) antes de salvar!
-      await models.CredencialUsuario.create({
-        id_usuario: newUser.id_usuario,
-        hash_senha: hash_senha
-      }, { transaction: t });
+    // HASH DA SENHA ANTES DE SALVAR
+    const salt = await bcrypt.genSalt(10);
+    const hash_senha = await bcrypt.hash(senha, salt);
 
-      // 3. Criar a Pessoa associada ao usuário, com todos os campos disponíveis
-      const newPessoa = await models.Pessoa.create({
-        id_usuario: newUser.id_usuario,
-        nome_completo,
-        celular,
-        cpf,
-        genero,
-        foto_perfil,
-        id_endereco, // Pode ser null se não houver um id_endereco geral
-      }, { transaction: t });
+    // Inicia uma transação Prisma para garantir atomicidade
+    const result = await prisma.$transaction(async (t) => {
+      // 1. Criar o Usuário e INCLUIR a Pessoa e Credencial na mesma operação
+      const newUser = await t.usuario.create({
+        data: { // 'data' é obrigatório no Prisma para criação
+          email,
+          tipo_usuario,
+          credencial_usuario: { // Conecta credencial na criação do usuário
+            create: { hash_senha: hash_senha }
+          },
+          pessoa: { // Conecta pessoa na criação do usuário
+            create: {
+              nome_completo,
+              celular,
+              cpf,
+              genero,
+              foto_perfil,
+              id_endereco: id_endereco ? parseInt(id_endereco) : null, // Converte para Int se existir
+            }
+          }
+        },
+        include: { // Garante que os objetos relacionados sejam retornados para acesso posterior na transação
+          pessoa: true,
+          credencial_usuario: true
+        }
+      });
 
       // 4. Criar o perfil específico (Cliente, Profissional ou Proprietario)
+      // Acessa o id_pessoa do objeto 'pessoa' que foi incluído na criação do usuário
       if (tipo_usuario === 'cliente') {
-        await models.Cliente.create({
-          id_pessoa: newPessoa.id_pessoa,
-          nivel_fidelidade: 'bronze', // Padrão inicial
-          pontos_fidelizacao: 0
-        }, { transaction: t });
+        await t.cliente.create({
+          data: {
+            id_pessoa: newUser.pessoa.id_pessoa, // Acessa o ID da pessoa criada
+            nivel_fidelidade: 'bronze', // Padrão inicial
+            pontos_fidelizacao: 0
+          }
+        });
       } else if (tipo_usuario === 'profissional') {
-        // Validação básica para campos obrigatórios de profissional
         if (!especializacao) {
           throw new Error('Especialização é obrigatória para profissionais.');
         }
-        await models.Profissional.create({
-          id_pessoa: newPessoa.id_pessoa,
-          especializacao,
-          biografia,
-          observacoes
-        }, { transaction: t });
+        await t.profissional.create({
+          data: {
+            id_pessoa: newUser.pessoa.id_pessoa,
+            especializacao,
+            biografia,
+            observacoes
+          }
+        });
       } else if (tipo_usuario === 'proprietario') {
-        // Validação básica para campos obrigatórios de proprietario
         if (!cnpj) {
           throw new Error('CNPJ é obrigatório para proprietários.');
         }
-        await models.Proprietario.create({
-          id_pessoa: newPessoa.id_pessoa,
-          cnpj
-        }, { transaction: t });
+        await t.proprietario.create({
+          data: {
+            id_pessoa: newUser.pessoa.id_pessoa,
+            cnpj
+          }
+        });
       } else {
         throw new Error('Tipo de usuário inválido.');
       }
@@ -132,79 +142,108 @@ usuarioController.createUser = async (req, res) => {
 
   } catch (error) {
     console.error('Erro ao criar usuário:', error);
+    // Erros de validação (ex: email duplicado) ou do DB serão capturados aqui
     res.status(500).json({
       message: 'Erro ao criar usuário.',
       error: error.message,
-      details: error.errors ? error.errors.map(e => e.message) : undefined
+      details: error.meta ? error.meta.cause : undefined // Detalhes de erro do Prisma
     });
   }
 };
 
-// Função para atualizar um usuário (apenas os dados do Usuario, Pessoa e Credencial se necessário)
+// Função para atualizar um usuário
 usuarioController.updateUser = async (req, res) => {
   const { id } = req.params;
   const {
-    email, tipo_usuario, hash_senha,
+    email, tipo_usuario, senha, // 'senha' é o campo para nova senha, se fornecida
     nome_completo, celular, cpf, genero, foto_perfil, id_endereco,
     especializacao, biografia, observacoes, cnpj
   } = req.body;
 
   try {
-    const models = req.app.get('models');
-    const result = await models.sequelize.transaction(async (t) => {
-      const user = await models.Usuario.findByPk(id, { transaction: t });
+    const prisma = req.app.get('prisma');
+
+    const result = await prisma.$transaction(async (t) => {
+      // Encontrar o usuário existente e incluir suas relações para atualização
+      const user = await t.usuario.findUnique({
+        where: { id_usuario: parseInt(id) },
+        include: { pessoa: true, credencial_usuario: true }
+      });
+
       if (!user) {
         throw new Error('Usuário não encontrado.');
       }
 
-      await user.update({ email, tipo_usuario }, { transaction: t });
+      // 1. Atualizar dados do Usuário
+      await t.usuario.update({
+        where: { id_usuario: user.id_usuario },
+        data: { email, tipo_usuario }
+      });
 
-      const pessoa = await models.Pessoa.findOne({ where: { id_usuario: user.id_usuario }, transaction: t });
-      if (pessoa) {
-        await pessoa.update({
-          nome_completo,
-          celular,
-          cpf,
-          genero,
-          foto_perfil,
-          id_endereco
-        }, { transaction: t });
+      // 2. Atualizar dados da Pessoa associada (se existir e dados forem fornecidos)
+      if (user.pessoa) {
+        await t.pessoa.update({
+          where: { id_pessoa: user.pessoa.id_pessoa },
+          data: {
+            nome_completo,
+            celular,
+            cpf,
+            genero,
+            foto_perfil,
+            id_endereco: id_endereco ? parseInt(id_endereco) : null,
+          }
+        });
       }
 
-      if (hash_senha) {
-        const credencial = await models.CredencialUsuario.findOne({ where: { id_usuario: user.id_usuario }, transaction: t });
-        if (credencial) {
-          await credencial.update({ hash_senha }, { transaction: t });
+      // 3. Atualizar hash da senha na Credencial (se uma nova senha for fornecida)
+      if (senha) {
+        const hashedSenha = await bcrypt.hash(senha, await bcrypt.genSalt(10));
+        if (user.credencial_usuario) {
+          await t.credencial_usuario.update({
+            where: { id_credencial: user.credencial_usuario.id_credencial },
+            data: { hash_senha: hashedSenha }
+          });
         }
       }
 
-      // Lógica de atualização para Cliente, Profissional, Proprietario (exemplo, pode ser mais complexa)
-      if (tipo_usuario === 'cliente') {
-        const cliente = await models.Cliente.findOne({ where: { id_pessoa: pessoa.id_pessoa }, transaction: t });
+      // 4. Lógica de atualização para perfis específicos (Cliente, Profissional, Proprietario)
+      // Verifica o tipo_usuario atual e atualiza o perfil correspondente
+      if (tipo_usuario === 'cliente' && user.pessoa) {
+        const cliente = await t.cliente.findUnique({ where: { id_pessoa: user.pessoa.id_pessoa } });
         if (cliente) {
-          // Atualiza campos específicos do cliente se existirem no body (ex: nivel_fidelidade, pontos_fidelizacao)
-          await cliente.update(req.body, { transaction: t });
+          await t.cliente.update({
+            where: { id_cliente: cliente.id_cliente },
+            data: {
+              nivel_fidelidade: req.body.nivel_fidelidade, // Exemplo de campo específico
+              pontos_fidelizacao: req.body.pontos_fidelizacao
+            }
+          });
         }
-      } else if (tipo_usuario === 'profissional') {
-        const profissional = await models.Profissional.findOne({ where: { id_pessoa: pessoa.id_pessoa }, transaction: t });
+      } else if (tipo_usuario === 'profissional' && user.pessoa) {
+        const profissional = await t.profissional.findUnique({ where: { id_pessoa: user.pessoa.id_pessoa } });
         if (profissional) {
-          await profissional.update({ especializacao, biografia, observacoes }, { transaction: t });
+          await t.profissional.update({
+            where: { id_profissional: profissional.id_profissional },
+            data: { especializacao, biografia, observacoes }
+          });
         }
-      } else if (tipo_usuario === 'proprietario') {
-        const proprietario = await models.Proprietario.findOne({ where: { id_pessoa: pessoa.id_pessoa }, transaction: t });
+      } else if (tipo_usuario === 'proprietario' && user.pessoa) {
+        const proprietario = await t.proprietario.findUnique({ where: { id_pessoa: user.pessoa.id_pessoa } });
         if (proprietario) {
-          await proprietario.update({ cnpj }, { transaction: t });
+          await t.proprietario.update({
+            where: { id_proprietario: proprietario.id_proprietario },
+            data: { cnpj }
+          });
         }
       }
 
-
-      return user;
+      return user; // Retorna o usuário (com dados possivelmente desatualizados, mas a operação foi feita)
     });
 
     res.status(200).json({ message: 'Usuário atualizado com sucesso!', user: result });
   } catch (error) {
     console.error('Erro ao atualizar usuário:', error);
-    res.status(500).json({ message: 'Erro ao atualizar usuário.', error: error.message });
+    res.status(500).json({ message: 'Erro ao atualizar usuário.', error: error.message, details: error.meta ? error.meta.cause : undefined });
   }
 };
 
@@ -213,34 +252,35 @@ usuarioController.deleteUser = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const models = req.app.get('models');
-    const result = await models.sequelize.transaction(async (t) => {
-      const user = await models.Usuario.findByPk(id, { transaction: t });
+    const prisma = req.app.get('prisma');
+
+    const result = await prisma.$transaction(async (t) => {
+      const user = await t.usuario.findUnique({
+        where: { id_usuario: parseInt(id) },
+        include: { pessoa: true, credencial_usuario: true } // Inclui para deletar filhos
+      });
+
       if (!user) {
         throw new Error('Usuário não encontrado.');
       }
 
-      // Deleta primeiro os registros de CredencialUsuario, Pessoa e seus filhos (Cliente, Profissional, Proprietario)
-      // para evitar problemas de FK se onDelete não for 'CASCADE' nos modelos Sequelize.
-      // Se suas FKs nos modelos Sequelize já tiverem onDelete: 'CASCADE',
-      // o destroy do Usuario pode propagar automaticamente.
-      // Caso contrário, é mais seguro deletar na ordem inversa de criação.
-
-      // 1. Deletar Credencial (Se existir)
-      await models.CredencialUsuario.destroy({ where: { id_usuario: user.id_usuario }, transaction: t });
-
-      // 2. Deletar Perfis específicos (Cliente, Profissional, Proprietario)
-      const pessoa = await models.Pessoa.findOne({ where: { id_usuario: user.id_usuario }, transaction: t });
-      if (pessoa) {
-        await models.Cliente.destroy({ where: { id_pessoa: pessoa.id_pessoa }, transaction: t });
-        await models.Profissional.destroy({ where: { id_pessoa: pessoa.id_pessoa }, transaction: t });
-        await models.Proprietario.destroy({ where: { id_pessoa: pessoa.id_pessoa }, transaction: t });
-        // 3. Deletar Pessoa
-        await models.Pessoa.destroy({ where: { id_pessoa: pessoa.id_pessoa }, transaction: t });
+      // 1. Deletar Credencial (se existir)
+      if (user.credencial_usuario) {
+        await t.credencial_usuario.delete({ where: { id_credencial: user.credencial_usuario.id_credencial } });
       }
 
-      // 4. Deletar o próprio Usuário
-      await user.destroy({ transaction: t });
+      // 2. Deletar Perfis específicos (Cliente, Profissional, Proprietario) e Pessoa (se existir)
+      if (user.pessoa) {
+        // Usar deleteMany para garantir que a operação seja executada mesmo se não encontrar um único registro
+        await t.cliente.deleteMany({ where: { id_pessoa: user.pessoa.id_pessoa } });
+        await t.profissional.deleteMany({ where: { id_pessoa: user.pessoa.id_pessoa } });
+        await t.proprietario.deleteMany({ where: { id_pessoa: user.pessoa.id_pessoa } });
+        // Deletar a Pessoa
+        await t.pessoa.delete({ where: { id_pessoa: user.pessoa.id_pessoa } });
+      }
+
+      // 3. Deletar o próprio Usuário
+      await t.usuario.delete({ where: { id_usuario: user.id_usuario } });
 
       return { message: 'Usuário deletado com sucesso.' };
     });
@@ -248,9 +288,8 @@ usuarioController.deleteUser = async (req, res) => {
     res.status(200).json(result);
   } catch (error) {
     console.error('Erro ao deletar usuário:', error);
-    res.status(500).json({ message: 'Erro ao deletar usuário.', error: error.message });
+    res.status(500).json({ message: 'Erro ao deletar usuário.', error: error.message, details: error.meta ? error.meta.cause : undefined });
   }
 };
-
 
 module.exports = usuarioController;

@@ -1,45 +1,27 @@
 // src/routes/usuarioRoutes.js
 const express = require('express');
-const router = express.Router(); // Cria uma instância de Router do Express
-const usuarioController = require('../controllers/usuarioController'); // Importa o controlador de usuários
+const router = express.Router();
+// Certifique-se de que o caminho para o controlador está correto e que ele exporta um objeto
+// <<<< MUDANÇA AQUI: Importação direta das funções do controlador
+const { getAllUsers, getUserById, createUser, updateUser, deleteUser } = require('../controllers/usuarioController');
 
-// Este módulo exporta uma função que recebe 'models' como argumento.
-// Isso permite que você passe seus modelos Sequelize para as rotas,
-// e então os controllers possam acessá-los via req.app.get('models').
-module.exports = (models) => {
-  // Middleware para anexar os 'models' ao objeto 'req.app' (global da aplicação Express)
-  // Isso torna os modelos acessíveis em todos os controladores que usam este router.
+// Este módulo exporta uma função que recebe 'prisma' como argumento.
+// Isso permite que você passe a instância do PrismaClient para as rotas,
+// e então os controllers possam acessá-la via req.app.get('prisma').
+module.exports = (prisma) => {
+  // Middleware para anexar a instância 'prisma' ao objeto 'req.app'
   router.use((req, res, next) => {
-    req.app.set('models', models); // Armazena os modelos no objeto app do Express
-    next(); // Continua para a próxima middleware/rota
+    req.app.set('prisma', prisma);
+    next();
   });
 
   // Definir as rotas para o recurso 'usuários'
+  // <<<< MUDANÇA AQUI: Usando as funções importadas diretamente
+  router.get('/', getAllUsers);
+  router.get('/:id', getUserById);
+  router.post('/', createUser);
+  router.put('/:id', updateUser);
+  router.delete('/:id', deleteUser);
 
-  // Rota para obter todos os usuários
-  // Método: GET
-  // URL esperada: /api/usuarios
-  router.get('/', usuarioController.getAllUsers);
-
-  // Rota para obter um usuário específico por ID
-  // Método: GET
-  // URL esperada: /api/usuarios/:id
-  router.get('/:id', usuarioController.getUserById);
-
-  // Rota para criar um novo usuário
-  // Método: POST
-  // URL esperada: /api/usuarios
-  router.post('/', usuarioController.createUser);
-
-  // Rota para atualizar um usuário existente por ID
-  // Método: PUT
-  // URL esperada: /api/usuarios/:id
-  router.put('/:id', usuarioController.updateUser);
-
-  // Rota para deletar um usuário por ID
-  // Método: DELETE
-  // URL esperada: /api/usuarios/:id
-  router.delete('/:id', usuarioController.deleteUser);
-
-  return router; // Retorna o router configurado
+  return router;
 };

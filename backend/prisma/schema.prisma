@@ -1,0 +1,454 @@
+generator client {
+  provider = "prisma-client-js"
+  ///output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model AgendamentoServico {
+  id_agendamento Int
+  id_servico     Int
+  agendamento    agendamento @relation(fields: [id_agendamento], references: [id_agendamento], onDelete: Cascade)
+  servico        servico     @relation(fields: [id_servico], references: [id_servico], onDelete: Cascade)
+
+  @@id([id_agendamento, id_servico])
+}
+
+model ProfissionalServico {
+  id_profissional Int
+  id_servico      Int
+  profissional    profissional @relation(fields: [id_profissional], references: [id_profissional], onDelete: Cascade)
+  servico         servico      @relation(fields: [id_servico], references: [id_servico], onDelete: Cascade)
+
+  @@id([id_profissional, id_servico])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+/// This table contains exclusion constraints and requires additional setup for migrations. Visit https://pris.ly/d/exclusion-constraints for more info.
+model agendamento {
+  id_agendamento      Int                     @id @default(autoincrement())
+  id_cliente          Int
+  id_profissional     Int
+  data_hora_inicio    DateTime?               @db.Timestamp(6)
+  data_hora_fim       DateTime?               @db.Timestamp(6)
+  status              String                  @db.VarChar(50)
+  observacao          String?
+  data_criacao        DateTime?               @default(now()) @db.Timestamp(6)
+  periodo             Unsupported("tsrange")? @default(dbgenerated("tsrange(data_hora_inicio, data_hora_fim)"))
+  AgendamentoServico  AgendamentoServico[]
+  cliente             cliente                 @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction)
+  profissional        profissional            @relation(fields: [id_profissional], references: [id_profissional], onDelete: NoAction)
+  agendamento_servico agendamento_servico[]
+
+  @@index([id_cliente], map: "idx_agendamento_cliente")
+  @@index([data_hora_inicio], map: "idx_agendamento_data")
+  @@index([id_profissional], map: "idx_agendamento_profissional")
+  @@index([status], map: "idx_agendamento_status")
+}
+
+model agendamento_servico {
+  id_agendamento_servico Int         @id @default(autoincrement())
+  id_agendamento         Int
+  id_servico             Int
+  agendamento            agendamento @relation(fields: [id_agendamento], references: [id_agendamento], onDelete: NoAction, onUpdate: NoAction)
+  servico                servico     @relation(fields: [id_servico], references: [id_servico], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_agendamento, id_servico], map: "unq_agendamento_servico")
+  @@unique([id_agendamento, id_servico], map: "uq_agendamento_servico")
+}
+
+model anamnese {
+  id_anamnese        Int      @id @default(autoincrement())
+  id_cliente         Int
+  alergias           String?  @db.VarChar(80)
+  historico_reacoes  String?  @db.VarChar(80)
+  data_consentimento DateTime @default(dbgenerated("CURRENT_DATE")) @db.Date
+  cliente            cliente  @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model avisos {
+  id                    Int       @id @default(autoincrement())
+  titulo                String    @db.VarChar(255)
+  descricao             String
+  data_publicacao       DateTime? @default(now()) @db.Timestamptz(6)
+  data_expiracao        DateTime? @db.Timestamptz(6)
+  tag                   String?   @db.VarChar(50)
+  tipo_aviso            String    @db.VarChar(50)
+  caminho_icone         String?   @db.VarChar(255)
+  link_redirecionamento String?   @db.VarChar(512)
+  ativo                 Boolean   @default(true)
+
+  @@index([ativo], map: "idx_avisos_ativo")
+  @@index([data_publicacao(sort: Desc)], map: "idx_avisos_data_publicacao")
+  @@index([tipo_aviso], map: "idx_avisos_tipo_aviso")
+}
+
+model barbearia {
+  id_barbearia                Int             @id @default(autoincrement())
+  id_proprietario             Int
+  nome_fantasia               String          @db.VarChar(100)
+  logo                        String
+  descricao                   String
+  telefone                    String?         @db.VarChar(15)
+  horario_funcionamento       String?
+  redes_sociais               Json?
+  latitude                    Decimal?        @db.Decimal(10, 8)
+  longitude                   Decimal?        @db.Decimal(11, 8)
+  id_endereco                 Int?
+  dias_aviso_validade_produto Int             @default(90)
+  proprietario                proprietario    @relation(fields: [id_proprietario], references: [id_proprietario], onDelete: NoAction, onUpdate: NoAction)
+  galeria_fotos               galeria_fotos[]
+  paleta_cores                paleta_cores[]
+  relatorio                   relatorio[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model cliente {
+  id_cliente         Int                @id @default(autoincrement())
+  id_pessoa          Int
+  nivel_fidelidade   String?            @db.VarChar(20)
+  pontos_fidelizacao Int?               @default(0)
+  agendamento        agendamento[]
+  anamnese           anamnese[]
+  pessoa             pessoa             @relation(fields: [id_pessoa], references: [id_pessoa], onDelete: NoAction)
+  cliente_endereco   cliente_endereco[]
+  feedback           feedback[]
+  pedido             pedido[]
+}
+
+model cliente_endereco {
+  id_cliente_endereco Int      @id @default(autoincrement())
+  id_cliente          Int
+  logradouro          String   @db.VarChar(255)
+  numero              String?  @db.VarChar(50)
+  complemento         String?  @db.VarChar(255)
+  bairro              String   @db.VarChar(100)
+  cidade              String   @db.VarChar(100)
+  estado              String   @db.VarChar(2)
+  cep                 String   @db.VarChar(10)
+  referencia          String?
+  cliente             cliente  @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction)
+  pedido              pedido[]
+
+  @@unique([id_cliente, logradouro, numero, bairro, cidade, estado, cep])
+}
+
+model credencial_usuario {
+  id_credencial               Int       @id @default(autoincrement())
+  id_usuario                  Int       @unique
+  hash_senha                  String
+  tipo_autenticacao           String?   @default("local") @db.VarChar(30)
+  data_ultima_alteracao_senha DateTime? @default(now()) @db.Timestamp(6)
+  token_recuperacao           String?
+  validade_token              DateTime? @db.Timestamp(6)
+  usuario                     usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model disponibilidade_profissional {
+  id_disponibilidade Int          @id @default(autoincrement())
+  id_profissional    Int
+  dia_semana         Int
+  hora_inicio        DateTime     @db.Time(6)
+  hora_fim           DateTime     @db.Time(6)
+  profissional       profissional @relation(fields: [id_profissional], references: [id_profissional], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model endereco {
+  id_endereco  Int       @id @default(autoincrement())
+  cep          String    @db.VarChar(9)
+  logradouro   String    @db.VarChar(100)
+  numero       String?   @db.VarChar(10)
+  complemento  String?   @db.VarChar(50)
+  bairro       String    @db.VarChar(50)
+  cidade       String    @db.VarChar(50)
+  estado       String    @db.VarChar(45)
+  pais         String    @default("Brasil") @db.VarChar(45)
+  data_criacao DateTime? @db.Timestamptz(6)
+  ativo        Boolean?  @default(true)
+  pessoa       pessoa[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model excecoes_disponibilidade {
+  id_excecao      Int          @id @default(autoincrement())
+  id_profissional Int
+  data_inicio     DateTime     @db.Date
+  data_fim        DateTime     @db.Date
+  motivo          String?      @db.VarChar(255)
+  hora_inicio     DateTime?    @db.Time(6)
+  hora_fim        DateTime?    @db.Time(6)
+  criado_em       DateTime     @default(now()) @db.Timestamp(6)
+  profissional    profissional @relation(fields: [id_profissional], references: [id_profissional], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model feedback {
+  id_feedback Int      @id @default(autoincrement())
+  id_cliente  Int
+  nota        Int?
+  comentario  String?
+  data        DateTime @default(now()) @db.Timestamp(6)
+  editado     Boolean  @default(false)
+  cliente     cliente  @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model forma_pagamento {
+  id_forma_pagamento   Int                 @id @default(autoincrement())
+  tipo_pagamento       String              @unique(map: "uniq_tipo_pagamento") @db.VarChar(20)
+  nome_exibicao        String              @db.VarChar(50)
+  descricao            String?
+  ativo                Boolean             @default(true)
+  permite_parcelamento Boolean             @default(false)
+  max_parcelas         Int                 @default(1)
+  taxa_base            Decimal?            @default(0.00) @db.Decimal(5, 2)
+  ordem_exibicao       Int                 @default(0)
+  data_criacao         DateTime?           @default(now()) @db.Timestamp(6)
+  pagamento            pagamento[]
+  taxa_parcelamento    taxa_parcelamento[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model foto_entidade {
+  id_foto_entidade Int           @id @default(autoincrement())
+  id_foto          Int
+  tipo_entidade    String        @db.VarChar(50)
+  id_referencia    Int
+  galeria_fotos    galeria_fotos @relation(fields: [id_foto], references: [id_foto], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_foto, tipo_entidade, id_referencia], map: "uq_foto_entidade")
+}
+
+model galeria_fotos {
+  id_foto        Int             @id @default(autoincrement())
+  id_barbearia   Int
+  imagem_caminho String?
+  descricao      String?
+  data_upload    DateTime?       @default(now()) @db.Timestamp(6)
+  foto_entidade  foto_entidade[]
+  barbearia      barbearia       @relation(fields: [id_barbearia], references: [id_barbearia], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model item_pedido {
+  id_item_pedido Int      @id @default(autoincrement())
+  id_pedido      Int
+  id_produto     Int
+  quantidade     Int
+  preco_unitario Decimal  @db.Decimal(10, 2)
+  desconto       Decimal? @default(0) @db.Decimal(10, 2)
+  pedido         pedido   @relation(fields: [id_pedido], references: [id_pedido], onDelete: NoAction, onUpdate: NoAction)
+  produto        produto  @relation(fields: [id_produto], references: [id_produto], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model movimentacao_estoque {
+  id_movimentacao   Int       @id @default(autoincrement())
+  id_produto        Int
+  tipo_movimentacao String    @db.VarChar(10)
+  quantidade        Int
+  data_hora         DateTime? @default(now()) @db.Timestamptz(6)
+  motivo            String?
+  id_usuario        Int?
+  produto           produto   @relation(fields: [id_produto], references: [id_produto], onDelete: NoAction, onUpdate: NoAction, map: "fk_movimentacao_produto")
+
+  @@index([id_produto, data_hora(sort: Desc)], map: "idx_movimentacao_estoque_produto_data")
+}
+
+model pacote_servico_item {
+  id_pacote_servico_item                                 Int     @id @default(autoincrement())
+  id_servico_pacote                                      Int
+  id_servico_item                                        Int
+  servico_pacote_servico_item_id_servico_itemToservico   servico @relation("pacote_servico_item_id_servico_itemToservico", fields: [id_servico_item], references: [id_servico], onDelete: NoAction, onUpdate: NoAction)
+  servico_pacote_servico_item_id_servico_pacoteToservico servico @relation("pacote_servico_item_id_servico_pacoteToservico", fields: [id_servico_pacote], references: [id_servico], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_servico_pacote, id_servico_item])
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model pagamento {
+  id_pagamento        Int             @id @default(autoincrement())
+  id_pedido           Int
+  valor               Decimal         @db.Decimal(10, 2)
+  data_hora_pagamento DateTime        @default(now()) @db.Timestamp(6)
+  status              String          @db.VarChar(50)
+  id_forma_pagamento  Int
+  observacoes         String?
+  forma_pagamento     forma_pagamento @relation(fields: [id_forma_pagamento], references: [id_forma_pagamento], onDelete: NoAction, onUpdate: NoAction, map: "fk_pagamento_forma_pagamento")
+  pedido              pedido          @relation(fields: [id_pedido], references: [id_pedido], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model paleta_cores {
+  id_cor       Int       @id @default(autoincrement())
+  id_barbearia Int
+  nome_uso     String    @db.VarChar(50)
+  valor_cor    String    @db.VarChar(7)
+  barbearia    barbearia @relation(fields: [id_barbearia], references: [id_barbearia], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model pedido {
+  id_pedido           Int               @id @default(autoincrement())
+  id_cliente          Int
+  data_hora_pedido    DateTime?         @default(now()) @db.Timestamp(6)
+  valor_total         Decimal           @db.Decimal(10, 2)
+  tipo_entrega        String            @db.VarChar(50)
+  status              String            @db.VarChar(50)
+  taxa_de_entrega     Decimal?          @db.Decimal(10, 2)
+  id_endereco_entrega Int?
+  item_pedido         item_pedido[]
+  pagamento           pagamento[]
+  cliente_endereco    cliente_endereco? @relation(fields: [id_endereco_entrega], references: [id_cliente_endereco], onDelete: NoAction, onUpdate: NoAction, map: "fk_pedido_cliente_endereco")
+  cliente             cliente           @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model pessoa {
+  id_pessoa     Int            @id @default(autoincrement())
+  id_usuario    Int            @unique
+  nome_completo String         @db.VarChar(50)
+  celular       String?        @db.VarChar(14)
+  cpf           String?        @unique @db.VarChar(11)
+  genero        String?        @db.VarChar(9)
+  foto_perfil   String?
+  status        Boolean        @default(true)
+  id_endereco   Int?
+  cliente       cliente[]
+  endereco      endereco?      @relation(fields: [id_endereco], references: [id_endereco], onDelete: Cascade)
+  usuario       usuario        @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction)
+  profissional  profissional[]
+  proprietario  proprietario?
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model produto {
+  id_produto           Int                    @id @default(autoincrement())
+  nome                 String                 @db.VarChar(45)
+  descricao            String
+  preco_venda          Decimal                @db.Decimal(10, 2)
+  data_validade        DateTime?              @db.Date
+  quantidade_estoque   Int
+  estoque_minimo       Int
+  ativo                Boolean                @default(true)
+  categoria            String                 @db.VarChar(15)
+  preco_compra         Decimal                @default(0.00) @db.Decimal(10, 2)
+  item_pedido          item_pedido[]
+  movimentacao_estoque movimentacao_estoque[]
+  promocao_produto     promocao_produto[]
+
+  @@index([nome], map: "idx_produto_nome")
+}
+
+model profissional {
+  id_profissional              Int                            @id @default(autoincrement())
+  id_pessoa                    Int
+  especializacao               String                         @db.VarChar(30)
+  biografia                    String?                        @db.VarChar(100)
+  observacoes                  String?                        @db.VarChar(45)
+  status                       Boolean                        @default(true)
+  ProfissionalServico          ProfissionalServico[]
+  agendamento                  agendamento[]
+  disponibilidade_profissional disponibilidade_profissional[]
+  excecoes_disponibilidade     excecoes_disponibilidade[]
+  pessoa                       pessoa                         @relation(fields: [id_pessoa], references: [id_pessoa], onDelete: Cascade)
+  profissional_servico         profissional_servico[]
+}
+
+model profissional_servico {
+  id_profissional_servico Int          @id @default(autoincrement())
+  id_servico              Int
+  id_profissional         Int
+  profissional            profissional @relation(fields: [id_profissional], references: [id_profissional], onDelete: NoAction, onUpdate: NoAction)
+  servico                 servico      @relation(fields: [id_servico], references: [id_servico], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_profissional, id_servico], map: "uq_profissional_servico")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model promocao_produto {
+  id_promocao          Int       @id @default(autoincrement())
+  id_produto           Int
+  porcentagem_desconto Decimal   @db.Decimal(5, 2)
+  data_inicio          DateTime  @db.Date
+  data_fim             DateTime  @db.Date
+  ativa                Boolean   @default(true)
+  data_criacao         DateTime? @default(now()) @db.Timestamptz(6)
+  produto              produto   @relation(fields: [id_produto], references: [id_produto], onDelete: NoAction, onUpdate: NoAction, map: "fk_promocao_produto")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model proprietario {
+  id_proprietario Int         @id @default(autoincrement())
+  id_pessoa       Int         @unique
+  cnpj            String?     @db.VarChar(18)
+  barbearia       barbearia[]
+  pessoa          pessoa      @relation(fields: [id_pessoa], references: [id_pessoa], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model relatorio {
+  id_relatorio    Int       @id @default(autoincrement())
+  id_barbearia    Int
+  tipo            String    @db.VarChar(50)
+  descricao       String?
+  data_inicio     DateTime  @db.Date
+  data_fim        DateTime  @db.Date
+  data_geracao    DateTime  @default(dbgenerated("CURRENT_DATE")) @db.Date
+  total_registros Int       @default(0)
+  valor_total     Decimal   @default(0.00) @db.Decimal(10, 2)
+  caminho_arquivo String
+  barbearia       barbearia @relation(fields: [id_barbearia], references: [id_barbearia], onDelete: NoAction, onUpdate: NoAction)
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model servico {
+  id_servico                                                         Int                      @id @default(autoincrement())
+  nome                                                               String                   @db.VarChar(100)
+  descricao                                                          String?
+  preco_original                                                     Decimal?                 @db.Decimal(10, 2)
+  preco_promocional                                                  Decimal?                 @db.Decimal(10, 2)
+  duracao_estimada                                                   Unsupported("interval")?
+  ativo                                                              Boolean                  @default(true)
+  pacote                                                             Boolean                  @default(false)
+  AgendamentoServico                                                 AgendamentoServico[]
+  ProfissionalServico                                                ProfissionalServico[]
+  agendamento_servico                                                agendamento_servico[]
+  pacote_servico_item_pacote_servico_item_id_servico_itemToservico   pacote_servico_item[]    @relation("pacote_servico_item_id_servico_itemToservico")
+  pacote_servico_item_pacote_servico_item_id_servico_pacoteToservico pacote_servico_item[]    @relation("pacote_servico_item_id_servico_pacoteToservico")
+  profissional_servico                                               profissional_servico[]
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model taxa_parcelamento {
+  id_taxa            Int             @id @default(autoincrement())
+  id_forma_pagamento Int
+  numero_parcelas    Int
+  taxa_juros         Decimal         @db.Decimal(5, 2)
+  data_validade      DateTime        @default(dbgenerated("CURRENT_DATE")) @db.Date
+  ativo              Boolean         @default(true)
+  forma_pagamento    forma_pagamento @relation(fields: [id_forma_pagamento], references: [id_forma_pagamento], onDelete: NoAction, onUpdate: NoAction)
+
+  @@unique([id_forma_pagamento, numero_parcelas], map: "uniq_combinacao")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model usuario {
+  id_usuario         Int                 @id @default(autoincrement())
+  email              String              @unique @db.VarChar(100)
+  tipo_usuario       String?             @db.VarChar(50)
+  data_criacao       DateTime?           @db.Timestamptz(6)
+  ativo              Boolean?            @default(true)
+  ultimo_login       DateTime?           @db.Timestamptz(6)
+  credencial_usuario credencial_usuario?
+  pessoa             pessoa?
+}
+
+enum status_agendamento {
+  confirmado
+  cancelado
+  concluido
+}
