@@ -37,7 +37,7 @@ model agendamento {
   status              String                  @db.VarChar(50)
   observacao          String?
   data_criacao        DateTime?               @default(now()) @db.Timestamp(6)
-  periodo             Unsupported("tsrange")? @default(dbgenerated("tsrange(data_hora_inicio, data_hora_fim)"))
+  periodo             Unsupported("tsrange")?
   AgendamentoServico  AgendamentoServico[]
   cliente             cliente                 @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction)
   profissional        profissional            @relation(fields: [id_profissional], references: [id_profissional], onDelete: NoAction)
@@ -411,7 +411,7 @@ model servico {
   descricao                                                          String?
   preco_original                                                     Decimal?                 @db.Decimal(10, 2)
   preco_promocional                                                  Decimal?                 @db.Decimal(10, 2)
-  duracao_estimada                                                   Unsupported("interval")?
+  duracao_estimada                                                   Int?
   ativo                                                              Boolean                  @default(true)
   pacote                                                             Boolean                  @default(false)
   AgendamentoServico                                                 AgendamentoServico[]

@@ -1,133 +1,141 @@
 // src/controllers/servicoController.js
 const servicoController = {};
 
-// Função para obter todos os serviços
-servicoController.getAllServicos = async (req, res) => {
+/**
+ * @description Cria um novo serviço no sistema.
+ * @route POST /api/servicos
+ * @access Proprietário
+ * @param {object} req.body - Dados do serviço (nome, descricao, preco_original, preco_promocional, duracao_estimada, ativo)
+ */
+servicoController.createServico = async (req, res) => { // Nome da função ajustado para createServico
+  const { nome, descricao, preco_original, preco_promocional, duracao_estimada, ativo } = req.body;
+  
+  console.log('DEBUG SERVICO: Função createServico foi alcançada.'); // NOVO LOG
+  console.log('DEBUG SERVICO: Dados recebidos no body:', req.body); // NOVO LOG
+
   try {
     const prisma = req.app.get('prisma'); // Acessa a instância do PrismaClient
-    const servicos = await prisma.servico.findMany({
-      // Você pode incluir relações aqui se necessário, como fotos ou pacotes
-      // include: {
-      //   foto_entidade: true, // Se quiser incluir fotos associadas ao serviço
-      //   pacote_servico_item_pacote_servico_item_id_servico_itemToservico: true, // Itens de pacote
-      //   pacote_servico_item_pacote_servico_item_id_servico_pacoteToservico: true, // Se o serviço for um pacote
-      // }
-    });
-    res.status(200).json(servicos);
-  } catch (error) {
-    console.error('Erro ao buscar serviços:', error);
-    res.status(500).json({ message: 'Erro interno do servidor', error: error.message });
-  }
-};
+    console.log('DEBUG SERVICO: Prisma instance in createServico:', !!prisma); // Log ajustado
 
-// Função para obter um serviço por ID
-servicoController.getServicoById = async (req, res) => {
-  try {
-    const prisma = req.app.get('prisma');
-    const { id } = req.params;
-    const servico = await prisma.servico.findUnique({
-      where: { id_servico: parseInt(id) }, // Converte o ID para inteiro
-      // include: {
-      //   foto_entidade: true,
-      //   pacote_servico_item_pacote_servico_item_id_servico_itemToservico: true,
-      //   pacote_servico_item_pacote_servico_item_id_servico_pacoteToservico: true,
-      // }
-    });
+    // Opcional: Se você quiser associar o serviço ao proprietário que o criou
+    // const proprietarioId = req.user.id_usuario; // Acessa o ID do usuário logado do token
+    // console.log('DEBUG SERVICO: Proprietário logado ID:', proprietarioId); // NOVO LOG
 
-    if (!servico) {
-      return res.status(404).json({ message: 'Serviço não encontrado.' });
-    }
-
-    res.status(200).json(servico);
-  } catch (error) {
-    console.error('Erro ao buscar serviço por ID:', error);
-    res.status(500).json({ message: 'Erro interno do servidor', error: error.message });
-  }
-};
-
-// Função para criar um novo serviço
-servicoController.createServico = async (req, res) => {
-  const {
-    nome,
-    descricao,
-    preco_original,
-    preco_promocional,
-    duracao_estimada, // Lembre-se que é Unsupported("interval") no Prisma
-    ativo,
-    pacote
-  } = req.body;
-
-  try {
-    const prisma = req.app.get('prisma');
-    const newServico = await prisma.servico.create({
+    const newService = await prisma.servico.create({
       data: {
         nome,
         descricao,
-        preco_original: parseFloat(preco_original), // Converte para float/decimal
-        preco_promocional: preco_promocional ? parseFloat(preco_promocional) : null,
-        duracao_estimada, // String, como mapeado no Prisma
+        preco_original,
+        preco_promocional,
+        duracao_estimada, // Enviado como Int (minutos), Prisma deve lidar com o tipo interval
         ativo,
-        pacote
-      }
+        // Se o seu schema.prisma tiver um campo 'proprietarioId' no modelo Servico,
+        // você precisaria passá-lo aqui:
+        // proprietario: { connect: { id_usuario: proprietarioId } } 
+      },
     });
-    res.status(201).json({ message: 'Serviço criado com sucesso!', servico: newServico });
+    console.log('DEBUG SERVICO: Serviço criado com sucesso no DB.'); // NOVO LOG
+    res.status(201).json({ message: 'Serviço criado com sucesso!', service: newService });
   } catch (error) {
     console.error('Erro ao criar serviço:', error);
-    res.status(500).json({
-      message: 'Erro ao criar serviço.',
-      error: error.message,
-      details: error.meta ? error.meta.cause : undefined
-    });
+    res.status(500).json({ message: 'Erro interno do servidor ao criar serviço', error: error.message });
   }
 };
 
-// Função para atualizar um serviço
-servicoController.updateServico = async (req, res) => {
+/**
+ * @description Obtém todos os serviços disponíveis.
+ * @route GET /api/servicos
+ * @access Proprietário, Profissional, Cliente
+ */
+servicoController.getAllServicos = async (req, res) => { // Nome da função ajustado para getAllServicos
+  console.log('DEBUG SERVICO: Função getAllServicos foi alcançada.'); // NOVO LOG
+  try {
+    const prisma = req.app.get('prisma');
+    const services = await prisma.servico.findMany();
+    res.status(200).json(services);
+  } catch (error) {
+    console.error('Erro ao buscar serviços:', error);
+    res.status(500).json({ message: 'Erro interno do servidor ao buscar serviços', error: error.message });
+  }
+};
+
+/**
+ * @description Obtém um serviço específico por ID.
+ * @route GET /api/servicos/:id
+ * @access Proprietário, Profissional, Cliente
+ * @param {string} req.params.id - ID do serviço
+ */
+servicoController.getServicoById = async (req, res) => { // Nome da função ajustado para getServicoById
   const { id } = req.params;
-  const {
-    nome,
-    descricao,
-    preco_original,
-    preco_promocional,
-    duracao_estimada,
-    ativo,
-    pacote
-  } = req.body;
+  console.log('DEBUG SERVICO: Função getServicoById foi alcançada. ID:', id); // NOVO LOG
+  try {
+    const prisma = req.app.get('prisma');
+    const service = await prisma.servico.findUnique({
+      where: { id_servico: parseInt(id) },
+    });
+    if (!service) {
+      return res.status(404).json({ message: 'Serviço não encontrado.' });
+    }
+    res.status(200).json(service);
+  } catch (error) {
+    console.error('Erro ao buscar serviço por ID:', error);
+    res.status(500).json({ message: 'Erro interno do servidor ao buscar serviço por ID', error: error.message });
+  }
+};
+
+/**
+ * @description Atualiza um serviço existente por ID.
+ * @route PUT /api/servicos/:id
+ * @access Proprietário
+ * @param {string} req.params.id - ID do serviço
+ * @param {object} req.body - Dados atualizados do serviço
+ */
+servicoController.updateServico = async (req, res) => { // Adicionado updateServico
+  const { id } = req.params;
+  const { nome, descricao, preco_original, preco_promocional, duracao_estimada, ativo } = req.body;
+  console.log('DEBUG SERVICO: Função updateServico foi alcançada. ID:', id); // NOVO LOG
 
   try {
     const prisma = req.app.get('prisma');
-    const updatedServico = await prisma.servico.update({
+    const updatedService = await prisma.servico.update({
       where: { id_servico: parseInt(id) },
       data: {
         nome,
         descricao,
-        preco_original: parseFloat(preco_original),
-        preco_promocional: preco_promocional ? parseFloat(preco_promocional) : null,
+        preco_original,
+        preco_promocional,
         duracao_estimada,
         ativo,
-        pacote
-      }
+      },
     });
-    res.status(200).json({ message: 'Serviço atualizado com sucesso!', servico: updatedServico });
+    res.status(200).json({ message: 'Serviço atualizado com sucesso!', service: updatedService });
   } catch (error) {
     console.error('Erro ao atualizar serviço:', error);
-    res.status(500).json({ message: 'Erro ao atualizar serviço.', error: error.message, details: error.meta ? error.meta.cause : undefined });
+    res.status(500).json({ message: 'Erro interno do servidor ao atualizar serviço', error: error.message });
   }
 };
 
-// Função para deletar um serviço
-servicoController.deleteServico = async (req, res) => {
+/**
+ * @description Deleta um serviço por ID.
+ * @route DELETE /api/servicos/:id
+ * @access Proprietário
+ * @param {string} req.params.id - ID do serviço
+ */
+servicoController.deleteServico = async (req, res) => { // Adicionado deleteServico
   const { id } = req.params;
+  console.log('DEBUG SERVICO: Função deleteServico foi alcançada. ID:', id); // NOVO LOG
+
   try {
     const prisma = req.app.get('prisma');
     await prisma.servico.delete({
-      where: { id_servico: parseInt(id) }
+      where: { id_servico: parseInt(id) },
     });
     res.status(200).json({ message: 'Serviço deletado com sucesso!' });
   } catch (error) {
     console.error('Erro ao deletar serviço:', error);
-    res.status(500).json({ message: 'Erro ao deletar serviço.', error: error.message, details: error.meta ? error.meta.cause : undefined });
+    res.status(500).json({ message: 'Erro interno do servidor ao deletar serviço', error: error.message });
   }
 };
+
 
 module.exports = servicoController;

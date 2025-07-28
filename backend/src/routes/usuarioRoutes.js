@@ -6,14 +6,17 @@ const router = express.Router();
 const usuarioController = require('../controllers/usuarioController'); 
 const { authorize } = require('../middlewares/authMiddleware');
 
-// Rotas de Usuários
-// A rota de cadastro (POST /) não precisa de autenticação, mas será acessada via /api/usuarios
-router.post('/', usuarioController.createUser); 
+module.exports = (prisma) => {
+  router.use((req, res, next) => {
+    req.app.set('prisma', prisma);
+    next();
+  });
 
-// Rotas protegidas por autorização (verifyToken já é global no app.js)
-router.get('/', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.getAllUsers);
-router.get('/:id', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.getUserById);
-router.put('/:id', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.updateUser);
-router.delete('/:id', authorize(['proprietario']), usuarioController.deleteUser);
+  // Rotas de Usuários PROTEGIDAS (POST /api/usuarios foi movido para app.js como rota pública)
+  router.get('/', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.getAllUsers);
+  router.get('/:id', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.getUserById);
+  router.put('/:id', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.updateUser);
+  router.delete('/:id', authorize(['proprietario']), usuarioController.deleteUser);
 
-module.exports = router; // Exporta o router diretamente
+  return router;
+};
