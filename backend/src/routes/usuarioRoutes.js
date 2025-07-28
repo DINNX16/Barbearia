@@ -1,27 +1,19 @@
 // src/routes/usuarioRoutes.js
+console.log('DEBUG: Arquivo usuarioRoutes.js carregado.');
 const express = require('express');
 const router = express.Router();
-// Certifique-se de que o caminho para o controlador está correto e que ele exporta um objeto
-// <<<< MUDANÇA AQUI: Importação direta das funções do controlador
-const { getAllUsers, getUserById, createUser, updateUser, deleteUser } = require('../controllers/usuarioController');
+// Importa as funções do controlador de usuários
+const usuarioController = require('../controllers/usuarioController'); 
+const { authorize } = require('../middlewares/authMiddleware');
 
-// Este módulo exporta uma função que recebe 'prisma' como argumento.
-// Isso permite que você passe a instância do PrismaClient para as rotas,
-// e então os controllers possam acessá-la via req.app.get('prisma').
-module.exports = (prisma) => {
-  // Middleware para anexar a instância 'prisma' ao objeto 'req.app'
-  router.use((req, res, next) => {
-    req.app.set('prisma', prisma);
-    next();
-  });
+// Rotas de Usuários
+// A rota de cadastro (POST /) não precisa de autenticação, mas será acessada via /api/usuarios
+router.post('/', usuarioController.createUser); 
 
-  // Definir as rotas para o recurso 'usuários'
-  // <<<< MUDANÇA AQUI: Usando as funções importadas diretamente
-  router.get('/', getAllUsers);
-  router.get('/:id', getUserById);
-  router.post('/', createUser);
-  router.put('/:id', updateUser);
-  router.delete('/:id', deleteUser);
+// Rotas protegidas por autorização (verifyToken já é global no app.js)
+router.get('/', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.getAllUsers);
+router.get('/:id', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.getUserById);
+router.put('/:id', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.updateUser);
+router.delete('/:id', authorize(['proprietario']), usuarioController.deleteUser);
 
-  return router;
-};
+module.exports = router; // Exporta o router diretamente

@@ -3,18 +3,13 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controllers/authController');
 
-// Este módulo exporta uma função que recebe 'prisma' como argumento.
-// Isso permite que você passe a instância do PrismaClient para as rotas,
-// e então os controllers possam acessá-la via req.app.get('prisma').
-module.exports = (prisma) => { // <<<< MUDANÇA AQUI: recebe 'prisma'
-  // Middleware para anexar a instância 'prisma' ao objeto 'req.app'
-  router.use((req, res, next) => {
-    req.app.set('prisma', prisma); // <<<< MUDANÇA AQUI: setando 'prisma'
-    next();
-  });
-
-  // Rota para o login do usuário
-  router.post('/login', authController.login);
-
-  return router;
-};
+// Middleware para anexar a instância 'prisma' ao objeto 'req.app'
+// Este middleware é redundante se já houver um global no app.js, mas não causa erro.
+// Pode ser removido se o middleware global em app.js for suficiente.
+router.use((req, res, next) => {
+  req.app.set('prisma', req.app.get('prisma')); // Garante que a instância já setada seja usada
+  next();
+});
+// Rota para o login do usuário
+router.post('/login', authController.login);
+module.exports = router;

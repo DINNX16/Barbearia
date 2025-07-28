@@ -7,6 +7,7 @@ const usuarioController = {}; // Objeto que irá conter todas as funções do co
 usuarioController.getAllUsers = async (req, res) => {
   try {
     const prisma = req.app.get('prisma'); // Acessa a instância do PrismaClient
+    console.log('DEBUG: Prisma instance in getAllUsers:', !!prisma); // Log para verificar se prisma existe
     const users = await prisma.usuario.findMany({
       // Inclui os detalhes da Pessoa e Credencial associadas ao usuário
       include: {
@@ -27,6 +28,7 @@ usuarioController.getAllUsers = async (req, res) => {
 usuarioController.getUserById = async (req, res) => {
   try {
     const prisma = req.app.get('prisma');
+    console.log('DEBUG: Prisma instance in getUserById:', !!prisma); // Log para verificar se prisma existe
     const { id } = req.params;
     const user = await prisma.usuario.findUnique({ // findUnique para buscar por PK
       where: { id_usuario: parseInt(id) }, // Converte o ID da URL para inteiro
@@ -67,6 +69,7 @@ usuarioController.createUser = async (req, res) => {
 
   try {
     const prisma = req.app.get('prisma');
+    console.log('DEBUG: Prisma instance in createUser:', !!prisma); // Log para verificar se prisma existe
 
     // HASH DA SENHA ANTES DE SALVAR
     const salt = await bcrypt.genSalt(10);
@@ -162,6 +165,7 @@ usuarioController.updateUser = async (req, res) => {
 
   try {
     const prisma = req.app.get('prisma');
+    console.log('DEBUG: Prisma instance in updateUser:', !!prisma); // Log para verificar se prisma existe
 
     const result = await prisma.$transaction(async (t) => {
       // Encontrar o usuário existente e incluir suas relações para atualização
@@ -253,6 +257,7 @@ usuarioController.deleteUser = async (req, res) => {
 
   try {
     const prisma = req.app.get('prisma');
+    console.log('DEBUG: Prisma instance in deleteUser:', !!prisma); // Log para verificar se prisma existe
 
     const result = await prisma.$transaction(async (t) => {
       const user = await t.usuario.findUnique({
