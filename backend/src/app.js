@@ -65,3 +65,19 @@ app.listen(port, () => {
 process.on('beforeExit', async () => {
   await prisma.$disconnect();
 });
+
+const disponibilidadeRoutes = require('./routes/disponibilidadeRoutes.js');
+
+app.use('/api/disponibilidades', disponibilidadeRoutes);
+
+// Importa as rotas de exceções de disponibilidade
+const excecoesRoutes = require('./routes/excecoesRoutes.js');
+
+// Diz ao Express para usar essas rotas sob o prefixo /api/excecoes
+app.use('/api/excecoes', excecoesRoutes);
+
+// Importa as rotas de agendamento de serviço
+const agendamentoServicoRoutes = require('./routes/agendamentoServicoRoutes.js');
+
+// Diz ao Express para usar essas rotas sob o prefixo /api/agendamento-servicos
+app.use('/api/agendamento-servicos', agendamentoServicoRoutes);
