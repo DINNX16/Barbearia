@@ -1,4 +1,4 @@
-/* Estilos para a página de login */
+/* Estilos Globais e do Body */
 body {
     background: #f6f5f7;
     display: flex;
@@ -9,11 +9,12 @@ body {
     margin: 0;
 }
 
-h1 {
-    font-family: 'Playfair Display', serif;
-}
+/* ========================================================= */
+/* CLASSES REUTILIZÁVEIS PARA FORMULÁRIOS              */
+/* ========================================================= */
 
-.login-container {
+/* O container principal que centraliza o formulário */
+.auth-container {
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
@@ -23,16 +24,35 @@ h1 {
     text-align: center;
 }
 
-input {
+/* O título principal do formulário */
+.form-title {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+/* O texto de descrição/subtítulo */
+.form-subtitle {
+    font-size: 14px;
+    margin-bottom: 25px;
+    display: block;
+    color: #555;
+}
+
+/* Estilo padrão para todos os inputs de texto/email/senha */
+.form-input {
     background-color: #eee;
     border: none;
     padding: 12px 15px;
     margin: 8px 0;
     width: 100%;
     border-radius: 5px;
+    box-sizing: border-box; /* Garante que o padding não quebre o layout */
 }
 
-button {
+/* O botão principal de ação */
+.form-button {
     border-radius: 20px;
     border: 1px solid #dc8c19;
     background-color: #dc8c19;
@@ -44,17 +64,18 @@ button {
     text-transform: uppercase;
     cursor: pointer;
     margin-top: 15px;
+    transition: background-color 0.2s;
 }
 
-a {
+.form-button:hover {
+    background-color: #9f4509;
+}
+
+/* Link secundário (Ex: "Esqueci minha senha" ou "Voltar") */
+.form-link {
     color: #333;
     font-size: 14px;
     text-decoration: none;
     margin: 15px 0;
-}
-
-span {
-    font-size: 12px;
-    margin-bottom: 15px;
     display: block;
 }

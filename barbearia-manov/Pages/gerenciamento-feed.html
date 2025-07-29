@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Feed - Barbearia Manóv</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style/main.css">
+    <link rel="stylesheet" href="style/form-style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">
+            <a href="main.html" style="text-decoration: none; color: inherit">
+            <h1>Barbearia Manóv</h1>
+            </a>
+        </div>
+    </header>
+
+    <main class="form-container">
+        <form id="feed-editor-form">
+
+            <fieldset>
+                <legend>Secção Biografia</legend>
+                <label for="bio-titulo">Título:</label>
+                <input type="text" id="bio-titulo" name="bio-titulo" required>
+
+                <label for="bio-texto">Texto de Descrição:</label>
+                <textarea id="bio-texto" name="bio-texto" rows="4" required></textarea>
+
+                <label for="bio-imagem">URL da Imagem:</label>
+                <input type="url" id="bio-imagem" name="bio-imagem" placeholder="https://exemplo.com/imagem.png" required>
+            </fieldset>
+
+            <fieldset>
+                <legend>Secção Carrossel</legend>
+                <div class="form-card">
+                    <h4>Card 1</h4>
+                    <label for="carousel-card1-titulo">Título:</label>
+                    <input type="text" id="carousel-card1-titulo" name="carousel-card1-titulo" required>
+                    <label for="carousel-card1-texto">Texto:</label>
+                    <input type="text" id="carousel-card1-texto" name="carousel-card1-texto" required>
+                    <label for="carousel-card1-imagem">URL da Imagem:</label>
+                    <input type="url" id="carousel-card1-imagem" name="carousel-card1-imagem" required>
+                </div>
+                <div class="form-card">
+                    <h4>Card 2</h4>
+                    <label for="carousel-card2-titulo">Título:</label>
+                    <input type="text" id="carousel-card2-titulo" name="carousel-card2-titulo" required>
+                    <label for="carousel-card2-texto">Texto:</label>
+                    <input type="text" id="carousel-card2-texto" name="carousel-card2-texto" required>
+                    <label for="carousel-card2-imagem">URL da Imagem:</label>
+                    <input type="url" id="carousel-card2-imagem" name="carousel-card2-imagem" required>
+                </div>
+                <div class="form-card">
+                    <h4>Card 3</h4>
+                    <label for="carousel-card3-titulo">Título:</label>
+                    <input type="text" id="carousel-card3-titulo" name="carousel-card3-titulo" required>
+                    <label for="carousel-card3-texto">Texto:</label>
+                    <input type="text" id="carousel-card3-texto" name="carousel-card3-texto" required>
+                    <label for="carousel-card3-imagem">URL da Imagem:</label>
+                    <input type="url" id="carousel-card3-imagem" name="carousel-card3-imagem" required>
+                </div>
+                <div class="form-card">
+                    <h4>Card 4</h4>
+                    <label for="carousel-card4-titulo">Título:</label>
+                    <input type="text" id="carousel-card4-titulo" name="carousel-card4-titulo" required>
+                    <label for="carousel-card4-texto">Texto:</label>
+                    <input type="text" id="carousel-card4-texto" name="carousel-card4-texto" required>
+                    <label for="carousel-card4-imagem">URL da Imagem:</label>
+                    <input type="url" id="carousel-card4-imagem" name="carousel-card4-imagem" required>
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Secção Avaliações</legend>
+                <label for="avaliacoes-titulo">Título da Secção:</label>
+                <input type="text" id="avaliacoes-titulo" name="avaliacoes-titulo" required>
+            </fieldset>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-salvar">Salvar Alterações</button>
+                <a href="main.html" class="btn-voltar">Voltar para a Página Principal</a>
+            </div>
+
+        </form>
+    </main>
+
+    <footer class="footer">
+        <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
+    </footer>
+    
+    <script src="js/editar-feed.js"></script>
+</body>
+</html>

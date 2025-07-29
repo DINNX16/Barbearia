@@ -1,0 +1,339 @@
+/* Variáveis Globais de Cores e Fontes */
+:root {
+  --primary: #1a1a1a;
+  --secondary: #d4af37;
+  --light: #f8f9fa;
+  --dark: #212529;
+  --gray: #6c757d;
+}
+
+body {
+  font-family: "Montserrat", sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f5f5f5;
+  color: var(--primary);
+}
+
+.header {
+  background-color: var(--primary);
+  color: white;
+  padding: 1rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+  text-align: center;
+}
+
+.logo h1 {
+  font-family: "Playfair Display", serif;
+  color: #db902e;
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+/* --- ESTILOS ATUALIZADOS PARA CAPA E PERFIL --- */
+
+.profile-header-container {
+  position: relative;
+  margin-bottom: 2rem;
+  background-color: white; /* Fundo para a parte que não é coberta pela capa */
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.cover-photo-container {
+  position: relative;
+  background-color: var(--gray);
+  border-radius: 10px 10px 0 0;
+  overflow: hidden;
+}
+
+#cover-photo-display {
+  width: 100%;
+  height: 250px; /* Altura da capa, ajuste se necessário */
+  object-fit: cover;
+  display: block;
+}
+
+.edit-cover-btn {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-family: "Montserrat", sans-serif;
+  z-index: 10; /* <-- Adicione esta linha */
+}
+.edit-cover-btn:hover {
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.edit-cover-btn i {
+  margin-right: 0.5rem;
+}
+
+.profile-header {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem 2rem 2rem; /* Apenas padding inferior */
+  margin-top: -75px; /* Puxa o header do perfil para cima (metade da altura da foto de perfil) */
+}
+
+.profile-pic-container {
+  position: relative;
+  cursor: pointer;
+  width: 150px;
+  height: 150px;
+}
+
+.profile-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 5px solid white;
+  background-color: var(--light); /* Cor de fundo caso a imagem demore a carregar */
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+.profile-pic-edit-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 2rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.profile-pic-container:hover .profile-pic-edit-overlay {
+  opacity: 1;
+}
+
+.user-info {
+  text-align: center;
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.user-name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0.5rem 0;
+}
+
+.user-email {
+  color: var(--gray);
+  margin-bottom: 1rem;
+}
+
+.edit-profile {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.edit-profile:hover {
+  background-color: #e0b52b;
+}
+
+/* --- SEÇÕES DO PERFIL (Agendamentos, Histórico, etc.) --- */
+
+.profile-sections {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 992px) {
+  .profile-sections {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.section {
+  background-color: white;
+  border-radius: 10px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  font-family: "Playfair Display", serif;
+  color: var(--secondary);
+  border-bottom: 2px solid var(--secondary);
+  padding-bottom: 0.5rem;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.section-title i {
+  margin-right: 0.5rem;
+}
+
+/* Itens de histórico, compras, etc. */
+.history-item {
+  padding: 1rem 0;
+  border-bottom: 1px solid #eee;
+}
+.history-item:last-child {
+  border-bottom: none;
+}
+.service-name, .product-name {
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+.service-date, .purchase-date {
+  color: var(--gray);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+.service-price, .purchase-price {
+  font-weight: 600;
+  color: var(--secondary);
+}
+.status {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+.status-completed, .status-entregue {
+  background-color: #d4edda;
+  color: #155724;
+}
+.status-upcoming, .status-agendado {
+  background-color: #fff3cd;
+  color: #856404;
+}
+.status-cancelled, .status-cancelado {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+/* Mensagem de seção vazia */
+.empty-message {
+  color: var(--gray);
+  text-align: center;
+  padding: 2rem 0;
+  font-style: italic;
+}
+
+/* Botão do formulário */
+.btn-section {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  text-decoration: none;
+  display: inline-block;
+}
+.btn-section:hover {
+  background-color: #e0b52b;
+}
+
+/* --- ESTILOS PARA O MODAL DE RECORTE --- */
+.crop-modal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: none; /* Oculto por padrão */
+  justify-content: center;
+  align-items: center;
+  z-index: 3000;
+  padding: 1rem;
+}
+
+.crop-modal-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+}
+
+.crop-image-container {
+  margin: 1rem 0;
+  max-height: 60vh;
+  overflow: hidden;
+}
+
+#image-to-crop {
+  max-width: 100%;
+  display: block;
+}
+
+.crop-modal-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.crop-modal-actions .btn-primary {
+  background-color: var(--secondary);
+  color: var(--primary);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.crop-modal-actions .btn-secondary {
+  background-color: var(--gray);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Footer */
+.footer {
+  background-color: var(--primary);
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+}
