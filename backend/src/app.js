@@ -2,7 +2,7 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const { PrismaClient } = require('@prisma/client');
-
+const cors = require('cors');
 dotenv.config();
 
 const app = express();
@@ -21,7 +21,7 @@ prisma.$connect()
     console.error('Não foi possível conectar ao banco de dados via Prisma:', err);
     process.exit(1);
   });
-
+app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -81,3 +81,7 @@ const agendamentoServicoRoutes = require('./routes/agendamentoServicoRoutes.js')
 
 // Diz ao Express para usar essas rotas sob o prefixo /api/agendamento-servicos
 app.use('/api/agendamento-servicos', agendamentoServicoRoutes);
+
+const pagamentoRoutes = require('./routes/pagamentosRoutes');
+
+app.use('/api/pagamentos', pagamentoRoutes);
