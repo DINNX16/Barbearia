@@ -1,0 +1,98 @@
+/* style/carrinho.css */
+
+.carrinho-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: flex-start;
+    width: 100%; /* <-- ADICIONE ESTA LINHA MÁGICA */
+}
+
+/* Adaptação para telas menores */
+@media (max-width: 992px) {
+    .carrinho-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+#carrinho-itens-section .section-title {
+    margin-bottom: 1rem;
+}
+
+/* Estilo para cada item na lista do carrinho */
+.carrinho-item {
+    display: flex;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+.carrinho-item:last-child {
+    border-bottom: none;
+}
+
+.carrinho-item-img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.carrinho-item-info {
+    flex-grow: 1;
+}
+.carrinho-item-info h4 {
+    margin: 0 0 0.25rem 0;
+    font-size: 1rem;
+}
+.carrinho-item-info .preco-unitario {
+    color: var(--gray);
+    font-size: 0.9rem;
+}
+
+.carrinho-item-controles {
+    text-align: right;
+}
+.carrinho-item-controles input {
+    width: 50px;
+    padding: 0.25rem;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 0.5rem;
+}
+.carrinho-item-controles button {
+    background: none;
+    border: none;
+    color: #c0392b;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+.carrinho-item-controles button:hover {
+    text-decoration: underline;
+}
+
+/* Estilo para o resumo do pedido */
+.resumo-content {
+    padding-top: 1rem;
+}
+.resumo-linha {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+}
+.resumo-linha.total {
+    font-size: 1.2rem;
+    margin-top: 1rem;
+    color: var(--primary);
+}
+.resumo-divisor {
+    border: 0;
+    border-top: 1px solid #eee;
+    margin: 1rem 0;
+}
+
+
+.container {
+  flex-grow: 1;
+}

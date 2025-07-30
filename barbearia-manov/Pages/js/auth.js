@@ -231,3 +231,38 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 });
+
+document.addEventListener('DOMContentLoaded', () => {
+    const header = document.querySelector('.header');
+    if (!header) return;
+
+    // 1. Cria os elementos
+    const cartContainer = document.createElement('div');
+    cartContainer.className = 'navbar-cart-container';
+    cartContainer.onclick = () => { window.location.href = 'carrinho.html'; };
+
+    const cartIcon = document.createElement('i');
+    cartIcon.className = 'fas fa-shopping-bag navbar-cart-icon';
+
+    const cartCount = document.createElement('span');
+    cartCount.className = 'navbar-cart-count';
+    
+    // 2. Monta e adiciona ao header
+    cartContainer.appendChild(cartIcon);
+    cartContainer.appendChild(cartCount);
+    header.appendChild(cartContainer);
+
+    // 3. Função para atualizar a contagem
+    const updateCartCount = () => {
+        const carrinhoSalvo = localStorage.getItem('carrinhoManov');
+        const carrinho = carrinhoSalvo ? JSON.parse(carrinhoSalvo) : [];
+        const totalItens = carrinho.reduce((acc, item) => acc + item.quantity, 0);
+
+        cartCount.textContent = totalItens;
+        cartCount.style.display = totalItens > 0 ? 'flex' : 'none';
+    };
+
+    // 4. Atualiza ao carregar e ouve por eventos
+    updateCartCount();
+    window.addEventListener('cartUpdated', updateCartCount);
+});

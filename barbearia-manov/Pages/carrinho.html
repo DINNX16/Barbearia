@@ -3,75 +3,71 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Carrinho - Barbearia Manóv</title>
+    <title>Meu Carrinho - Barbearia Manóv</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="style/main.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"/>
+    <link rel="stylesheet" href="style/perfil.css" />
     <link rel="stylesheet" href="style/carrinho.css" />
 </head>
 <body>
+
     <header class="header">
-        <span class="abrir-menu" onclick="openNav()">☰ Menu</span>
         <div class="logo">
             <a href="main.html" style="text-decoration: none; color: inherit">
-              <h1>Barbearia Manóv</h1>
+                <h1>Barbearia Manóv</h1>
             </a>
-            <nav class="nav">
-                </nav>
-        </div>
-        <div class="search-header">
-            <input type="text" placeholder="Buscar..." aria-label="Buscar" />
-            <button class="btn-busca" aria-label="Buscar">🔍</button>
         </div>
     </header>
 
-    <div id="myNav" class="overlay">
-        <a href="javascript:void(0)" id="btnFechar" class="closebtn" onclick="closeNav()">&times;</a>
-        <div class="overlay-content">
-            <a href="perfil.html" onclick="closeNav()">Perfil</a>
-            <a href="historico.html" onclick="closeNav()">Histórico</a>
-            <a href="carrinho.html" onclick="closeNav()"><b>Meu Carrinho</b></a>
-            <a href="login.html" onclick="closeNav()" id="loginMenuLink">Login</a>
-            <a href="#" onclick="logout(); closeNav()" id="logoutMenuLink" style="display: none">Logout</a>
-            <a href="configuracao.html">Configurações</a>
-        </div>
-    </div>
-    
-    <main>
-        <section class="content-section">
-            <h2>Meu Carrinho de Compras</h2>
-            <div class="carrinho-container">
-                <div id="lista-itens-carrinho" class="carrinho-itens">
-                    <p class="carrinho-vazio">Seu carrinho está vazio.</p>
-                </div>
+    <div class="container">
+        <h2 style="font-family: 'Playfair Display', serif; text-align: center; margin-bottom: 2rem;">
+            Meu Carrinho de Compras
+        </h2>
 
-                <div class="carrinho-resumo">
-                    <h3>Resumo do Pedido</h3>
+        <div class="carrinho-layout">
+            
+            <div class="section" id="carrinho-itens-section">
+                <div class="section-title">
+                    <i class="fas fa-shopping-bag"></i> Itens no Carrinho
+                </div>
+                <div id="lista-de-itens">
+                    </div>
+                <div class="empty-message" id="carrinho-vazio-mensagem" style="display: none;">
+                    Seu carrinho está vazio.
+                </div>
+            </div>
+
+            <div class="section" id="carrinho-resumo-section">
+                <div class="section-title">
+                    <i class="fas fa-file-invoice-dollar"></i> Resumo do Pedido
+                </div>
+                <div class="resumo-content">
                     <div class="resumo-linha">
                         <span>Subtotal</span>
-                        <span id="subtotal-valor">R$ 0,00</span>
+                        <span id="resumo-subtotal">R$ 0,00</span>
                     </div>
                     <div class="resumo-linha">
                         <span>Itens</span>
-                        <span id="qtde-itens">0</span>
+                        <span id="resumo-qtde">0</span>
                     </div>
-                    <hr>
+                    <hr class="resumo-divisor">
                     <div class="resumo-linha total">
-                        <span>Total</span>
-                        <span id="total-valor">R$ 0,00</span>
+                        <strong>Total</strong>
+                        <strong id="resumo-total">R$ 0,00</strong>
                     </div>
-                    <button id="finalizar-compra" class="btn-finalizar">Finalizar Compra</button>
+                    <button id="btn-finalizar-compra" class="btn-section" style="width: 100%; margin-top: 1rem;">
+                        Finalizar Compra
+                    </button>
                 </div>
             </div>
-        </section>
-    </main>
-    
+
+        </div>
+    </div>
+
     <footer class="footer">
-        <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
+        <p>© <span id="current-year">2025</span> Barbearia Manóv - Todos os direitos reservados</p>
     </footer>
 
-    <script src="js/auth.js"></script>
-    <script src="js/menu.js"></script>
     <script src="js/carrinho.js"></script>
-    <script src=""></script>
- </body>
+</body>
 </html>

@@ -848,3 +848,47 @@
         opacity: 1;
         visibility: visible;
       }
+
+
+      .navbar-cart-container {
+    position: absolute;   /* Posicionamento absoluto relativo ao .header */
+    top: 24px;            /* Alinhamento vertical com o centro do logo */
+    right: 25px;          /* Distância da borda direita */
+    z-index: 100;         /* Garante que fique visível */
+    cursor: pointer;
+}
+
+.navbar-cart-icon {
+    color: #db902e;       /* Sua cor dourada */
+    font-size: 26px;
+    transition: transform 0.2s ease;
+}
+
+.navbar-cart-container:hover .navbar-cart-icon {
+    transform: scale(1.1);
+}
+
+.navbar-cart-count {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    background-color: #c0392b; /* Vermelho para destaque */
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid var(--primary); /* Borda da cor do fundo do header */
+}
+
+/* Ajuste para telas menores, para não colidir com outros elementos */
+@media (max-width: 768px) {
+    .navbar-cart-container {
+        top: 20px;
+        right: 20px;
+    }
+}
