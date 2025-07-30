@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  
+
 
   // Executa a lógica de roteamento assim que a página carrega
   handleSectionDisplay();
@@ -147,5 +147,87 @@ document.addEventListener("DOMContentLoaded", function () {
     prevButton.addEventListener("click", handlePrev);
 
     window.addEventListener("resize", () => updatePosition(false));
+  }
+});
+
+
+/**
+ * Módulo de controle de acesso baseado no papel do usuário.
+ */
+document.addEventListener('DOMContentLoaded', function () {
+
+  /**
+   * Pega os dados do usuário logado do localStorage.
+   * @returns {object | null} O objeto do usuário ou null se não houver ninguém logado.
+   */
+  function getUserData() {
+    const userString = localStorage.getItem('currentUser');
+    if (!userString) {
+      return null; // Ninguém logado
+    }
+    try {
+      return JSON.parse(userString); // Converte a string de volta para objeto
+    } catch (e) {
+      console.error("Erro ao ler dados do usuário:", e);
+      return null;
+    }
+  }
+
+  function getUserData() {
+    const userString = localStorage.getItem('currentUser');
+    if (!userString) return null;
+    try {
+      return JSON.parse(userString);
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /**
+   * Verifica se o usuário logado NÃO é um cliente comum.
+   * @returns {boolean} Verdadeiro se for proprietário ou funcionário.
+   */
+  function isPrivilegedUser() {
+    const userData = getUserData();
+    // A verificação agora inclui 'PROPRIETARIO' E 'FUNCIONARIO'
+    return userData && (userData.role === 'PROPRIETARIO' || userData.role === 'FUNCIONARIO');
+  }
+
+  // --- Lógica Principal de Bloqueio ---
+  if (isPrivilegedUser()) {
+    console.log(`Usuário com papel especial (${getUserData().role}) detectado. Desabilitando funções de compra.`);
+  }
+    const buyButtons = document.querySelectorAll('.btn-comprar, .btn-buy');
+
+    buyButtons.forEach(button => {
+      button.disabled = true;
+      button.style.backgroundColor = '#6c757d';
+      button.style.cursor = 'not-allowed';
+      button.textContent = 'Ação não permitida';
+      button.setAttribute('title', 'Acesso de funcionário/proprietário não permite compras.');
+    });
+  // --- Lógica Principal ---
+  // Se a função isOwner() retornar verdadeiro...
+  if (isOwner()) {
+    console.log("Usuário PROPRIETÁRIO detectado. Desabilitando funções de compra.");
+
+    // Encontra TODOS os botões de compra pela classe '.btn-comprar'
+    const buyButtons = document.querySelectorAll('.btn-comprar, .btn-buy');
+
+    buyButtons.forEach(button => {
+      button.disabled = true; // Desabilita o botão
+      button.style.backgroundColor = '#6c757d'; // Muda a cor para cinza
+      button.style.cursor = 'not-allowed'; // Muda o cursor do mouse
+      button.textContent = 'Ação não permitida'; // Altera o texto do botão
+
+      // Adiciona uma "dica" ao passar o mouse
+      button.setAttribute('title', 'Proprietários não podem realizar compras.');
+    });
+
+    // Você pode adicionar outras lógicas aqui, como esconder o ícone do carrinho de compras
+    const cartIcon = document.getElementById('cart-icon'); // Supondo que o ícone tenha este ID
+    if (cartIcon) {
+      cartIcon.style.display = 'none';
+    }
   }
 });

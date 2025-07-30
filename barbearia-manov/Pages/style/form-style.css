@@ -1,0 +1,117 @@
+/* Estilos para a página de edição do feed */
+
+.form-container {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+}
+
+#feed-editor-form fieldset {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+    background-color: #fdfdfd;
+}
+
+#feed-editor-form legend {
+    font-family: "Playfair Display", serif;
+    font-size: 1.8rem;
+    color: var(--primary);
+    padding: 0 0.5rem;
+    margin-left: 1rem;
+}
+
+#feed-editor-form label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    color: var(--dark);
+    font-size: 0.9rem;
+}
+
+#feed-editor-form input[type="text"],
+#feed-editor-form input[type="url"],
+#feed-editor-form textarea {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 1rem;
+    margin-bottom: 1.5rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+#feed-editor-form input:focus,
+#feed-editor-form textarea:focus {
+    outline: none;
+    border-color: var(--secondary);
+    box-shadow: 0 0 5px rgba(212, 175, 55, 0.5);
+}
+
+.form-card {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border-left: 4px solid var(--secondary);
+}
+
+.form-card h4 {
+    margin: 0 0 1rem 0;
+    font-family: "Playfair Display", serif;
+    color: var(--dark);
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.5rem;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.btn-salvar, .btn-voltar {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 5px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.btn-salvar {
+    background-color: var(--secondary);
+    color: var(--primary);
+}
+
+.btn-salvar:hover {
+    background-color: #b89530; /* Um tom mais escuro de 'secondary' */
+    transform: translateY(-2px);
+}
+
+.btn-voltar {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-voltar:hover {
+    background-color: #5a6268;
+}
+
+@media (max-width: 600px) {
+    .form-actions {
+        flex-direction: column;
+    }
+    .btn-salvar, .btn-voltar {
+        width: 100%;
+    }
+}

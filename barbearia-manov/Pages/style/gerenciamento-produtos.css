@@ -1,0 +1,163 @@
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+:root {
+    --primary: #1a1a1a;
+    --secondary: #db902e;
+    --light: #f8f9fa;
+    --dark: #212529;
+    --success: #28a745;
+    --danger: #dc3545;
+    --info: #17a2b8;
+    --background-body: #f5f5f5;
+    --card-background: #ffffff;
+    --border-subtle: #e9ecef;
+    --hover-background: #fdf5e6;
+}
+html, body {
+    font-family: "Montserrat", sans-serif;
+    margin: 0;
+    padding: 0;
+    color: var(--primary);
+    background-color: var(--background-body);
+}
+main {
+    flex: 1;
+    padding: 1rem;
+}
+.header {
+    background-color: var(--primary);
+    color: white;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+.header h1 {
+    font-family: "Playfair Display", serif;
+    color: var(--secondary);
+    margin: 1rem 0;
+    font-size: 1.8rem;
+}
+.admin-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    background-color: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+    padding: 30px;
+}
+.section-title {
+    color: var(--primary);
+    font-size: 1.8em;
+    margin-bottom: 25px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--secondary);
+    text-align: center;
+}
+.form-section {
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.form-group {
+    margin-bottom: 15px;
+    flex: 1;
+}
+.form-group-inline {
+    display: flex;
+    gap: 20px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: var(--dark);
+}
+.form-group input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 5px;
+    font-size: 1em;
+    background-color: var(--light);
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.form-group input[type="text"]:focus {
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(219, 144, 46, 0.25);
+    outline: none;
+}
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: flex-end;
+    margin-top: 25px;
+}
+.btn-form {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.btn-save { background-color: var(--success); color: white; }
+.btn-save:hover { filter: brightness(1.1); }
+.btn-clear { background-color: #6c757d; color: white; }
+.btn-clear:hover { background-color: #5a6268; }
+.table-container { overflow-x: auto; }
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+}
+.admin-table th, .admin-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-subtle);
+}
+.admin-table th {
+    background-color: var(--primary);
+    color: var(--light);
+    font-weight: 600;
+    font-size: 0.9em;
+}
+.admin-table tbody tr:hover { background-color: var(--hover-background); }
+.table-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+.btn-action {
+    padding: 6px 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 0.85em;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: white;
+}
+.btn-edit { background-color: var(--info); }
+.btn-edit:hover { filter: brightness(1.1); }
+.btn-delete { background-color: var(--danger); }
+.btn-delete:hover { filter: brightness(1.1); }
+footer {
+    background-color: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    margin-top: 2rem;
+}
+@media (max-width: 768px) {
+    .form-group-inline { flex-direction: column; gap: 0; }
+    .admin-table { display: block; }
+    .admin-table thead, .admin-table tbody, .admin-table th, .admin-table td, .admin-table tr { display: block; }
+    .admin-table thead tr { position: absolute; top: -9999px; left: -9999px; }
+    .admin-table tr { border: 1px solid var(--border-subtle); margin-bottom: 15px; }
+    .admin-table td { border: none; border-bottom: 1px solid #eee; position: relative; padding-left: 50%; text-align: right; }
+    .admin-table td:before { position: absolute; top: 12px; left: 12px; width: 45%; padding-right: 10px; white-space: nowrap; content: attr(data-label); font-weight: 600; text-align: left;}
+    .admin-table td.actions-cell { padding-left: 12px; text-align: center; }
+    .admin-table td.actions-cell:before { content: ''; }
+}
