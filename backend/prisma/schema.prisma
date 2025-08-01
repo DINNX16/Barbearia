@@ -1,6 +1,6 @@
+/// output   = "../src/generated/prisma"
 generator client {
   provider = "prisma-client-js"
-  ///output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -37,7 +37,7 @@ model agendamento {
   status              String                  @db.VarChar(50)
   observacao          String?
   data_criacao        DateTime?               @default(now()) @db.Timestamp(6)
-  periodo             Unsupported("tsrange")?
+  periodo             Unsupported("tsrange")? @default(dbgenerated("tsrange(data_hora_inicio, data_hora_fim)"))
   AgendamentoServico  AgendamentoServico[]
   cliente             cliente                 @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction)
   profissional        profissional            @relation(fields: [id_profissional], references: [id_profissional], onDelete: NoAction)
@@ -336,6 +336,7 @@ model produto {
   ativo                Boolean                @default(true)
   categoria            String                 @db.VarChar(15)
   preco_compra         Decimal                @default(0.00) @db.Decimal(10, 2)
+  marca                String?                @db.VarChar
   item_pedido          item_pedido[]
   movimentacao_estoque movimentacao_estoque[]
   promocao_produto     promocao_produto[]
@@ -411,7 +412,7 @@ model servico {
   descricao                                                          String?
   preco_original                                                     Decimal?                 @db.Decimal(10, 2)
   preco_promocional                                                  Decimal?                 @db.Decimal(10, 2)
-  duracao_estimada                                                   Int?
+  duracao_estimada                                                   Unsupported("interval")?
   ativo                                                              Boolean                  @default(true)
   pacote                                                             Boolean                  @default(false)
   AgendamentoServico                                                 AgendamentoServico[]
