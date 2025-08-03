@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redefinir Senha - Barbearia Manóv</title>
+    <link rel="stylesheet" href="style/style.login.css" />
+  </head>
+  <body>
+    <div class="auth-container">
+      <form id="resetForm">
+        <h1 class="form-title">Redefinir Senha</h1>
+        <span class="form-subtitle">Digite o código e sua nova senha.</span>
+        <input
+          class="form-input"
+          type="text"
+          id="codeInput"
+          placeholder="Código de 6 dígitos"
+          required
+        />
+        <input
+          class="form-input"
+          type="password"
+          id="newPasswordInput"
+          placeholder="Sua nova senha"
+          required
+        />
+        <button class="form-button" type="submit">Salvar Nova Senha</button>
+      </form>
+    </div>
+    <script src="script_redefinir.js"></script>
+  </body>
+</html>

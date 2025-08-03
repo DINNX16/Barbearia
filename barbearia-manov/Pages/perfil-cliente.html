@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Meu Perfil - Barbearia Manóv</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.css"
+    />
+    <link rel="stylesheet" href="style/perfil.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="logo">
+        <a href="main.html" style="text-decoration: none; color: inherit">
+          <h1>Barbearia Manóv</h1>
+        </a>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="profile-header-container">
+        <div class="cover-photo-container">
+          <img
+            src="https://via.placeholder.com/1200x400?text=Capa"
+            alt="Foto de capa"
+            id="cover-photo-display"
+          />
+          <button id="edit-cover-photo-btn" class="edit-cover-btn">
+            <i class="fas fa-camera"></i> Alterar Capa
+          </button>
+          <input
+            type="file"
+            id="cover-photo-input"
+            accept="image/*"
+            style="display: none"
+          />
+        </div>
+
+        <div class="profile-header">
+          <div class="profile-pic-container">
+            <img
+              src="https://via.placeholder.com/150?text=Perfil"
+              alt="Foto de perfil"
+              class="profile-pic"
+              id="profile-pic-display"
+            />
+            <div class="profile-pic-edit-overlay">
+              <i class="fas fa-camera"></i>
+            </div>
+            <input
+              type="file"
+              id="profile-pic-input"
+              accept="image/*"
+              style="display: none"
+            />
+          </div>
+          <div class="user-info">
+            <h2 class="user-name" id="user-name-display">Carregando...</h2>
+            <p class="user-email" id="user-email-display">Carregando...</p>
+            <button class="edit-profile">Editar Perfil</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-sections">
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-calendar-check"></i> Próximos Agendamentos
+          </h3>
+          <div id="proximos-agendamentos-list"></div>
+          <div
+            class="empty-message"
+            id="empty-proximos-agendamentos"
+            style="display: none"
+          >
+            Nenhum agendamento futuro.
+          </div>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-notes-medical"></i> Formulário de Anamnese
+          </h3>
+          <p style="color: var(--gray); margin-bottom: 1rem">
+            Para garantir um atendimento seguro e personalizado, por favor,
+            preencha ou atualize suas informações de saúde.
+          </p>
+          <a href="anamnese.html" class="btn-section">Acessar Formulário</a>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-cut"></i> Últimos Serviços
+          </h3>
+          <div id="ultimos-servicos-list"></div>
+          <div
+            class="empty-message"
+            id="empty-ultimos-servicos"
+            style="display: none"
+          >
+            Nenhum serviço recente.
+          </div>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-history"></i> Histórico de Agendamentos
+          </h3>
+          <div id="historico-agendamentos-list"></div>
+          <div
+            class="empty-message"
+            id="empty-historico-agendamentos"
+            style="display: none"
+          >
+            Nenhum histórico de agendamentos.
+          </div>
+        </div>
+
+        <div class="section">
+          <h3 class="section-title">
+            <i class="fas fa-shopping-bag"></i> Histórico de Compras
+          </h3>
+          <div id="historico-compras-list"></div>
+          <div
+            class="empty-message"
+            id="empty-historico-compras"
+            style="display: none"
+          >
+            Nenhuma compra realizada.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="crop-modal" class="crop-modal-container">
+      <div class="crop-modal-content">
+        <h2>Recortar Imagem</h2>
+        <div class="crop-image-container">
+          <img id="image-to-crop" src="" alt="Imagem para recortar" />
+        </div>
+        <div class="crop-modal-actions">
+          <button id="cancel-crop-btn" class="btn-secondary">Cancelar</button>
+          <button id="confirm-crop-btn" class="btn-primary">
+            Salvar Alterações
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <p>
+        © <span id="current-year">2023</span> Barbearia Manóv - Todos os direitos
+        reservados
+      </p>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.2/cropper.min.js"></script>
+    <script src="js/perfil.js"></script>
+  </body>
+</html>

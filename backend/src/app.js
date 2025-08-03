@@ -26,7 +26,7 @@ prisma.$connect()
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// INÍCIO DO BLOCO DE CÓDIGO DO CORS
+// INÍCIO DO BLOCO DE CÓDIGO DO CORS (Aceitando sua versão)
 const allowedOrigins = [
   'http://127.0.0.1:5501', 
   'http://localhost:5501'

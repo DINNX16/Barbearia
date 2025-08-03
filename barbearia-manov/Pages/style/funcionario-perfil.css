@@ -1,0 +1,90 @@
+/* Layout para as seções de perfil (funcionário e proprietário) */
+.profile-sections {
+    display: grid;
+    grid-template-columns: 1fr; /* Padrão: 1 coluna para telas pequenas */
+    gap: 2rem;
+}
+
+/* Em telas maiores, ativa o layout de 2 colunas */
+@media (min-width: 992px) {
+    .profile-sections {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* Os cards (reaproveitando a classe .section) */
+.section {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+    font-family: "Playfair Display", serif;
+    color: var(--secondary); /* Supondo que você tenha as variáveis de cor */
+    border-bottom: 2px solid var(--secondary);
+    padding-bottom: 0.5rem;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Estilos para as listas e mensagens dentro dos cards */
+.appointments-list {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 10px; /* Evita que a barra de rolagem cole no texto */
+}
+
+.history-item {
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+.history-item:last-child {
+    border-bottom: none;
+}
+
+.empty-message {
+    color: var(--gray);
+    text-align: center;
+    padding: 2rem 0;
+    font-style: italic;
+}
+
+.btn-agenda {
+    display: inline-block;
+    margin-top: 1rem;
+    background-color: var(--secondary);
+    color: var(--primary);
+    padding: 0.6rem 1.5rem;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+
+.btn-agenda:hover {
+    background-color: #e0b52b;
+}
+
+.qualifications-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.qualification-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.95rem;
+}
+
+.qualification-item i {
+    font-size: 1.2rem;
+    color: var(--secondary);
+    width: 20px;
+    text-align: center;
+}

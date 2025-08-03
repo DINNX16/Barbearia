@@ -34,7 +34,7 @@ function logout() {
 
 // Funções para abrir/fechar o menu overlay (se ainda não as tiver)
 function openNav() {
-  document.getElementById("myNav").style.width = "100%";
+  document.getElementById("myNav").style.width = "25%";
 }
 
 function closeNav() {

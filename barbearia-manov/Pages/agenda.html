@@ -438,237 +438,228 @@
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
-        const mesAnoEl = document.getElementById("mes-ano");
-        const calendarioGridEl = document.getElementById("calendario-grid");
-        const prevMonthBtn = document.getElementById("prev-month");
-        const nextMonthBtn = document.getElementById("next-month");
-        const horariosContainerEl = document.getElementById(
-          "horarios-disponiveis"
-        );
-        const dataSelecionadaHorariosEl = document.getElementById(
-          "data-selecionada-horarios"
-        );
-        const horariosGridEl = document.getElementById("horarios-grid");
-        const btnConfirmar = document.getElementById(
-          "btn-confirmar-agendamento"
-        );
+    // --- 1. Seleção de Elementos do HTML ---
+    const mesAnoEl = document.getElementById("mes-ano");
+    const calendarioGridEl = document.getElementById("calendario-grid");
+    const prevMonthBtn = document.getElementById("prev-month");
+    const nextMonthBtn = document.getElementById("next-month");
+    const horariosContainerEl = document.getElementById("horarios-disponiveis");
+    const dataSelecionadaHorariosEl = document.getElementById("data-selecionada-horarios");
+    const horariosGridEl = document.getElementById("horarios-grid");
+    const btnConfirmar = document.getElementById("btn-confirmar-agendamento");
+    const profissionalSelect = document.getElementById('profissional'); // Pega o menu de seleção
+    const modal = document.getElementById("modal-profissional");
+    const verPerfilLink = document.getElementById("ver-perfil-profissional");
+    const fecharModalBtn = document.getElementById("modal-fechar-btn");
 
-        let dataAtual = new Date(); // Usa a data atual do sistema
-        let horarioSelecionado = null;
+    // --- 2. Variáveis de Estado ---
+    let dataAtual = new Date();
+    let horarioSelecionado = null;
 
-        // --- SIMULAÇÃO DE DADOS DO BACKEND ---
-        // Em um cenário real, estes dados viriam de uma API
-        const horariosOcupados = {
-          "6/6/2025": ["09:40", "11:00", "15:00"], // Sexta
-          "7/6/2025": ["10:20", "11:40", "16:20", "17:00"], // Sábado
-        };
+    // --- 3. Simulação de Dados (que viriam da API) ---
+    const horariosOcupadosPorProfissional = {
+        // Horários do Eduardo (ID 1)
+        "1": {
+            "25/7/2025": ["10:20", "14:20"],
+            "26/7/2025": ["09:00", "11:40", "15:00", "16:20"],
+        },
+        // Horários da Ana (ID 2)
+        "2": {
+            "25/7/2025": ["09:00", "11:00", "15:00"],
+            "28/7/2025": ["10:20", "11:40", "16:20", "17:00"],
+        },
+        // Horários do Carlos (ID 3)
+        "3": {}
+    };
 
-        const horarioTrabalho = {
-          inicio: "09:00",
-          fim: "20:00",
-          almocoInicio: "12:20",
-          almocoFim: "13:40",
-        };
-        const duracaoSlot = 40; // Duração de cada agendamento em minutos
-        // --- FIM DA SIMULAÇÃO ---
+    const horarioTrabalho = {
+        inicio: "09:00",
+        fim: "20:00",
+        almocoInicio: "12:20",
+        almocoFim: "13:40",
+    };
+    const duracaoSlot = 40;
+    
+    // --- 4. Funções Principais ---
 
-        function gerarSlotsDeHorario() {
-          const slots = [];
-          let [horaInicio, minInicio] = horarioTrabalho.inicio
-            .split(":")
-            .map(Number);
-          let [horaFim, minFim] = horarioTrabalho.fim.split(":").map(Number);
+    /**
+     * LÊ A URL E PRÉ-SELECIONA O PROFISSIONAL
+     * Esta é a nova função que adicionamos.
+     */
+    function preselecionarProfissional() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const barbeiroId = urlParams.get('barbeiroId');
 
-          let tempoAtual = new Date();
-          tempoAtual.setHours(horaInicio, minInicio, 0, 0);
+        if (barbeiroId && profissionalSelect) {
+            console.log(`ID do barbeiro encontrado na URL: ${barbeiroId}. Pré-selecionando...`);
+            profissionalSelect.value = barbeiroId;
+            // Dispara o evento de mudança para a agenda recarregar
+            profissionalSelect.dispatchEvent(new Event('change'));
+        }
+    }
 
-          const tempoFim = new Date();
-          tempoFim.setHours(horaFim, minFim, 0, 0);
+    function gerarSlotsDeHorario() {
+        const slots = [];
+        let [horaInicio, minInicio] = horarioTrabalho.inicio.split(":").map(Number);
+        let [horaFim, minFim] = horarioTrabalho.fim.split(":").map(Number);
+        let tempoAtual = new Date();
+        tempoAtual.setHours(horaInicio, minInicio, 0, 0);
+        const tempoFim = new Date();
+        tempoFim.setHours(horaFim, minFim, 0, 0);
 
-          while (tempoAtual < tempoFim) {
-            slots.push(
-              tempoAtual.toLocaleTimeString("pt-BR", {
-                hour: "2-digit",
-                minute: "2-digit",
-              })
-            );
+        while (tempoAtual < tempoFim) {
+            slots.push(tempoAtual.toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }));
             tempoAtual.setMinutes(tempoAtual.getMinutes() + duracaoSlot);
-          }
-          return slots;
+        }
+        return slots;
+    }
+    const todosOsSlotsDoDia = gerarSlotsDeHorario();
+
+    function gerarCalendario(mes, ano) {
+        calendarioGridEl.innerHTML = "";
+        horariosContainerEl.classList.remove("visivel");
+        btnConfirmar.disabled = true;
+
+        const primeiroDiaDoMes = new Date(ano, mes, 1).getDay();
+        const diasNoMes = new Date(ano, mes + 1, 0).getDate();
+        const hoje = new Date();
+        hoje.setHours(0, 0, 0, 0);
+
+        mesAnoEl.textContent = `${new Date(ano, mes).toLocaleString("pt-BR", { month: "long" })} ${ano}`;
+
+        for (let i = 0; i < primeiroDiaDoMes; i++) {
+            calendarioGridEl.insertAdjacentHTML("beforeend", '<div class="dia-calendario vazio"></div>');
         }
 
-        const todosOsSlotsDoDia = gerarSlotsDeHorario();
-
-        function gerarCalendario(mes, ano) {
-          calendarioGridEl.innerHTML = "";
-          horariosContainerEl.classList.remove("visivel");
-          btnConfirmar.disabled = true;
-
-          const primeiroDiaDoMes = new Date(ano, mes, 1).getDay();
-          const diasNoMes = new Date(ano, mes + 1, 0).getDate();
-          const hoje = new Date();
-
-          mesAnoEl.textContent = `${new Date(ano, mes).toLocaleString("pt-BR", {
-            month: "long",
-          })} ${ano}`;
-
-          for (let i = 0; i < primeiroDiaDoMes; i++) {
-            calendarioGridEl.insertAdjacentHTML(
-              "beforeend",
-              '<div class="dia-calendario vazio"></div>'
-            );
-          }
-
-          for (let i = 1; i <= diasNoMes; i++) {
+        for (let i = 1; i <= diasNoMes; i++) {
             const diaEl = document.createElement("div");
             diaEl.classList.add("dia-calendario");
             diaEl.textContent = i;
-
             const dataCompleta = new Date(ano, mes, i);
 
-            if (dataCompleta.setHours(0, 0, 0, 0) < hoje.setHours(0, 0, 0, 0)) {
-              diaEl.classList.add("dia-passado");
+            if (dataCompleta < hoje) {
+                diaEl.classList.add("dia-passado");
             }
-            if (
-              i === new Date().getDate() &&
-              mes === new Date().getMonth() &&
-              ano === new Date().getFullYear()
-            ) {
-              diaEl.classList.add("dia-atual");
+            if (i === new Date().getDate() && mes === new Date().getMonth() && ano === new Date().getFullYear()) {
+                diaEl.classList.add("dia-atual");
             }
-
             calendarioGridEl.appendChild(diaEl);
-          }
         }
+    }
 
-        function selecionarDia(e) {
-          const diaClicado = e.target;
-          if (
-            !diaClicado.classList.contains("dia-calendario") ||
-            diaClicado.classList.contains("vazio") ||
-            diaClicado.classList.contains("dia-passado")
-          ) {
+    function selecionarDia(e) {
+        const diaClicado = e.target;
+        if (!diaClicado.classList.contains("dia-calendario") || diaClicado.classList.contains("vazio") || diaClicado.classList.contains("dia-passado")) {
             return;
-          }
-
-          const diaSelecionadoAnterior =
-            calendarioGridEl.querySelector(".selecionado");
-          if (diaSelecionadoAnterior) {
-            diaSelecionadoAnterior.classList.remove("selecionado");
-          }
-          diaClicado.classList.add("selecionado");
-
-          const dia = diaClicado.textContent;
-          const data = `${dia}/${
-            dataAtual.getMonth() + 1
-          }/${dataAtual.getFullYear()}`;
-          mostrarHorarios(data);
         }
 
-        function mostrarHorarios(data) {
-          horariosContainerEl.classList.add("visivel");
-          dataSelecionadaHorariosEl.textContent = data;
-          horariosGridEl.innerHTML = "";
-          btnConfirmar.disabled = true;
-          horarioSelecionado = null;
+        const diaSelecionadoAnterior = calendarioGridEl.querySelector(".selecionado");
+        if (diaSelecionadoAnterior) {
+            diaSelecionadoAnterior.classList.remove("selecionado");
+        }
+        diaClicado.classList.add("selecionado");
 
-          const ocupados = horariosOcupados[data] || [];
+        const dia = diaClicado.textContent;
+        const data = `${dia}/${dataAtual.getMonth() + 1}/${dataAtual.getFullYear()}`;
+        mostrarHorarios(data);
+    }
 
-          todosOsSlotsDoDia.forEach((horario) => {
+    function mostrarHorarios(data) {
+        horariosContainerEl.classList.add("visivel");
+        dataSelecionadaHorariosEl.textContent = data;
+        horariosGridEl.innerHTML = "";
+        btnConfirmar.disabled = true;
+        horarioSelecionado = null;
+
+        const idProfissional = profissionalSelect.value;
+        const horariosOcupadosDoProfissional = horariosOcupadosPorProfissional[idProfissional] || {};
+        const ocupadosHoje = horariosOcupadosDoProfissional[data] || [];
+
+        todosOsSlotsDoDia.forEach((horario) => {
             const btn = document.createElement("button");
             btn.classList.add("btn-horario");
             btn.textContent = horario;
             btn.dataset.horario = horario;
 
-            // Verifica se o horário está indisponível
             let [h, m] = horario.split(":").map(Number);
-            let [hAlmocoInicio, mAlmocoInicio] = horarioTrabalho.almocoInicio
-              .split(":")
-              .map(Number);
-            let [hAlmocoFim, mAlmocoFim] = horarioTrabalho.almocoFim
-              .split(":")
-              .map(Number);
-
+            let [hAlmocoInicio, mAlmocoInicio] = horarioTrabalho.almocoInicio.split(":").map(Number);
+            let [hAlmocoFim, mAlmocoFim] = horarioTrabalho.almocoFim.split(":").map(Number);
             const tempoSlot = h * 60 + m;
             const tempoAlmocoInicio = hAlmocoInicio * 60 + mAlmocoInicio;
             const tempoAlmocoFim = hAlmocoFim * 60 + mAlmocoFim;
 
-            if (
-              ocupados.includes(horario) ||
-              (tempoSlot >= tempoAlmocoInicio && tempoSlot < tempoAlmocoFim)
-            ) {
-              btn.classList.add("indisponivel");
-              btn.disabled = true;
+            if (ocupadosHoje.includes(horario) || (tempoSlot >= tempoAlmocoInicio && tempoSlot < tempoAlmocoFim)) {
+                btn.classList.add("indisponivel");
+                btn.disabled = true;
             } else {
-              btn.classList.add("disponivel");
+                btn.classList.add("disponivel");
             }
-
             horariosGridEl.appendChild(btn);
-          });
-        }
+        });
+    }
 
-        function selecionarHorario(e) {
-          const btnClicado = e.target;
-          if (!btnClicado.classList.contains("disponivel")) return;
-
-          const horarioSelecionadoAnterior =
-            horariosGridEl.querySelector(".selecionado");
-          if (horarioSelecionadoAnterior) {
+    function selecionarHorario(e) {
+        const btnClicado = e.target;
+        if (!btnClicado.classList.contains("disponivel")) return;
+        
+        const horarioSelecionadoAnterior = horariosGridEl.querySelector(".selecionado");
+        if (horarioSelecionadoAnterior) {
             horarioSelecionadoAnterior.classList.remove("selecionado");
-          }
-
-          btnClicado.classList.add("selecionado");
-          horarioSelecionado = btnClicado.dataset.horario;
-          btnConfirmar.disabled = false;
         }
 
-        prevMonthBtn.addEventListener("click", () => {
-          dataAtual.setMonth(dataAtual.getMonth() - 1);
-          gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
-        });
-
-        nextMonthBtn.addEventListener("click", () => {
-          dataAtual.setMonth(dataAtual.getMonth() + 1);
-          gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
-        });
-
-        calendarioGridEl.addEventListener("click", selecionarDia);
-        horariosGridEl.addEventListener("click", selecionarHorario);
-        btnConfirmar.addEventListener("click", () => {
-          if (horarioSelecionado) {
-            const dataAgendamento =
-              calendarioGridEl.querySelector(".selecionado").textContent;
-            const mesAno = `${
-              dataAtual.getMonth() + 1
-            }/${dataAtual.getFullYear()}`;
-            alert(
-              `Agendamento confirmado para ${dataAgendamento}/${mesAno} às ${horarioSelecionado}! (Simulação)`
-            );
-          } else {
-            alert("Por favor, selecione um horário.");
-          }
-        });
-
-        // Lógica do Modal (simplificada)
-        document
-          .getElementById("ver-perfil-profissional")
-          .addEventListener("click", (e) => {
-            e.preventDefault();
-            document
-              .getElementById("modal-profissional")
-              .classList.add("visivel");
-          });
-        document
-          .getElementById("modal-fechar-btn")
-          .addEventListener("click", () => {
-            document
-              .getElementById("modal-profissional")
-              .classList.remove("visivel");
-          });
-
-        // Iniciar
+        btnClicado.classList.add("selecionado");
+        horarioSelecionado = btnClicado.dataset.horario;
+        btnConfirmar.disabled = false;
+    }
+    
+    // --- 5. Event Listeners (Gatilhos de Ação) ---
+    
+    prevMonthBtn.addEventListener("click", () => {
+        dataAtual.setMonth(dataAtual.getMonth() - 1);
         gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
-      });
+    });
+
+    nextMonthBtn.addEventListener("click", () => {
+        dataAtual.setMonth(dataAtual.getMonth() + 1);
+        gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+    });
+
+    // Recarrega o calendário quando um novo profissional é selecionado
+    profissionalSelect.addEventListener('change', () => {
+        gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+    });
+
+    calendarioGridEl.addEventListener("click", selecionarDia);
+    horariosGridEl.addEventListener("click", selecionarHorario);
+    
+    btnConfirmar.addEventListener("click", () => {
+        if (horarioSelecionado) {
+            const diaSelecionado = calendarioGridEl.querySelector(".selecionado");
+            const dataAgendamento = `${diaSelecionado.textContent}/${dataAtual.getMonth() + 1}/${dataAtual.getFullYear()}`;
+            const nomeProfissional = profissionalSelect.options[profissionalSelect.selectedIndex].text;
+            alert(`Agendamento com ${nomeProfissional} confirmado para ${dataAgendamento} às ${horarioSelecionado}! (Simulação)`);
+        } else {
+            alert("Por favor, selecione um horário.");
+        }
+    });
+
+    verPerfilLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        if(modal) modal.classList.add("visivel");
+    });
+    
+    fecharModalBtn.addEventListener("click", () => {
+        if(modal) modal.classList.remove("visivel");
+    });
+
+    // --- 6. Inicialização ---
+    
+    // Gera o calendário com os dados do profissional padrão
+    gerarCalendario(dataAtual.getMonth(), dataAtual.getFullYear());
+    
+    // Verifica a URL e, se necessário, seleciona outro profissional
+    preselecionarProfissional();
+});
     </script>
   </body>
 </html>
