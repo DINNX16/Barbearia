@@ -1,94 +1,86 @@
-// /js/funcionario-perfil.js
+// js/funcionario-perfil.js
 
-// --- Funções de Formatação ---
+const API_BASE_URL = 'http://localhost:3000'; // Ajuste se necessário
+
+// =============================================================
+// NOVA FUNÇÃO PARA BUSCAR DADOS REAIS DA API
+// =============================================================
+async function fetchEmployeeProfile() {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+        console.error('Token não encontrado, redirecionando para login.');
+        window.location.href = 'login.html';
+        throw new Error('Token de autenticação não encontrado.');
+    }
+
+    const response = await fetch(`${API_BASE_URL}/api/auth/perfil`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!response.ok) {
+        console.error('Falha ao autenticar, redirecionando para login.');
+        localStorage.clear();
+        window.location.href = 'login.html';
+        throw new Error('Falha na autenticação do token.');
+    }
+
+    const data = await response.json();
+    return data.user; // Retorna o objeto 'user' completo e enriquecido
+}
+
+
+// --- Funções de Formatação (Ajustada) ---
 function formatDate(dateString) {
     if (!dateString) return "Data indisponível";
     const date = new Date(dateString);
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = String(date.getMonth() + 1).padStart(2, "0");
-    const year = date.getFullYear();
-    const time = `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
+    const day = String(date.getUTCDate()).padStart(2, '0');
+    const month = String(date.getUTCMonth() + 1).padStart(2, '0');
+    const year = date.getUTCFullYear();
+    const time = `${String(date.getUTCHours()).padStart(2, '0')}:${String(date.getUTCMinutes()).padStart(2, '0')}`;
     return `${day}/${month}/${year} às ${time}`;
 }
 
-// --- Simulação de API ---
-// Esta função agora tem os dados corretos para "Eduardo M."
-async function mockFetchEmployeeData() {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve({
-                id: 1, // ID do Eduardo M. na página de agenda
-                name: "Eduardo M.", // Nome correspondente
-                title: "Barbeiro Mestre e Fundador",
-                avatarUrl: "https://i.pravatar.cc/150?u=eduardo.m",
-                vacationNotice: "Sem avisos de férias no momento.",
-                qualifications: {
-                    instagram: "@eduardo.manov",
-                    courses: [
-                        "Mestre em barboterapia.",
-                        "Especialista em cortes modernos e fade.",
-                        "Visagismo e harmonização facial.",
-                    ]
-                },
-                upcomingAppointments: [
-                    { client: "Marcos Andrade", date: "2025-07-28T14:00:00" },
-                    { client: "Lucas Ferraz", date: "2025-07-29T15:00:00" },
-                ],
-                historyAppointments: [
-                    { client: "Daniel Siqueira", date: "2025-07-22T09:00:00" },
-                    { client: "Fábio Ribeiro", date: "2025-07-21T16:30:00" },
-                ]
-            });
-        }, 800);
-    });
-}
 
-// --- Funções de Renderização (A parte que estava faltando) ---
+// --- Funções de Renderização (Adaptadas para os dados reais) ---
 
-// Renderiza o cabeçalho do perfil e o link da agenda
 function renderProfileInfo(data) {
-    document.getElementById('employee-pic-display').src = data.avatarUrl;
-    document.getElementById('employee-name-display').textContent = data.name;
-    document.getElementById('employee-title-display').textContent = data.title;
-    const agendaButton = document.querySelector('.btn-agenda');
-    if (agendaButton) {
-        agendaButton.href = `agenda.html?barbeiroId=${data.id}`;
-    }
+    // Dados vêm de 'pessoa' e 'detalhesProfissional'
+    document.getElementById('employee-pic-display').src = data.pessoa.foto_perfil || 'https://i.pravatar.cc/150';
+    document.getElementById('employee-name-display').textContent = data.pessoa.nome_completo || 'Nome não informado';
+    document.getElementById('employee-title-display').textContent = data.detalhesProfissional.especializacao || 'Profissional';
 }
 
-// Renderiza o aviso de férias
-function renderVacationNotice(notice) {
-    document.getElementById('vacation-notice').textContent = notice || "Sem avisos no momento.";
+function renderVacationNotice(data) {
+    // NOTA: O campo de aviso de férias não existe no banco de dados ainda.
+    // Vamos deixar uma mensagem padrão por enquanto.
+    document.getElementById('vacation-notice').textContent = "Sem avisos de férias no momento.";
 }
 
-// Renderiza o card de qualificações
-function renderQualifications(qualifications) {
+function renderQualifications(data) {
     const container = document.getElementById('qualifications-content');
-    const instagramLink = qualifications.instagram
-        ? `<a href="https://instagram.com/${qualifications.instagram.replace('@', '')}" target="_blank">${qualifications.instagram}</a>`
-        : 'Não informado';
-
-    let coursesHTML = '<ul><li>Nenhum curso listado.</li></ul>';
-    if (qualifications.courses && qualifications.courses.length > 0) {
-        coursesHTML = `<ul>${qualifications.courses.map(course => `<li>${course}</li>`).join('')}</ul>`;
+    if (!data.detalhesProfissional) {
+        container.innerHTML = '<p>Nenhuma qualificação informada.</p>';
+        return;
     }
+
+    // Usamos os campos 'biografia' e 'especializacao' do banco
+    const biografia = data.detalhesProfissional.biografia || 'Nenhuma biografia disponível.';
+    const especializacao = data.detalhesProfissional.especializacao || 'Nenhuma especialização listada.';
 
     container.innerHTML = `
         <div class="qualifications-grid">
             <div class="qualification-item">
-                <i class="fab fa-instagram"></i>
-                <div><strong>Instagram:</strong> ${instagramLink}</div>
+                <i class="fas fa-id-card"></i>
+                <div><strong>Biografia:</strong><p style="margin: 5px 0 0 0;">${biografia}</p></div>
             </div>
             <div class="qualification-item">
                 <i class="fas fa-graduation-cap"></i>
-                <div><strong>Cursos e Certificados:</strong></div>
+                <div><strong>Especializações:</strong><p style="margin: 5px 0 0 0;">${especializacao}</p></div>
             </div>
         </div>
-        ${coursesHTML} 
     `;
 }
 
-// Renderiza as listas de agendamentos (futuros e passados)
 function renderAppointments(appointments, listId, emptyId) {
     const listElement = document.getElementById(listId);
     const emptyMessage = document.getElementById(emptyId);
@@ -104,63 +96,46 @@ function renderAppointments(appointments, listId, emptyId) {
     listElement.style.display = 'block';
     emptyMessage.style.display = 'none';
 
+    // O nome do cliente agora vem de `item.cliente.pessoa.nome_completo`
     listElement.innerHTML = appointments.map(item => `
         <div class="history-item">
-            <div><strong>Cliente:</strong> ${item.client}</div>
-            <div><strong>Data:</strong> ${formatDate(item.date)}</div>
+            <div><strong>Cliente:</strong> ${item.cliente.pessoa.nome_completo}</div>
+            <div><strong>Data:</strong> ${formatDate(item.data_hora_inicio)}</div>
+            <div><strong>Status:</strong> ${item.status}</div>
         </div>
     `).join('');
 }
 
 
-// --- Lógica Principal ---
-// Esta função orquestra tudo: busca os dados e chama as funções para renderizar
+// --- Lógica Principal (Orquestrador) ---
 async function loadEmployeeProfile() {
     try {
-        const data = await mockFetchEmployeeData();
-        // Chama cada função de renderização com a parte correspondente dos dados
+        // Uma única chamada à API agora traz TODOS os dados que precisamos
+        const data = await fetchEmployeeProfile();
+
+        // Filtramos a lista de agendamentos recebida da API
+        const upcomingAppointments = data.agendamentos.filter(ag => ['agendado', 'confirmado'].includes(ag.status.toLowerCase()));
+        const historyAppointments = data.agendamentos.filter(ag => ['concluído', 'cancelado'].includes(ag.status.toLowerCase()));
+        
+        // Chamamos cada função de renderização com o objeto de dados completo ou a lista filtrada
         renderProfileInfo(data);
-        renderVacationNotice(data.vacationNotice);
-        renderQualifications(data.qualifications);
-        renderAppointments(data.upcomingAppointments, 'upcoming-appointments-list', 'empty-upcoming');
-        renderAppointments(data.historyAppointments, 'history-appointments-list', 'empty-history');
+        renderVacationNotice(data);
+        renderQualifications(data);
+        renderAppointments(upcomingAppointments, 'upcoming-appointments-list', 'empty-upcoming');
+        renderAppointments(historyAppointments, 'history-appointments-list', 'empty-history');
+
     } catch (error) {
         console.error("Erro ao carregar perfil do funcionário:", error);
-        // Coloca uma mensagem de erro em um dos cards se algo der errado
-        document.getElementById('vacation-notice').textContent = "Erro ao carregar dados.";
+        document.getElementById('employee-name-display').textContent = "Erro ao carregar dados.";
     }
 }
 
+
 // --- Inicialização ---
-// Garante que o código só rode depois que a página HTML estiver pronta
 document.addEventListener("DOMContentLoaded", () => {
     loadEmployeeProfile();
-    // Atualiza o ano no rodapé
     const yearSpan = document.getElementById('current-year');
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     }
 });
-
-// js/funcionario-perfil.js
-
-// ... (outras funções) ...
-
-async function fetchDisponibilidade(idProfissional) {
-    try {
-        // URL CORRIGIDA para bater com a rota que definimos
-        const response = await fetch(`/api/disponibilidades/profissional/${idProfissional}`);
-
-        // O controller já retorna um erro 404, então podemos simplificar aqui
-        if (!response.ok) {
-            // Se a resposta não for 'OK', nós assumimos que não há disponibilidade ou deu um erro
-            return []; // Retorna um array vazio
-        }
-        return await response.json();
-    } catch (error) {
-        console.error("Erro na API de disponibilidade:", error);
-        return []; // Retorna um array vazio em caso de erro de conexão
-    }
-}
-
-// ... (resto do seu script) ...

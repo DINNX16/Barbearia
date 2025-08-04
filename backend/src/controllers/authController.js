@@ -1,13 +1,14 @@
 // src/controllers/authController.js
-const bcrypt = require('bcryptjs'); // Para hash de senha
-const jwt = require('jsonwebtoken'); // Para JWTs
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
-dotenv.config(); // Garante que JWT_SECRET seja carregado
+dotenv.config();
 
 const authController = {};
 
-// Função para o login do usuário
+// A função de login permanece a mesma
 authController.login = async (req, res) => {
+  // ... seu código de login existente, sem alterações ...
   const { email, senha } = req.body;
 
   console.log('DEBUG LOGIN: Tentativa de login para o email:', email);
@@ -39,14 +40,12 @@ authController.login = async (req, res) => {
         return res.status(500).json({ message: 'Erro de configuração do servidor: JWT_SECRET não encontrado.' });
     }
 
-    // --- LOGS ADICIONAIS PARA DEPURAR O JWT ---
     const jwtPayload = { 
       id_usuario: user.id_usuario, 
       email: user.email, 
       tipo_usuario: user.tipo_usuario 
     };
     console.log('DEBUG LOGIN: Payload do JWT sendo criado:', jwtPayload);
-    // --- FIM DOS LOGS ADICIONAIS ---
 
     const token = jwt.sign(
       jwtPayload,
@@ -72,27 +71,29 @@ authController.login = async (req, res) => {
   }
 };
 
+
+// =============================================================
+// FUNÇÃO getProfile CORRIGIDA PARA EVITAR O CRASH
+// =============================================================
 authController.getProfile = async (req, res) => {
   console.log('DEBUG: Acedendo à rota /perfil');
   try {
     const prisma = req.app.get('prisma');
-    // O ID do usuário é extraído do token pelo middleware verifyToken e anexado a req.user
     const userId = req.user.id_usuario;
 
     if (!userId) {
-      // Esta verificação é uma segurança extra
       return res.status(400).json({ message: 'ID do usuário não encontrado no token.' });
     }
 
-    // Busca o usuário no banco de dados, selecionando campos específicos e seguros
     const userProfile = await prisma.usuario.findUnique({
       where: { id_usuario: userId },
       select: {
         id_usuario: true,
         email: true,
         tipo_usuario: true,
-        pessoa: { // Inclui dados da tabela 'pessoa' relacionada
+        pessoa: {
           select: {
+            id_pessoa: true,
             nome_completo: true,
             foto_perfil: true,
           },
@@ -104,7 +105,44 @@ authController.getProfile = async (req, res) => {
       return res.status(404).json({ message: 'Usuário não encontrado.' });
     }
 
-    // Envia os dados do perfil como resposta
+    if (userProfile.tipo_usuario === 'profissional' && userProfile.pessoa) {
+      
+      // =====================================================================
+      // AQUI ESTÁ A CORREÇÃO: Usamos 'findFirst' em vez de 'findUnique'.
+      // 'findFirst' é mais seguro se o campo 'id_pessoa' não for estritamente único.
+      // =====================================================================
+      const detalhesProfissional = await prisma.profissional.findFirst({
+        where: { id_pessoa: userProfile.pessoa.id_pessoa },
+        select: {
+          id_profissional: true,
+          especializacao: true,
+          biografia: true,
+        }
+      });
+      
+      // Adicionamos uma verificação extra para garantir que 'detalhesProfissional' foi encontrado
+      if (detalhesProfissional) {
+        const agendamentos = await prisma.agendamento.findMany({
+          where: { id_profissional: detalhesProfissional.id_profissional },
+          select: {
+            data_hora_inicio: true,
+            status: true,
+            cliente: {
+              select: {
+                pessoa: {
+                  select: { nome_completo: true }
+                }
+              }
+            }
+          },
+          orderBy: { data_hora_inicio: 'desc' }
+        });
+
+        userProfile.detalhesProfissional = detalhesProfissional;
+        userProfile.agendamentos = agendamentos;
+      }
+    }
+
     res.status(200).json({
         message: 'Perfil recuperado com sucesso!',
         user: userProfile 
@@ -115,6 +153,5 @@ authController.getProfile = async (req, res) => {
     res.status(500).json({ message: 'Erro interno do servidor.', error: error.message });
   }
 };
-
 
 module.exports = authController;
