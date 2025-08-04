@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Disponibilidade - Barbearia Manóv</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link rel="stylesheet" href="style/estilo-geral.css">
+  <link rel="stylesheet" href="style/gerenciamento.css">
+</head>
+
+<body>
+  <header class="header">
+    <a href="main.html" style="text-decoration: none; color: inherit;">
+      <h1>Barbearia Manóv</h1>
+    </a>
+  </header>
+
+  <main class="main-content">
+    <div class="admin-container">
+      <div class="form-section">
+        <h2 class="section-title">Adicionar Novo Horário</h2>
+        <form id="disponibilidade-form">
+          <div class="form-group">
+            <label for="dia-semana">Dia da Semana:</label>
+            <select id="dia-semana" required>
+              <option value="1">Segunda-feira</option>
+              <option value="2">Terça-feira</option>
+              <option value="3">Quarta-feira</option>
+              <option value="4">Quinta-feira</option>
+              <option value="5">Sexta-feira</option>
+              <option value="6">Sábado</option>
+              <option value="0">Domingo</option>
+            </select>
+          </div>
+          <div class="form-group-row">
+            <div class="form-group">
+              <label for="hora-inicio">Hora de Início:</label>
+              <input type="time" id="hora-inicio" required>
+            </div>
+            <div class="form-group">
+              <label for="hora-fim">Hora de Fim:</label>
+              <input type="time" id="hora-fim" required>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-form btn-save">Adicionar Horário</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="list-section">
+        <h2 class="section-title">Minha Agenda Semanal</h2>
+        <div id="semana-container">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
+  </footer>
+
+  <script src="js/auth.js"></script>
+  <script src="js/gerenciar-disponibilidade.js"></script>
+</body>
+
+</html>

@@ -1,15 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gerenciar Feed - Barbearia Manóv</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&family=Playfair+Display:wght@400;700&display=swap"
+        rel="stylesheet">
+
     <link rel="stylesheet" href="style/gerenciamento_de_avisos.css">
 
 </head>
+
 <body>
     <header class="header">
         <a href="main.html" style="text-decoration: none; color: inherit;">
@@ -45,6 +49,15 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="tipo-servico">Tipo de Serviço:</label>
+                        <select id="tipo-servico" required>
+                            <option value="cortes">Cortes</option>
+                            <option value="barbas">Barbas</option>
+                            <option value="sobrancelhas">Sobrancelhas</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
                         <input type="checkbox" id="ativo" checked>
                         <label for="ativo" style="display: inline-block;">Card Ativo (visível no site)</label>
                     </div>
@@ -70,7 +83,7 @@
                         </tr>
                     </thead>
                     <tbody id="feed-table-body">
-                        </tbody>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -80,6 +93,7 @@
         <p>© 2025 Barbearia Manóv - Todos os direitos reservados</p>
     </footer>
 
-<script src="js/ger-servicos.js"></script>
+    <script src="js/ger-servicos.js"></script>
 </body>
+
 </html>

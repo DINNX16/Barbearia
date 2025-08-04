@@ -7,12 +7,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const tituloInput = document.getElementById('titulo');
     const textoCardInput = document.getElementById('texto-card');
     const valorCardInput = document.getElementById('valor-card');
+    const tipoServicoSelect = document.getElementById('tipo-servico'); // <-- Novo elemento
     const ativoCheckbox = document.getElementById('ativo');
     const btnClearForm = document.getElementById('btn-clear-form');
     const feedTableBody = document.getElementById('feed-table-body');
-    const API_URL = '/api/galeria'; // A URL da nossa nova API
+    const API_URL = '/api/galeria';
 
-    let feedData = []; // Armazenará os dados vindos da API
+    let feedData = [];
 
     // --- FUNÇÕES DA API ---
 
@@ -92,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tituloInput.value = item.titulo;
             textoCardInput.value = item.descricao;
             valorCardInput.value = item.valor;
+            tipoServicoSelect.value = item.tipo_servico; // <-- Preenche o dropdown
             ativoCheckbox.checked = item.ativo;
             feedForm.scrollIntoView({ behavior: 'smooth' });
         }
@@ -135,9 +137,9 @@ document.addEventListener('DOMContentLoaded', () => {
             titulo: tituloInput.value,
             descricao: textoCardInput.value,
             valor: valorCardInput.value,
+            tipo_servico: tipoServicoSelect.value, // <-- Pega o valor do dropdown
             ativo: ativoCheckbox.checked
         };
-
         const method = id ? 'PUT' : 'POST';
         const url = id ? `${API_URL}/${id}` : API_URL;
         const token = localStorage.getItem('seuTokenJWT');

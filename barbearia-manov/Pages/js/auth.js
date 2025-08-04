@@ -197,15 +197,15 @@ document.addEventListener('DOMContentLoaded', function () {
   if (isPrivilegedUser()) {
     console.log(`Usuário com papel especial (${getUserData().role}) detectado. Desabilitando funções de compra.`);
   }
-    const buyButtons = document.querySelectorAll('.btn-comprar, .btn-buy');
+  const buyButtons = document.querySelectorAll('.btn-comprar, .btn-buy');
 
-    buyButtons.forEach(button => {
-      button.disabled = true;
-      button.style.backgroundColor = '#6c757d';
-      button.style.cursor = 'not-allowed';
-      button.textContent = 'Ação não permitida';
-      button.setAttribute('title', 'Acesso de funcionário/proprietário não permite compras.');
-    });
+  buyButtons.forEach(button => {
+    button.disabled = true;
+    button.style.backgroundColor = '#6c757d';
+    button.style.cursor = 'not-allowed';
+    button.textContent = 'Ação não permitida';
+    button.setAttribute('title', 'Acesso de funcionário/proprietário não permite compras.');
+  });
   // --- Lógica Principal ---
   // Se a função isOwner() retornar verdadeiro...
   if (isOwner()) {
@@ -233,36 +233,82 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    const header = document.querySelector('.header');
-    if (!header) return;
+  const header = document.querySelector('.header');
+  if (!header) return;
 
-    // 1. Cria os elementos
-    const cartContainer = document.createElement('div');
-    cartContainer.className = 'navbar-cart-container';
-    cartContainer.onclick = () => { window.location.href = 'carrinho.html'; };
+  // 1. Cria os elementos
+  const cartContainer = document.createElement('div');
+  cartContainer.className = 'navbar-cart-container';
+  cartContainer.onclick = () => { window.location.href = 'carrinho.html'; };
 
-    const cartIcon = document.createElement('i');
-    cartIcon.className = 'fas fa-shopping-bag navbar-cart-icon';
+  const cartIcon = document.createElement('i');
+  cartIcon.className = 'fas fa-shopping-bag navbar-cart-icon';
 
-    const cartCount = document.createElement('span');
-    cartCount.className = 'navbar-cart-count';
-    
-    // 2. Monta e adiciona ao header
-    cartContainer.appendChild(cartIcon);
-    cartContainer.appendChild(cartCount);
-    header.appendChild(cartContainer);
+  const cartCount = document.createElement('span');
+  cartCount.className = 'navbar-cart-count';
 
-    // 3. Função para atualizar a contagem
-    const updateCartCount = () => {
-        const carrinhoSalvo = localStorage.getItem('carrinhoManov');
-        const carrinho = carrinhoSalvo ? JSON.parse(carrinhoSalvo) : [];
-        const totalItens = carrinho.reduce((acc, item) => acc + item.quantity, 0);
+  // 2. Monta e adiciona ao header
+  cartContainer.appendChild(cartIcon);
+  cartContainer.appendChild(cartCount);
+  header.appendChild(cartContainer);
 
-        cartCount.textContent = totalItens;
-        cartCount.style.display = totalItens > 0 ? 'flex' : 'none';
-    };
+  // 3. Função para atualizar a contagem
+  const updateCartCount = () => {
+    const carrinhoSalvo = localStorage.getItem('carrinhoManov');
+    const carrinho = carrinhoSalvo ? JSON.parse(carrinhoSalvo) : [];
+    const totalItens = carrinho.reduce((acc, item) => acc + item.quantity, 0);
 
-    // 4. Atualiza ao carregar e ouve por eventos
-    updateCartCount();
-    window.addEventListener('cartUpdated', updateCartCount);
+    cartCount.textContent = totalItens;
+    cartCount.style.display = totalItens > 0 ? 'flex' : 'none';
+  };
+
+  // 4. Atualiza ao carregar e ouve por eventos
+  updateCartCount();
+  window.addEventListener('cartUpdated', updateCartCount);
 });
+
+// Adicione este bloco de código ao seu arquivo js/auth.js
+
+/**
+ * Função para decodificar um token JWT e extrair o payload (dados do usuário).
+ * @param {string} token - O token JWT.
+ * @returns {object|null} - O payload do token ou null se for inválido.
+ */
+function parseJwt(token) {
+  if (!token) { return null; }
+  try {
+    // Pega a parte do meio do token (o payload), decodifica de Base64 e converte de texto para objeto JSON
+    return JSON.parse(atob(token.split('.')[1]));
+  } catch (e) {
+    // Se o token for inválido, retorna nulo
+    console.error("Erro ao decodificar o token:", e);
+    return null;
+  }
+}
+
+/**
+ * Verifica o token do usuário logado e atualiza a UI (menu) de acordo com suas permissões.
+ */
+function verificarPermissoesEAtualizarMenu() {
+  const token = localStorage.getItem('seuTokenJWT');
+  const adminLink = document.getElementById('admin-link-disponibilidade');
+
+  if (!token || !adminLink) {
+    // Se não há token ou o link não existe na página, não faz nada
+    return;
+  }
+
+  const payload = parseJwt(token);
+
+  // Verifica se o payload existe e se o tipo de usuário é 'funcionario' ou 'admin'
+  if (payload && (payload.tipo_usuario === 'funcionario' || payload.tipo_usuario === 'admin')) {
+    // Se for, mostra o link de gerenciamento
+    adminLink.style.display = 'block';
+  } else {
+    // Garante que o link esteja escondido para outros tipos de usuário (ex: 'cliente')
+    adminLink.style.display = 'none';
+  }
+}
+
+// Executa a verificação assim que o conteúdo da página estiver carregado
+document.addEventListener('DOMContentLoaded', verificarPermissoesEAtualizarMenu);

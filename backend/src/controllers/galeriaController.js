@@ -25,6 +25,7 @@ const createFoto = async (req, res) => {
         descricao,
         valor,
         ativo,
+        tipo_servico,
         id_barbearia: 1 // Assumindo o ID 1 para a barbearia, ajuste se necessário
       }
     });
@@ -39,7 +40,7 @@ const createFoto = async (req, res) => {
 const updateFoto = async (req, res) => {
   const prisma = req.app.get('prisma');
   const { id } = req.params;
-  const { imagem_caminho, titulo, descricao, valor, ativo } = req.body;
+  const { imagem_caminho, titulo, descricao, valor, ativo, tipo_servico } = req.body;
   try {
     const fotoAtualizada = await prisma.galeria_fotos.update({
       where: { id_foto: parseInt(id) },

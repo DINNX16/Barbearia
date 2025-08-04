@@ -525,6 +525,8 @@
     <a href="javascript:void(0)" id="btnFechar" class="closebtn" onclick="closeNav()">&times;</a>
     <div class="overlay-content">
       <a href="perfil.html" onclick="closeNav()">Perfil</a>
+      <a href="gerenciar-disponibilidade.html" onclick="closeNav()" id="admin-link-disponibilidade"
+        style="display: none;">Gerenciar Disponibilidade</a>
       <a href="historico.html">Histórico</a>
       <a href="#">Últimos Serviços</a>
       <a href="avaliacao.html">Avaliações</a>
@@ -536,83 +538,18 @@
 
   <main>
     <section id="cortes" class="vertical-feed content-section">
-      <h2>Nossas Novidades e Destaques</h2>
-      <div class="feed-grid-container" id="feed-container">
-      </div>
+      <h2>Nossos Cortes e Estilos</h2>
+      <div class="feed-grid-container" id="cortes-grid"></div>
     </section>
 
-
-    <!-- NOVA SEÇÃO PARA DESIGN DE SOBRANCELHAS -->
     <section id="sobrancelhas" class="vertical-feed content-section">
       <h2>Design de Sobrancelhas</h2>
-      <div class="feed-grid-container">
-        <article class="feed-item card">
-          <img src="https://via.placeholder.com/400x250/ccc/000?text=Sobrancelha+1"
-            alt="Exemplo de design de sobrancelha 1" />
-          <div class="card-content">
-            <h3>Design Clássico</h3>
-            <p>Um alinhamento perfeito para um olhar marcante.</p>
-            <p><strong>Valor:</strong> R$ 80 ,00</p>
-            <a href="agenda.html" class="card-link">Agendar</a>
-          </div>
-        </article>
-        <article class="feed-item card">
-          <img src="https://via.placeholder.com/400x250/ccc/000?text=Sobrancelha+2"
-            alt="Exemplo de design de sobrancelha 2" />
-          <div class="card-content">
-            <h3>Sobrancelha Navalhada</h3>
-            <p>Estilo e atitude com o acabamento na navalha.</p>
-            <p><strong>Valor:</strong> R$ 120,00</p>
-            <a href="agenda.html" class="card-link">Agendar</a>
-          </div>
-        </article>
-        <article class="feed-item card">
-          <img src="https://via.placeholder.com/400x250/ccc/000?text=Sobrancelha+3"
-            alt="Exemplo de design de sobrancelha 3" />
-          <div class="card-content">
-            <h3>Manutenção e Limpeza</h3>
-            <p>Mantenha o design sempre em dia.</p>
-            <p><strong>Valor:</strong> R$ 50,00</p>
-            <a href="agenda.html" class="card-link">Agendar</a>
-          </div>
-        </article>
-      </div>
+      <div class="feed-grid-container" id="sobrancelhas-grid"></div>
     </section>
 
-    <!-- NOVA SEÇÃO PARA BARBAS -->
     <section id="barbas" class="vertical-feed content-section">
       <h2>Estilos de Barba</h2>
-      <div class="feed-grid-container">
-        <article class="feed-item card">
-          <img src="https://via.placeholder.com/400x250/333/fff?text=Barba+Lenhador"
-            alt="Exemplo de barba estilo lenhador" />
-          <div class="card-content">
-            <h3>Barba Lenhador</h3>
-            <p>Para um visual robusto e imponente.</p>
-            <p><strong>Valor:</strong> R$ 70,00</p>
-            <a href="agenda.html" class="card-link">Agendar</a>
-          </div>
-        </article>
-        <article class="feed-item card">
-          <img src="https://via.placeholder.com/400x250/333/fff?text=Barba+Desenhada"
-            alt="Exemplo de barba desenhada" />
-          <div class="card-content">
-            <h3>Barba Desenhada</h3>
-            <p>Contornos precisos para um estilo moderno.</p>
-            <p><strong>Valor:</strong> R$ 85,00</p>
-            <a href="agenda.html" class="card-link">Agendar</a>
-          </div>
-        </article>
-        <article class="feed-item card">
-          <img src="https://via.placeholder.com/400x250/333/fff?text=Barboterapia" alt="Exemplo de barboterapia" />
-          <div class="card-content">
-            <h3>Barboterapia</h3>
-            <p>Cuidado completo com toalha quente e massagem.</p>
-            <p><strong>Valor:</strong> R$ 150,00</p>
-            <a href="agenda.html" class="card-link">Agendar</a>
-          </div>
-        </article>
-      </div>
+      <div class="feed-grid-container" id="barbas-grid"></div>
     </section>
   </main>
 
@@ -623,18 +560,23 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      const feedContainer = document.getElementById('feed-container');
+      const cortesContainer = document.getElementById('cortes-grid');
+      const sobrancelhasContainer = document.getElementById('sobrancelhas-grid');
+      const barbasContainer = document.getElementById('barbas-grid');
 
-      /**
-       * Cria o código HTML para um único card do feed.
-       * @param {object} item - O objeto do card vindo da API.
-       */
-      function createFeedCard(item) {
-        // Apenas cria o card se ele estiver marcado como 'ativo'
-        if (!item.ativo) {
-          return ''; // Retorna uma string vazia se o card estiver inativo
+      // Função para mostrar a seção correta e esconder as outras
+      window.showContent = function (sectionId) {
+        document.querySelectorAll('.content-section').forEach(section => {
+          section.classList.remove('active');
+        });
+        const activeSection = document.getElementById(sectionId);
+        if (activeSection) {
+          activeSection.classList.add('active');
         }
+      }
 
+      function createFeedCard(item) {
+        if (!item.ativo) return '';
         return `
             <article class="feed-item card">
                 <img src="${item.imagem_caminho || 'https://via.placeholder.com/400x250'}" alt="${item.titulo}" />
@@ -648,37 +590,33 @@
         `;
       }
 
-      /**
-       * Busca os dados da API e preenche a página.
-       */
       async function carregarFeed() {
-        if (!feedContainer) return; // Se o container não existir, não faz nada
-
         try {
-          // 1. Busca os dados na API que criamos
           const response = await fetch('/api/galeria');
           const feedItems = await response.json();
 
-          if (feedItems.length > 0) {
-            // 2. Transforma cada item de dado em um card HTML e junta tudo
-            const feedHtml = feedItems.map(createFeedCard).join('');
-            feedContainer.innerHTML = feedHtml;
-          } else {
-            feedContainer.innerHTML = '<p style="text-align:center; grid-column: 1 / -1;">Ainda não há novidades no feed.</p>';
-          }
+          // Separa os itens por tipo de serviço
+          const cortes = feedItems.filter(item => item.tipo_servico === 'cortes');
+          const sobrancelhas = feedItems.filter(item => item.tipo_servico === 'sobrancelhas');
+          const barbas = feedItems.filter(item => item.tipo_servico === 'barbas');
+
+          // Preenche cada container com seus respectivos cards
+          if (cortesContainer) cortesContainer.innerHTML = cortes.map(createFeedCard).join('');
+          if (sobrancelhasContainer) sobrancelhasContainer.innerHTML = sobrancelhas.map(createFeedCard).join('');
+          if (barbasContainer) barbasContainer.innerHTML = barbas.map(createFeedCard).join('');
+
+          // Mostra a seção de cortes por padrão ao carregar a página
+          showContent('cortes');
 
         } catch (error) {
           console.error('Erro ao carregar o feed:', error);
-          feedContainer.innerHTML = '<p style="text-align:center; color:red; grid-column: 1 / -1;">Não foi possível carregar as novidades.</p>';
         }
       }
 
-      // Inicia o processo assim que a página carrega
       carregarFeed();
     });
   </script>
 
-  <script src="/barbearia-manov/Pages/js/auth.js"></script>
 </body>
 
 </html>

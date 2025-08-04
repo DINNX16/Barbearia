@@ -7,7 +7,7 @@ function formatDate(dateString) {
     const day = String(date.getDate()).padStart(2, "0");
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const year = date.getFullYear();
-    const time = `${String(date.getHours()).padStart(2,"0")}:${String(date.getMinutes()).padStart(2,"0")}`;
+    const time = `${String(date.getHours()).padStart(2, "0")}:${String(date.getMinutes()).padStart(2, "0")}`;
     return `${day}/${month}/${year} às ${time}`;
 }
 
@@ -50,7 +50,7 @@ function renderProfileInfo(data) {
     document.getElementById('employee-pic-display').src = data.avatarUrl;
     document.getElementById('employee-name-display').textContent = data.name;
     document.getElementById('employee-title-display').textContent = data.title;
-    
+
     const agendaButton = document.querySelector('.btn-agenda');
     if (agendaButton) {
         agendaButton.href = `agenda.html?barbeiroId=${data.id}`;
@@ -65,8 +65,8 @@ function renderVacationNotice(notice) {
 // Renderiza o card de qualificações
 function renderQualifications(qualifications) {
     const container = document.getElementById('qualifications-content');
-    const instagramLink = qualifications.instagram 
-        ? `<a href="https://instagram.com/${qualifications.instagram.replace('@','')}" target="_blank">${qualifications.instagram}</a>`
+    const instagramLink = qualifications.instagram
+        ? `<a href="https://instagram.com/${qualifications.instagram.replace('@', '')}" target="_blank">${qualifications.instagram}</a>`
         : 'Não informado';
 
     let coursesHTML = '<ul><li>Nenhum curso listado.</li></ul>';
@@ -119,7 +119,7 @@ function renderAppointments(appointments, listId, emptyId) {
 async function loadEmployeeProfile() {
     try {
         const data = await mockFetchEmployeeData();
-        
+
         // Chama cada função de renderização com a parte correspondente dos dados
         renderProfileInfo(data);
         renderVacationNotice(data.vacationNotice);
@@ -143,3 +143,26 @@ document.addEventListener("DOMContentLoaded", () => {
         yearSpan.textContent = new Date().getFullYear();
     }
 });
+
+// js/funcionario-perfil.js
+
+// ... (outras funções) ...
+
+async function fetchDisponibilidade(idProfissional) {
+    try {
+        // URL CORRIGIDA para bater com a rota que definimos
+        const response = await fetch(`/api/disponibilidades/profissional/${idProfissional}`);
+
+        // O controller já retorna um erro 404, então podemos simplificar aqui
+        if (!response.ok) {
+            // Se a resposta não for 'OK', nós assumimos que não há disponibilidade ou deu um erro
+            return []; // Retorna um array vazio
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Erro na API de disponibilidade:", error);
+        return []; // Retorna um array vazio em caso de erro de conexão
+    }
+}
+
+// ... (resto do seu script) ...
