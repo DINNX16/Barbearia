@@ -5,6 +5,11 @@ const { PrismaClient } = require('@prisma/client');
 const cors = require('cors');
 dotenv.config();
 
+// ADICIONE AS 3 LINHAS ABAIXO PARA DEPURAR
+console.log('--- DEBUG DENTRO DO app.js ---');
+console.log('A chave do Stripe é:', process.env.STRIPE_SECRET_KEY);
+console.log('---------------------------------');
+
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -36,7 +41,7 @@ app.use((req, res, next) => {
 // --- IMPORTAÇÃO DOS CONTROLLERS E MIDDLEWARES DE AUTH ---
 const authMiddleware = require('./middlewares/authMiddleware');
 const verifyToken = authMiddleware.verifyToken;
-const usuarioController = require('./controllers/usuarioController'); 
+const usuarioController = require('./controllers/usuarioController');
 
 // --- IMPORTAÇÃO DAS ROTAS (TODAS JUNTAS AQUI) ---
 const authRoutes = require('./routes/authRoutes')(prisma);
@@ -47,12 +52,13 @@ const excecoesRoutes = require('./routes/excecoesRoutes.js');
 const agendamentoServicoRoutes = require('./routes/agendamentoServicoRoutes.js');
 const pagamentoRoutes = require('./routes/pagamentosRoutes');
 const produtoRoutes = require('./routes/produtoRoutes'); // <-- NOVA ROTA DE PRODUTOS
-
+const galeriaRoutes = require('./routes/galeriaRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 // --- USO DAS ROTAS ---
 
 // -- ROTAS PÚBLICAS (não precisam de token) --
 app.use('/api/auth', authRoutes);
-app.post('/api/usuarios', usuarioController.createUser); 
+app.post('/api/usuarios', usuarioController.createUser);
 app.use('/api/produtos', produtoRoutes); // <-- NOVA ROTA DE PRODUTOS SENDO USADA AQUI
 
 // -- BARREIRA DE AUTENTICAÇÃO --
@@ -66,7 +72,8 @@ app.use('/api/disponibilidades', disponibilidadeRoutes);
 app.use('/api/excecoes', excecoesRoutes);
 app.use('/api/agendamento-servicos', agendamentoServicoRoutes);
 app.use('/api/pagamentos', pagamentoRoutes);
-
+app.use('/api/galeria', galeriaRoutes);
+app.use('/api/feedbacks', feedbackRoutes);
 // Rota de status para verificar se o servidor está no ar
 app.get('/status', (req, res) => {
   res.send('Backend da Barbearia funcionando!');

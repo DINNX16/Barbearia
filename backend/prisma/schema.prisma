@@ -37,7 +37,7 @@ model agendamento {
   status              String                  @db.VarChar(50)
   observacao          String?
   data_criacao        DateTime?               @default(now()) @db.Timestamp(6)
-  periodo             Unsupported("tsrange")? @default(dbgenerated("tsrange(data_hora_inicio, data_hora_fim)"))
+  periodo             Unsupported("tsrange")?
   AgendamentoServico  AgendamentoServico[]
   cliente             cliente                 @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction)
   profissional        profissional            @relation(fields: [id_profissional], references: [id_profissional], onDelete: NoAction)
@@ -227,7 +227,10 @@ model galeria_fotos {
   id_foto        Int             @id @default(autoincrement())
   id_barbearia   Int
   imagem_caminho String?
+  titulo         String          @db.VarChar(100)
   descricao      String?
+  valor          String?         @db.VarChar(50)
+  ativo          Boolean         @default(true)
   data_upload    DateTime?       @default(now()) @db.Timestamp(6)
   foto_entidade  foto_entidade[]
   barbearia      barbearia       @relation(fields: [id_barbearia], references: [id_barbearia], onDelete: NoAction, onUpdate: NoAction)

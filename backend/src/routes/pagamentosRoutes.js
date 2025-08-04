@@ -1,4 +1,8 @@
 // ./routes/pagamentoRoutes.js
+// ADICIONE AS 3 LINHAS ABAIXO PARA DEPURAR
+console.log('--- DEBUG DENTRO DE pagamentosRoutes.js ---');
+console.log('A chave do Stripe é:', process.env.STRIPE_SECRET_KEY);
+console.log('---------------------------------');
 
 const express = require('express');
 const router = express.Router();
