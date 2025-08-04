@@ -50,7 +50,6 @@ function renderProfileInfo(data) {
     document.getElementById('employee-pic-display').src = data.avatarUrl;
     document.getElementById('employee-name-display').textContent = data.name;
     document.getElementById('employee-title-display').textContent = data.title;
-
     const agendaButton = document.querySelector('.btn-agenda');
     if (agendaButton) {
         agendaButton.href = `agenda.html?barbeiroId=${data.id}`;
@@ -119,7 +118,6 @@ function renderAppointments(appointments, listId, emptyId) {
 async function loadEmployeeProfile() {
     try {
         const data = await mockFetchEmployeeData();
-
         // Chama cada função de renderização com a parte correspondente dos dados
         renderProfileInfo(data);
         renderVacationNotice(data.vacationNotice);

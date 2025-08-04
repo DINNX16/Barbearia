@@ -14,7 +14,7 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 const prisma = new PrismaClient({
-  log: ['query', 'info', 'warn', 'error'],
+  log: ['query', 'info', 'warn', 'error'],
 });
 
 // Conexão com o banco
@@ -32,10 +32,27 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Disponibiliza o prisma para os controllers
+// INÍCIO DO BLOCO DE CÓDIGO DO CORS (Aceitando sua versão)
+const allowedOrigins = [
+  'http://127.0.0.1:5501', 
+  'http://localhost:5501'
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.indexOf(origin) === -1) {
+      const msg = 'A política CORS para este site não permite acesso da origem especificada.';
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  }
+}));
+// FIM DO BLOCO DE CÓDIGO DO CORS
+
 app.use((req, res, next) => {
-  req.app.set('prisma', prisma);
-  next();
+  req.app.set('prisma', prisma);
+  next();
 });
 
 // --- IMPORTAÇÃO DOS CONTROLLERS E MIDDLEWARES DE AUTH ---
@@ -76,21 +93,21 @@ app.use('/api/galeria', galeriaRoutes);
 app.use('/api/feedbacks', feedbackRoutes);
 // Rota de status para verificar se o servidor está no ar
 app.get('/status', (req, res) => {
-  res.send('Backend da Barbearia funcionando!');
+  res.send('Backend da Barbearia funcionando! Acesse /api/usuarios ou /api/auth para testar a API.');
 });
 
 // Middleware para tratamento de erros
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Algo deu errado no servidor!');
+  console.error(err.stack);
+  res.status(500).send('Algo deu errado no servidor!');
 });
 
 // --- INICIALIZAÇÃO DO SERVIDOR (SEMPRE NO FINAL) ---
 app.listen(port, () => {
-  console.log(`Servidor backend rodando em http://localhost:${port}`);
+  console.log(`Servidor backend rodando em http://localhost:${port}`);
 });
 
 // Desconexão do Prisma ao fechar o processo
 process.on('beforeExit', async () => {
-  await prisma.$disconnect();
+  await prisma.$disconnect();
 });
