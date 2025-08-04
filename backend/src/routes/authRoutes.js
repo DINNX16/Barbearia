@@ -1,6 +1,7 @@
 // src/routes/authRoutes.js
 const express = require('express');
 const authController = require('../controllers/authController');
+const { verifyToken } = require('../middlewares/authMiddleware');
 
 // Mude para uma função de fábrica que recebe 'prisma'
 module.exports = (prisma) => {
@@ -15,6 +16,8 @@ module.exports = (prisma) => {
 
   // Rota para o login do usuário
   router.post('/login', authController.login);
+  router.get('/perfil', verifyToken, authController.getProfile);
+
 
   return router; // Retorna a instância do router
 };

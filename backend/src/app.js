@@ -71,6 +71,8 @@ const pagamentoRoutes = require('./routes/pagamentosRoutes');
 const produtoRoutes = require('./routes/produtoRoutes'); // <-- NOVA ROTA DE PRODUTOS
 const galeriaRoutes = require('./routes/galeriaRoutes');
 const feedbackRoutes = require('./routes/feedbackRoutes');
+const agendamentoRoutes = require('./routes/agendamentoRoutes');
+const pedidoRoutes = require('./routes/pedidoRoutes');
 // --- USO DAS ROTAS ---
 
 // -- ROTAS PÚBLICAS (não precisam de token) --
@@ -91,6 +93,8 @@ app.use('/api/agendamento-servicos', agendamentoServicoRoutes);
 app.use('/api/pagamentos', pagamentoRoutes);
 app.use('/api/galeria', galeriaRoutes);
 app.use('/api/feedbacks', feedbackRoutes);
+app.use('/api/agendamentos', agendamentoRoutes);
+app.use('/api/pedidos', pedidoRoutes);
 // Rota de status para verificar se o servidor está no ar
 app.get('/status', (req, res) => {
   res.send('Backend da Barbearia funcionando! Acesse /api/usuarios ou /api/auth para testar a API.');

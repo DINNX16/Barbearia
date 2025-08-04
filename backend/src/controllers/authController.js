@@ -72,4 +72,49 @@ authController.login = async (req, res) => {
   }
 };
 
+authController.getProfile = async (req, res) => {
+  console.log('DEBUG: Acedendo à rota /perfil');
+  try {
+    const prisma = req.app.get('prisma');
+    // O ID do usuário é extraído do token pelo middleware verifyToken e anexado a req.user
+    const userId = req.user.id_usuario;
+
+    if (!userId) {
+      // Esta verificação é uma segurança extra
+      return res.status(400).json({ message: 'ID do usuário não encontrado no token.' });
+    }
+
+    // Busca o usuário no banco de dados, selecionando campos específicos e seguros
+    const userProfile = await prisma.usuario.findUnique({
+      where: { id_usuario: userId },
+      select: {
+        id_usuario: true,
+        email: true,
+        tipo_usuario: true,
+        pessoa: { // Inclui dados da tabela 'pessoa' relacionada
+          select: {
+            nome_completo: true,
+            foto_perfil: true,
+          },
+        },
+      },
+    });
+
+    if (!userProfile) {
+      return res.status(404).json({ message: 'Usuário não encontrado.' });
+    }
+
+    // Envia os dados do perfil como resposta
+    res.status(200).json({
+        message: 'Perfil recuperado com sucesso!',
+        user: userProfile 
+    });
+
+  } catch (error) {
+    console.error('Erro ao buscar perfil do usuário:', error);
+    res.status(500).json({ message: 'Erro interno do servidor.', error: error.message });
+  }
+};
+
+
 module.exports = authController;
