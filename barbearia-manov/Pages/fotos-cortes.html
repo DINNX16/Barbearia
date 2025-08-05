@@ -567,11 +567,11 @@
       // Função para mostrar a seção correta e esconder as outras
       window.showContent = function (sectionId) {
         document.querySelectorAll('.content-section').forEach(section => {
-          section.classList.remove('active');
+          section.style.display = 'none';
         });
         const activeSection = document.getElementById(sectionId);
         if (activeSection) {
-          activeSection.classList.add('active');
+          activeSection.style.display = 'block';
         }
       }
 
@@ -592,7 +592,14 @@
 
       async function carregarFeed() {
         try {
-          const response = await fetch('/api/galeria');
+          // --- CORREÇÃO AQUI ---
+          // Usando a URL completa do seu servidor backend
+          const response = await fetch('http://localhost:3000/api/galeria');
+
+          if (!response.ok) {
+            throw new Error(`Erro na rede: ${response.statusText} (Status: ${response.status})`);
+          }
+
           const feedItems = await response.json();
 
           // Separa os itens por tipo de serviço
@@ -610,6 +617,7 @@
 
         } catch (error) {
           console.error('Erro ao carregar o feed:', error);
+          if (cortesContainer) cortesContainer.innerHTML = '<p>Erro ao carregar conteúdo.</p>';
         }
       }
 

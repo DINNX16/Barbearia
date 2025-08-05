@@ -359,17 +359,28 @@ O JavaScript preencheria isso corretamente com base na nota. */
       const sucessoMsg = document.getElementById('mensagem-sucesso');
 
       form.addEventListener('submit', async (event) => {
-        event.preventDefault(); // Impede o recarregamento da página
+        event.preventDefault();
 
         const formData = new FormData(form);
         const nota = formData.get('nota');
         const comentario = formData.get('comentario');
-        const token = localStorage.getItem('seuTokenJWT'); // Pega o token do usuário logado
+
+        // =======================================================
+        // CORREÇÃO: Usando a chave correta 'jwtToken'
+        // =======================================================
+        const token = localStorage.getItem('jwtToken');
 
         if (!token) {
           alert('Você precisa estar logado para enviar uma avaliação.');
+          // Opcional: redirecionar para o login
+          // window.location.href = 'login.html';
           return;
         }
+
+        // Desabilita o botão para evitar múltiplos envios
+        const submitButton = form.querySelector('button[type="submit"]');
+        submitButton.disabled = true;
+        submitButton.textContent = 'A Enviar...';
 
         try {
           const response = await fetch('/api/feedbacks', {
@@ -378,7 +389,7 @@ O JavaScript preencheria isso corretamente com base na nota. */
               'Content-Type': 'application/json',
               'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ nota, comentario })
+            body: JSON.stringify({ nota: parseInt(nota), comentario })
           });
 
           if (response.ok) {
@@ -386,15 +397,18 @@ O JavaScript preencheria isso corretamente com base na nota. */
             sucessoMsg.style.display = 'block';
           } else {
             const errorData = await response.json();
-            alert(`Erro: ${errorData.error}`);
+            alert(`Erro: ${errorData.message || 'Não foi possível enviar.'}`);
+            submitButton.disabled = false;
+            submitButton.textContent = 'Enviar Avaliação';
           }
         } catch (error) {
           console.error('Erro ao enviar formulário:', error);
           alert('Não foi possível enviar sua avaliação. Tente novamente mais tarde.');
+          submitButton.disabled = false;
+          submitButton.textContent = 'Enviar Avaliação';
         }
       });
     });
-
   </script>
   </style>
 </body>

@@ -1,12 +1,156 @@
 // js/perfil.js
 
-const API_BASE_URL = 'http://localhost:3000';
+const API_BASE_URL = 'http://localhost:3000'; // Ajuste se necessário
 
 // =============================================================
-// FUNÇÕES DE FETCH (REAIS)
+// INICIALIZAÇÃO E EVENT LISTENERS
 // =============================================================
 
-// Busca os dados básicos do perfil (nome, email, etc.)
+document.addEventListener('DOMContentLoaded', () => {
+  loadProfileData();
+  setupEventListeners();
+  const yearSpan = document.getElementById('current-year');
+  if (yearSpan) {
+    yearSpan.textContent = new Date().getFullYear();
+  }
+});
+
+// =============================================================
+// LÓGICA DE UPLOAD, CROP E EVENTOS
+// =============================================================
+
+function setupEventListeners() {
+  // --- Elementos do DOM ---
+  const profilePicInput = document.getElementById("profile-pic-input");
+  const coverPhotoInput = document.getElementById("cover-photo-input");
+  const profilePicContainer = document.querySelector(".profile-pic-container");
+  const editCoverBtn = document.getElementById("edit-cover-photo-btn");
+  const cropModal = document.getElementById("crop-modal");
+  const imageToCrop = document.getElementById("image-to-crop");
+  const confirmCropBtn = document.getElementById("confirm-crop-btn");
+  const cancelCropBtn = document.getElementById("cancel-crop-btn");
+
+  let cropper = null;
+  let currentCropConfig = {};
+
+  // --- Gatilhos para abrir o seletor de arquivos ---
+  profilePicContainer.addEventListener("click", () => profilePicInput.click());
+  editCoverBtn.addEventListener("click", () => coverPhotoInput.click());
+
+  // --- Função genérica para abrir o modal ---
+  const openCropModal = (event, config) => {
+    if (event.target.files && event.target.files.length > 0) {
+      currentCropConfig = config;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        imageToCrop.src = e.target.result;
+        cropModal.style.display = "flex";
+        if (cropper) cropper.destroy();
+        cropper = new Cropper(imageToCrop, {
+          aspectRatio: config.aspectRatio,
+          viewMode: 1,
+          background: false,
+        });
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    }
+    event.target.value = '';
+  };
+
+  // --- Listeners para cada tipo de input ---
+  profilePicInput.addEventListener("change", (e) => openCropModal(e, {
+    aspectRatio: 1 / 1,
+    uploadFieldName: 'profilePic',
+    endpoint: '/api/usuarios/me/foto-perfil',
+    elementIdToUpdate: 'profile-pic-display',
+    responseKey: 'foto_perfil'
+  }));
+  coverPhotoInput.addEventListener("change", (e) => openCropModal(e, {
+    aspectRatio: 16 / 9,
+    uploadFieldName: 'coverPic',
+    endpoint: '/api/usuarios/me/foto-capa',
+    elementIdToUpdate: 'cover-photo-display',
+    responseKey: 'foto_capa'
+  }));
+
+  // --- Lógica do modal ---
+  const closeCropModal = () => (cropModal.style.display = "none");
+  cancelCropBtn.addEventListener("click", closeCropModal);
+
+  confirmCropBtn.addEventListener("click", (event) => {
+    // CORREÇÃO CRUCIAL PARA IMPEDIR O REFRESH
+    event.preventDefault();
+
+    if (!cropper) return;
+    confirmCropBtn.textContent = "A Enviar...";
+    confirmCropBtn.disabled = true;
+
+    cropper.getCroppedCanvas({
+      width: currentCropConfig.aspectRatio === 1 ? 400 : 1200,
+      imageSmoothingQuality: 'high',
+    }).toBlob(async (blob) => {
+      try {
+        const response = await uploadImage(blob, currentCropConfig.uploadFieldName, currentCropConfig.endpoint);
+        const newImageUrl = `${API_BASE_URL}${response[currentCropConfig.responseKey]}?t=${new Date().getTime()}`;
+        document.getElementById(currentCropConfig.elementIdToUpdate).src = newImageUrl;
+        alert('Imagem atualizada com sucesso!');
+      } catch (error) {
+        alert(`Erro ao enviar imagem: ${error.message}`);
+        console.error(error);
+      } finally {
+        closeCropModal();
+        confirmCropBtn.textContent = "Salvar Alterações";
+        confirmCropBtn.disabled = false;
+      }
+    }, 'image/jpeg');
+  });
+}
+
+async function uploadImage(imageBlob, fieldName, endpoint) {
+  const token = localStorage.getItem('jwtToken');
+  if (!token) throw new Error('Utilizador não autenticado.');
+  const formData = new FormData();
+  formData.append(fieldName, imageBlob, 'upload.jpg');
+  const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+    method: 'PUT',
+    headers: { 'Authorization': `Bearer ${token}` },
+    body: formData
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Falha no upload.');
+  }
+  return await response.json();
+}
+
+// =============================================================
+// LÓGICA PRINCIPAL DE CARREGAMENTO DE DADOS
+// =============================================================
+
+async function loadProfileData() {
+  try {
+    const [userData, allAppointments, purchasesHistory] = await Promise.all([
+      fetchUserProfile(),
+      fetchAppointments(),
+      fetchPurchases(),
+    ]);
+    renderUserProfile(userData);
+    renderGenericList(purchasesHistory, "historico-compras-list", "empty-historico-compras", createPurchasesHtml);
+    const upcomingAppointments = allAppointments.filter(ag => ['agendado', 'confirmado'].includes(ag.status.toLowerCase()));
+    const historyAppointments = allAppointments.filter(ag => ['concluído', 'cancelado'].includes(ag.status.toLowerCase()));
+    const lastServices = [...historyAppointments].sort((a, b) => new Date(b.data) - new Date(a.data)).slice(0, 2);
+    renderGenericList(upcomingAppointments, "proximos-agendamentos-list", "empty-proximos-agendamentos", createAppointmentsHtml);
+    renderGenericList(lastServices, "ultimos-servicos-list", "empty-ultimos-servicos", createAppointmentsHtml);
+    renderGenericList(historyAppointments, "historico-agendamentos-list", "empty-historico-agendamentos", createAppointmentsHtml);
+  } catch (error) {
+    console.error("Não foi possível carregar os dados do perfil:", error.message);
+  }
+}
+
+// =============================================================
+// FUNÇÕES DE FETCH (CHAMADAS À API)
+// =============================================================
+
 async function fetchUserProfile() {
   const token = localStorage.getItem('jwtToken');
   if (!token) {
@@ -14,11 +158,7 @@ async function fetchUserProfile() {
     window.location.href = 'login.html';
     throw new Error('Token de autenticação não encontrado.');
   }
-
-  const response = await fetch(`${API_BASE_URL}/api/auth/perfil`, {
-    headers: { 'Authorization': `Bearer ${token}` }
-  });
-
+  const response = await fetch(`${API_BASE_URL}/api/auth/perfil`, { headers: { 'Authorization': `Bearer ${token}` } });
   if (!response.ok) {
     console.error('Falha ao autenticar, redirecionando para login.');
     localStorage.clear();
@@ -29,40 +169,45 @@ async function fetchUserProfile() {
   return data.user;
 }
 
-// NOVA FUNÇÃO: Busca o histórico de agendamentos da nova API
 async function fetchAppointments() {
-    const token = localStorage.getItem('jwtToken');
-    if (!token) throw new Error('Token não encontrado.');
-
-    const response = await fetch(`${API_BASE_URL}/api/agendamentos/meus-agendamentos`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
-
-    if (!response.ok) throw new Error('Falha ao buscar agendamentos.');
-    return await response.json();
+  const token = localStorage.getItem('jwtToken');
+  if (!token) throw new Error('Token não encontrado.');
+  const response = await fetch(`${API_BASE_URL}/api/agendamentos/meus-agendamentos`, { headers: { 'Authorization': `Bearer ${token}` } });
+  if (!response.ok) throw new Error('Falha ao buscar agendamentos.');
+  return await response.json();
 }
 
-// NOVA FUNÇÃO: Busca o histórico de compras da nova API
 async function fetchPurchases() {
-    const token = localStorage.getItem('jwtToken');
-    if (!token) throw new Error('Token não encontrado.');
-
-    const response = await fetch(`${API_BASE_URL}/api/pedidos/meus-pedidos`, {
-        headers: { 'Authorization': `Bearer ${token}` }
-    });
-
-    if (!response.ok) throw new Error('Falha ao buscar histórico de compras.');
-    return await response.json();
+  const token = localStorage.getItem('jwtToken');
+  if (!token) throw new Error('Token não encontrado.');
+  const response = await fetch(`${API_BASE_URL}/api/pedidos/meus-pedidos`, { headers: { 'Authorization': `Bearer ${token}` } });
+  if (!response.ok) throw new Error('Falha ao buscar histórico de compras.');
+  return await response.json();
 }
 
 // =============================================================
-// FUNÇÕES DE RENDERIZAÇÃO E FORMATAÇÃO (sem grandes alterações)
+// FUNÇÕES DE RENDERIZAÇÃO E FORMATAÇÃO (HELPERS)
 // =============================================================
+
+function renderUserProfile(userData) {
+  const defaultAvatar = '../assets/default-avatar.png';
+  const defaultCover = '../assets/default-cover.jpg';
+  const nome = userData.pessoa?.nome_completo || 'Nome não disponível';
+  let fotoUrl = userData.pessoa?.foto_perfil;
+  let fotoCapaUrl = userData.pessoa?.foto_capa;
+
+  if (fotoUrl) fotoUrl = `${API_BASE_URL}${fotoUrl}`;
+  if (fotoCapaUrl) fotoCapaUrl = `${API_BASE_URL}${fotoCapaUrl}`;
+
+  document.getElementById("profile-pic-display").src = fotoUrl || defaultAvatar;
+  document.getElementById("cover-photo-display").src = fotoCapaUrl || defaultCover;
+  document.getElementById("user-name-display").textContent = nome;
+  document.getElementById("user-email-display").textContent = userData.email || "Email não informado";
+}
 
 function formatDate(dateString) {
   if (!dateString) return "Data indisponível";
   const date = new Date(dateString);
-  // Ajuste para garantir que a data seja exibida corretamente
   const day = String(date.getUTCDate()).padStart(2, "0");
   const month = String(date.getUTCMonth() + 1).padStart(2, "0");
   const year = date.getUTCFullYear();
@@ -73,17 +218,6 @@ function formatPrice(price) {
   if (typeof price !== "number" && typeof price !== "string") return "Preço indisponível";
   const numericPrice = parseFloat(String(price));
   return `R$ ${numericPrice.toFixed(2).replace(".", ",")}`;
-}
-
-function renderUserProfile(userData) {
-  const nome = userData.pessoa ? userData.pessoa.nome_completo : 'Nome não disponível';
-  const fotoUrl = userData.pessoa ? userData.pessoa.foto_perfil : null;
-  document.getElementById("profile-pic-display").src = fotoUrl || "https://via.placeholder.com/150";
-  document.getElementById("profile-pic-display").alt = `Foto de ${nome}`;
-  document.getElementById("cover-photo-display").src = "https://i.pinimg.com/originals/1e/70/ae/1e70ae41273934d75891e49646b1a37a.jpg";
-  document.getElementById("cover-photo-display").alt = `Foto de capa de ${nome}`;
-  document.getElementById("user-name-display").textContent = nome;
-  document.getElementById("user-email-display").textContent = userData.email || "Email não informado";
 }
 
 function getStatusClass(status) {
@@ -113,122 +247,22 @@ function createAppointmentsHtml(item) {
   const date = new Date(item.data);
   const time = `${String(date.getUTCHours()).padStart(2, "0")}:${String(date.getUTCMinutes()).padStart(2, "0")}`;
   return `
-    <div class="history-item">
-        <div class="service-name">${item.servico}</div>
-        <div class="service-date">${formatDate(item.data)} - ${time}</div>
-        <div class="service-price">${formatPrice(item.preco)}</div>
-        <span class="status ${getStatusClass(item.status)}">${item.status}</span>
-    </div>
-  `;
+        <div class="history-item">
+            <div class="service-name">${item.servico}</div>
+            <div class="service-date">${formatDate(item.data)} - ${time}</div>
+            <div class="service-price">${formatPrice(item.preco)}</div>
+            <span class="status ${getStatusClass(item.status)}">${item.status}</span>
+        </div>
+    `;
 }
 
 function createPurchasesHtml(item) {
   return `
-    <div class="history-item">
-        <div class="product-name">${item.produto}</div>
-        <div class="purchase-date">${formatDate(item.data)}</div>
-        <div class="purchase-price">${formatPrice(item.preco)}</div>
-        <span class="status ${getStatusClass(item.status)}">${item.status}</span>
-    </div>
-  `;
+        <div class="history-item">
+            <div class="product-name">${item.produto}</div>
+            <div class="purchase-date">${formatDate(item.data)}</div>
+            <div class="purchase-price">${formatPrice(item.preco)}</div>
+            <span class="status ${getStatusClass(item.status)}">${item.status}</span>
+        </div>
+    `;
 }
-
-
-// =============================================================
-// FUNÇÃO PRINCIPAL (ORQUESTRADOR)
-// =============================================================
-
-async function loadProfileData() {
-  try {
-    const [userData, allAppointments, purchasesHistory] = await Promise.all([
-      fetchUserProfile(),
-      fetchAppointments(),
-      fetchPurchases(),
-    ]);
-
-    renderUserProfile(userData);
-    renderGenericList(purchasesHistory, "historico-compras-list", "empty-historico-compras", createPurchasesHtml);
-
-    // --- LÓGICA PARA SEPARAR OS AGENDAMENTOS ---
-    const upcomingAppointments = allAppointments.filter(ag => ['agendado', 'confirmado'].includes(ag.status.toLowerCase()));
-    const historyAppointments = allAppointments.filter(ag => ['concluído', 'cancelado'].includes(ag.status.toLowerCase()));
-    const lastServices = [...historyAppointments].sort((a, b) => new Date(b.data) - new Date(a.data)).slice(0, 2); // Pega os 2 mais recentes do histórico
-
-    renderGenericList(upcomingAppointments, "proximos-agendamentos-list", "empty-proximos-agendamentos", createAppointmentsHtml);
-    renderGenericList(lastServices, "ultimos-servicos-list", "empty-ultimos-servicos", createAppointmentsHtml);
-    renderGenericList(historyAppointments, "historico-agendamentos-list", "empty-historico-agendamentos", createAppointmentsHtml);
-    
-  } catch (error) {
-    console.error("Não foi possível carregar todos os dados do perfil:", error.message);
-    document.getElementById("user-name-display").textContent = "Erro ao carregar";
-    document.getElementById("user-email-display").textContent = "Por favor, faça login novamente.";
-  }
-}
-
-// --- INICIALIZAÇÃO E EVENT LISTENERS ---
-document.addEventListener("DOMContentLoaded", () => {
-  loadProfileData();
-  document.getElementById("current-year").textContent = new Date().getFullYear();
-
-  // O resto da sua lógica de eventos (modal, cropper, etc.) pode continuar aqui
-  // ...
-});
-
-// A lógica do cropper foi omitida por ser muito grande, mas deve ser mantida aqui.
-// --- NOVO: LÓGICA DO MODAL E RECORTE DE IMAGEM ---
-
-// Variáveis globais para o Cropper
-let cropper = null;
-let imageToCrop = document.getElementById("image-to-crop");
-let cropModal = document.getElementById("crop-modal");
-let currentCropType = null; // 'profile' ou 'cover'
-
-// Função para abrir o modal de recorte
-function openCropModal(imageFile, cropType, aspectRatio) {
-  if (!imageFile) return;
-  currentCropType = cropType;
-  const reader = new FileReader();
-  reader.onload = function (e) {
-    imageToCrop.src = e.target.result;
-    cropModal.style.display = "flex";
-    if (cropper) {
-      cropper.destroy();
-    }
-    cropper = new Cropper(imageToCrop, {
-      aspectRatio: aspectRatio,
-      viewMode: 1,
-      responsive: true,
-      background: false,
-    });
-  };
-  reader.readAsDataURL(imageFile);
-}
-
-// Função para fechar o modal
-function closeCropModal() {
-  cropModal.style.display = "none";
-  if (cropper) {
-    cropper.destroy();
-    cropper = null;
-  }
-}
-
-// Função para lidar com o recorte e atualização da imagem
-function handleCrop() {
-  if (!cropper || !currentCropType) return;
-  const canvas = cropper.getCroppedCanvas({
-    width: currentCropType === "profile" ? 400 : 1200,
-    height: currentCropType === "profile" ? 400 : 400,
-    imageSmoothingQuality: "high",
-  });
-  const croppedImageDataUrl = canvas.toDataURL("image/jpeg");
-  if (currentCropType === "profile") {
-    document.getElementById("profile-pic-display").src = croppedImageDataUrl;
-    console.log("Nova imagem de perfil (Base64):", croppedImageDataUrl.substring(0, 50) + "...");
-  } else if (currentCropType === "cover") {
-    document.getElementById("cover-photo-display").src = croppedImageDataUrl;
-    console.log("Nova imagem de capa (Base64):", croppedImageDataUrl.substring(0, 50) + "...");
-  }
-  closeCropModal();
-}
-

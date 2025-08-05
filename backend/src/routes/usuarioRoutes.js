@@ -1,10 +1,9 @@
 // src/routes/usuarioRoutes.js
-console.log('DEBUG: Arquivo usuarioRoutes.js carregado.');
 const express = require('express');
 const router = express.Router();
-// Importa as funções do controlador de usuários
-const usuarioController = require('../controllers/usuarioController'); 
+const usuarioController = require('../controllers/usuarioController');
 const { authorize } = require('../middlewares/authMiddleware');
+const upload = require('../middlewares/uploadMiddleware');
 
 module.exports = (prisma) => {
   router.use((req, res, next) => {
@@ -12,7 +11,17 @@ module.exports = (prisma) => {
     next();
   });
 
-  // Rotas de Usuários PROTEGIDAS (POST /api/usuarios foi movido para app.js como rota pública)
+  // =============================================================
+  // NOVA ROTA PARA LISTAR OS PROFISSIONAIS
+  // =============================================================
+  // Esta rota ficará disponível em GET /api/usuarios/profissionais
+  router.get('/profissionais', usuarioController.getAllProfessionals);
+
+  // --- Rotas de Upload ---
+  router.put('/me/foto-perfil', upload.single('profilePic'), usuarioController.updateProfilePhoto);
+  router.put('/me/foto-capa', upload.single('coverPic'), usuarioController.updateCoverPhoto);
+
+  // --- Rotas CRUD Genéricas ---
   router.get('/', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.getAllUsers);
   router.get('/:id', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.getUserById);
   router.put('/:id', authorize(['proprietario', 'profissional', 'cliente']), usuarioController.updateUser);

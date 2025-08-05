@@ -35,13 +35,8 @@
       position: relative;
       flex-shrink: 0;
       width: 100%;
-      /* A
-    dicione esta linha */
-
-
     }
 
-    /* Título H1 dentro do Header */
     .header h1 {
       font-family: "Playfair Display", serif;
       color: var(--secondary);
@@ -63,9 +58,34 @@
       font-family: "Playfair Display", serif;
       color: var(--primary);
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1rem;
+      /* Reduzido para dar espaço ao botão */
       font-size: 2.2rem;
     }
+
+    /* =================================== */
+    /* NOVO ESTILO PARA O BOTÃO DE AVALIAR */
+    /* =================================== */
+    .container-avaliacoes .btn-avaliar {
+      display: block;
+      width: fit-content;
+      margin: 0 auto 2rem auto;
+      /* Centraliza e adiciona margem inferior */
+      padding: 0.7rem 1.5rem;
+      background-color: var(--secondary);
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .container-avaliacoes .btn-avaliar:hover {
+      background-color: var(--primary);
+      color: var(--secondary);
+      transform: translateY(-2px);
+    }
+
 
     .filtros-avaliacoes {
       display: flex;
@@ -95,9 +115,7 @@
     .lista-avaliacoes-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      /* Cria colunas responsivas */
       gap: 1.5rem;
-      /* Espaçamento entre os cards */
       margin-bottom: 2rem;
     }
 
@@ -140,20 +158,12 @@
     .estrelas-avaliacao {
       margin-bottom: 1rem;
       font-size: 1.3rem;
-      /* Tamanho das estrelas */
     }
 
     .estrelas-avaliacao span {
-      /* Estilo para as estrelas */
       color: var(--secondary);
-      /* Cor dourada para estrelas preenchidas */
       margin-right: 2px;
     }
-
-    /* Para estrelas vazias, você pode usar um caractere diferente ou mudar a cor:
-.estrelas-avaliacao span.vazia { color: #ccc; }
-O JavaScript preencheria isso corretamente com base na nota. */
-
 
     .texto-avaliacao {
       font-family: "Montserrat", sans-serif;
@@ -162,7 +172,6 @@ O JavaScript preencheria isso corretamente com base na nota. */
       color: var(--dark);
       margin-bottom: 1rem;
       flex-grow: 1;
-      /* Faz o texto ocupar o espaço disponível */
     }
 
     .avaliacao-servico-info {
@@ -172,13 +181,11 @@ O JavaScript preencheria isso corretamente com base na nota. */
       padding-top: 0.75rem;
       border-top: 1px dashed #eee;
       margin-top: auto;
-      /* Empurra para o final do card se o texto for curto */
     }
 
     .avaliacao-servico-info span {
       font-weight: 500;
     }
-
 
     .paginacao-avaliacoes {
       display: flex;
@@ -220,7 +227,6 @@ O JavaScript preencheria isso corretamente com base na nota. */
       color: var(--dark);
     }
 
-    /* Responsividade para os cards e filtros */
     @media (max-width: 768px) {
       .container-avaliacoes h2 {
         font-size: 1.8rem;
@@ -229,17 +235,14 @@ O JavaScript preencheria isso corretamente com base na nota. */
       .filtros-avaliacoes {
         flex-direction: column;
         align-items: flex-start;
-        /* Alinha à esquerda em telas menores */
       }
 
       .filtros-avaliacoes select {
         width: 100%;
-        /* Ocupa a largura total */
       }
 
       .lista-avaliacoes-grid {
         grid-template-columns: 1fr;
-        /* Uma coluna em telas menores */
       }
     }
   </style>
@@ -256,6 +259,8 @@ O JavaScript preencheria isso corretamente com base na nota. */
     <div class="container-avaliacoes">
       <h2>O que Nossos Clientes Dizem</h2>
 
+      <a href="enviar-avaliacao.html" class="btn-avaliar">Deixe sua Avaliação</a>
+
       <div class="filtros-avaliacoes">
         <label for="ordenar-avaliacoes">Ordenar por:</label>
         <select id="ordenar-avaliacoes" name="ordenar-avaliacoes">
@@ -265,8 +270,7 @@ O JavaScript preencheria isso corretamente com base na nota. */
         </select>
       </div>
 
-      <div id="lista-avaliacoes" class="lista-avaliacoes-grid">
-      </div>
+      <div id="lista-avaliacoes" class="lista-avaliacoes-grid"></div>
 
       <div id="paginacao-container" class="paginacao-avaliacoes" style="visibility: hidden;">
         <button id="btnAnteriorAvaliacoes" disabled>Anterior</button>
@@ -277,15 +281,12 @@ O JavaScript preencheria isso corretamente com base na nota. */
     </div>
 
     <script>
+      // O seu JavaScript existente continua aqui, sem alterações
       document.addEventListener('DOMContentLoaded', () => {
-
-        // --- 1. VARIÁVEIS DE CONTROLE ---
-        let todosOsFeedbacks = []; // Guarda a lista completa vinda da API
-        let feedbacksAtuais = [];   // Guarda a lista após ordenação
+        let todosOsFeedbacks = [];
+        let feedbacksAtuais = [];
         let paginaAtual = 1;
-        const itensPorPagina = 6; // Defina quantos feedbacks quer mostrar por página
-
-        // --- 2. REFERÊNCIAS AOS ELEMENTOS DO HTML ---
+        const itensPorPagina = 6;
         const listaUI = document.getElementById('lista-avaliacoes');
         const selectOrdenar = document.getElementById('ordenar-avaliacoes');
         const btnAnterior = document.getElementById('btnAnteriorAvaliacoes');
@@ -293,44 +294,25 @@ O JavaScript preencheria isso corretamente com base na nota. */
         const infoPaginaUI = document.getElementById('infoPaginaAvaliacoes');
         const paginacaoContainer = document.getElementById('paginacao-container');
 
-        // --- 3. FUNÇÕES DE RENDERIZAÇÃO E LÓGICA ---
-
-        /**
-         * "Desenha" a página atual na tela com os itens corretos.
-         */
         function renderizarPagina() {
-          listaUI.innerHTML = ''; // Limpa a lista antes de redesenhar
-
+          listaUI.innerHTML = '';
           if (feedbacksAtuais.length === 0) {
             listaUI.innerHTML = '<p>Ainda não há avaliações para exibir.</p>';
-            if (paginacaoContainer) {
-              paginacaoContainer.style.visibility = 'hidden'; // Esconde a paginação
-            }
+            if (paginacaoContainer) paginacaoContainer.style.visibility = 'hidden';
             return;
           }
-
           const totalPaginas = Math.ceil(feedbacksAtuais.length / itensPorPagina);
-
-          // SÓ MOSTRA A PAGINAÇÃO SE HOUVER MAIS DE UMA PÁGINA
           if (paginacaoContainer) {
-            if (totalPaginas > 1) {
-              paginacaoContainer.style.visibility = 'visible';
-            } else {
-              paginacaoContainer.style.visibility = 'hidden';
-            }
+            paginacaoContainer.style.visibility = totalPaginas > 1 ? 'visible' : 'hidden';
           }
-
           const indiceInicio = (paginaAtual - 1) * itensPorPagina;
           const indiceFim = indiceInicio + itensPorPagina;
           const itensDaPagina = feedbacksAtuais.slice(indiceInicio, indiceFim);
-
           itensDaPagina.forEach(fb => {
             const card = document.createElement('div');
             card.className = 'card-avaliacao';
-
             const data = new Date(fb.data).toLocaleDateString('pt-BR');
             const nome = fb.cliente?.pessoa?.nome_completo || 'Cliente Anônimo';
-
             card.innerHTML = `
               <div class="card-avaliacao-header">
                 <span class="nome-avaliador">${nome}</span>
@@ -341,27 +323,14 @@ O JavaScript preencheria isso corretamente com base na nota. */
             `;
             listaUI.appendChild(card);
           });
-
-          // Atualiza as informações de paginação
-          if (infoPaginaUI) {
-            infoPaginaUI.textContent = `Página ${paginaAtual} de ${totalPaginas}`;
-          }
-          if (btnAnterior) {
-            btnAnterior.disabled = paginaAtual === 1;
-          }
-          if (btnProximo) {
-            btnProximo.disabled = paginaAtual === totalPaginas;
-          }
+          if (infoPaginaUI) infoPaginaUI.textContent = `Página ${paginaAtual} de ${totalPaginas}`;
+          if (btnAnterior) btnAnterior.disabled = paginaAtual === 1;
+          if (btnProximo) btnProximo.disabled = paginaAtual === totalPaginas;
         }
 
-        /**
-         * Ordena a lista de feedbacks de acordo com a seleção do usuário.
-         */
         function ordenarFeedbacks() {
           const criterio = selectOrdenar.value;
-          // Cria uma cópia para não alterar a ordem original
           let feedbacksOrdenados = [...todosOsFeedbacks];
-
           switch (criterio) {
             case 'mais_altas':
               feedbacksOrdenados.sort((a, b) => (b.nota || 0) - (a.nota || 0));
@@ -369,18 +338,15 @@ O JavaScript preencheria isso corretamente com base na nota. */
             case 'mais_baixas':
               feedbacksOrdenados.sort((a, b) => (a.nota || 0) - (b.nota || 0));
               break;
-            case 'recentes':
             default:
               feedbacksOrdenados.sort((a, b) => new Date(b.data) - new Date(a.data));
               break;
           }
-
           feedbacksAtuais = feedbacksOrdenados;
-          paginaAtual = 1; // Sempre volta para a primeira página após ordenar
+          paginaAtual = 1;
           renderizarPagina();
         }
 
-        // Função auxiliar para criar as estrelas
         function createStarRating(nota) {
           let stars = '';
           for (let i = 1; i <= 5; i++) {
@@ -389,41 +355,23 @@ O JavaScript preencheria isso corretamente com base na nota. */
           return stars;
         }
 
-        // --- 4. INICIALIZAÇÃO E EVENT LISTENERS ---
-
         async function init() {
           try {
             const response = await fetch('/api/feedbacks');
             const feedbacks = await response.json();
             todosOsFeedbacks = feedbacks;
-            ordenarFeedbacks(); // Ordena e renderiza pela primeira vez
+            ordenarFeedbacks();
           } catch (error) {
             console.error('Erro ao buscar avaliações:', error);
             listaUI.innerHTML = '<p>Não foi possível carregar as avaliações.</p>';
-            if (paginacaoContainer) {
-              paginacaoContainer.style.visibility = 'hidden';
-            }
+            if (paginacaoContainer) paginacaoContainer.style.visibility = 'hidden';
           }
         }
 
-        // Gatilhos de eventos
-        if (selectOrdenar) {
-          selectOrdenar.addEventListener('change', ordenarFeedbacks);
-        }
-        if (btnProximo) {
-          btnProximo.addEventListener('click', () => {
-            paginaAtual++;
-            renderizarPagina();
-          });
-        }
-        if (btnAnterior) {
-          btnAnterior.addEventListener('click', () => {
-            paginaAtual--;
-            renderizarPagina();
-          });
-        }
+        if (selectOrdenar) selectOrdenar.addEventListener('change', ordenarFeedbacks);
+        if (btnProximo) btnProximo.addEventListener('click', () => { paginaAtual++; renderizarPagina(); });
+        if (btnAnterior) btnAnterior.addEventListener('click', () => { paginaAtual--; renderizarPagina(); });
 
-        // Inicia a aplicação
         init();
       });
     </script>

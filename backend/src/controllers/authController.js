@@ -36,14 +36,14 @@ authController.login = async (req, res) => {
 
     const JWT_SECRET = process.env.JWT_SECRET;
     if (!JWT_SECRET) {
-        console.error('ERRO: JWT_SECRET não está definido nas variáveis de ambiente!');
-        return res.status(500).json({ message: 'Erro de configuração do servidor: JWT_SECRET não encontrado.' });
+      console.error('ERRO: JWT_SECRET não está definido nas variáveis de ambiente!');
+      return res.status(500).json({ message: 'Erro de configuração do servidor: JWT_SECRET não encontrado.' });
     }
 
-    const jwtPayload = { 
-      id_usuario: user.id_usuario, 
-      email: user.email, 
-      tipo_usuario: user.tipo_usuario 
+    const jwtPayload = {
+      id_usuario: user.id_usuario,
+      email: user.email,
+      tipo_usuario: user.tipo_usuario
     };
     console.log('DEBUG LOGIN: Payload do JWT sendo criado:', jwtPayload);
 
@@ -96,6 +96,7 @@ authController.getProfile = async (req, res) => {
             id_pessoa: true,
             nome_completo: true,
             foto_perfil: true,
+            foto_capa: true,
           },
         },
       },
@@ -106,7 +107,7 @@ authController.getProfile = async (req, res) => {
     }
 
     if (userProfile.tipo_usuario === 'profissional' && userProfile.pessoa) {
-      
+
       // =====================================================================
       // AQUI ESTÁ A CORREÇÃO: Usamos 'findFirst' em vez de 'findUnique'.
       // 'findFirst' é mais seguro se o campo 'id_pessoa' não for estritamente único.
@@ -119,7 +120,7 @@ authController.getProfile = async (req, res) => {
           biografia: true,
         }
       });
-      
+
       // Adicionamos uma verificação extra para garantir que 'detalhesProfissional' foi encontrado
       if (detalhesProfissional) {
         const agendamentos = await prisma.agendamento.findMany({
@@ -144,8 +145,8 @@ authController.getProfile = async (req, res) => {
     }
 
     res.status(200).json({
-        message: 'Perfil recuperado com sucesso!',
-        user: userProfile 
+      message: 'Perfil recuperado com sucesso!',
+      user: userProfile
     });
 
   } catch (error) {

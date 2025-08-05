@@ -319,6 +319,7 @@ model pessoa {
   cpf           String?        @unique @db.VarChar(11)
   genero        String?        @db.VarChar(9)
   foto_perfil   String?
+  foto_capa     String?
   status        Boolean        @default(true)
   id_endereco   Int?
   cliente       cliente[]
@@ -351,7 +352,7 @@ model produto {
 model profissional {
   id_profissional              Int                            @id @default(autoincrement())
   id_pessoa                    Int
-  especializacao               String                         @db.VarChar(30)
+  especializacao               String                         @db.VarChar(150)
   biografia                    String?                        @db.VarChar(100)
   observacoes                  String?                        @db.VarChar(45)
   status                       Boolean                        @default(true)

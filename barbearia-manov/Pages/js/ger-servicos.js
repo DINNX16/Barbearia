@@ -1,4 +1,4 @@
-// js/ger-servicos.js
+// js/ger-servicos.js - VERSÃO FINAL E CORRIGIDA
 document.addEventListener('DOMContentLoaded', () => {
     // --- ELEMENTOS DO DOM ---
     const feedForm = document.getElementById('feed-form');
@@ -7,44 +7,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const tituloInput = document.getElementById('titulo');
     const textoCardInput = document.getElementById('texto-card');
     const valorCardInput = document.getElementById('valor-card');
-    const tipoServicoSelect = document.getElementById('tipo-servico'); // <-- Novo elemento
+    const tipoServicoSelect = document.getElementById('tipo-servico');
     const ativoCheckbox = document.getElementById('ativo');
     const btnClearForm = document.getElementById('btn-clear-form');
     const feedTableBody = document.getElementById('feed-table-body');
-    const API_URL = '/api/galeria';
+    const API_URL = 'http://localhost:3000/api/galeria';
 
     let feedData = [];
 
     // --- FUNÇÕES DA API ---
-
     async function fetchFeedData() {
         try {
-            const token = localStorage.getItem('seuTokenJWT'); // Pega o token do usuário logado
+            const token = localStorage.getItem('jwtToken'); // <-- Lendo o nome CORRETO
             if (!token) {
-                // Se não houver token, exibe uma mensagem clara e interrompe.
                 feedTableBody.innerHTML = `<tr><td colspan="6">Você precisa estar logado para gerenciar o feed.</td></tr>`;
                 return;
             }
 
-            // A URL agora é completa para evitar qualquer problema de CORS
-            const API_URL_COMPLETA = 'http://localhost:3000/api/galeria';
-
-            const response = await fetch(API_URL_COMPLETA, {
-                method: 'GET',
-                headers: {
-                    // Envia o token no cabeçalho da requisição
-                    'Authorization': `Bearer ${token}`
-                }
+            const response = await fetch('http://localhost:3000/api/galeria', {
+                headers: { 'Authorization': `Bearer ${token}` }
             });
 
             if (!response.ok) {
-                // Se a resposta for 403 (Token inválido) ou outro erro, mostra uma mensagem
-                if (response.status === 403) {
-                    throw new Error('Sessão expirada ou inválida. Faça login novamente.');
+                if (response.status === 403 || response.status === 401) {
+                    throw new Error('Sessão inválida ou expirada. Faça login novamente.');
                 }
                 throw new Error('Falha ao buscar dados');
             }
-
             feedData = await response.json();
             renderFeedTable();
         } catch (error) {
@@ -54,14 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- FUNÇÕES DE RENDERIZAÇÃO E FORMULÁRIO ---
-
     function renderFeedTable() {
         feedTableBody.innerHTML = '';
         feedData.forEach(item => {
             const row = feedTableBody.insertRow();
             row.innerHTML = `
                 <td data-label="ID">${item.id_foto}</td>
-                <td data-label="Imagem"><img src="${item.imagem_caminho}" alt="${item.titulo}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;"></td>
+                <td data-label="Imagem"><img src="${item.imagem_caminho || ''}" alt="${item.titulo}" style="width: 80px; height: 80px; object-fit: cover; border-radius: 4px;"></td>
                 <td data-label="Título">${item.titulo}</td>
                 <td data-label="Valor">${item.valor || '-'}</td>
                 <td data-label="Ativo">${item.ativo ? 'Sim' : 'Não'}</td>
@@ -93,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tituloInput.value = item.titulo;
             textoCardInput.value = item.descricao;
             valorCardInput.value = item.valor;
-            tipoServicoSelect.value = item.tipo_servico; // <-- Preenche o dropdown
+            tipoServicoSelect.value = item.tipo_servico;
             ativoCheckbox.checked = item.ativo;
             feedForm.scrollIntoView({ behavior: 'smooth' });
         }
@@ -108,17 +96,15 @@ document.addEventListener('DOMContentLoaded', () => {
     async function deleteFeedItem(id) {
         if (confirm('Tem certeza que deseja excluir este card?')) {
             try {
-                const token = localStorage.getItem('seuTokenJWT');
+                const token = localStorage.getItem('jwtToken'); // <-- Lendo o nome CORRETO
                 if (!token) { alert('Você precisa estar logado para realizar esta ação.'); return; }
 
                 const response = await fetch(`${API_URL}/${id}`, {
                     method: 'DELETE',
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
-
                 if (!response.ok) throw new Error('Falha ao excluir');
-
-                await fetchFeedData(); // Atualiza a tabela
+                await fetchFeedData();
                 clearForm();
             } catch (error) {
                 console.error('Erro:', error);
@@ -128,7 +114,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // --- EVENT LISTENERS PRINCIPAIS ---
-
     feedForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const id = feedIdInput.value ? parseInt(feedIdInput.value) : null;
@@ -137,12 +122,13 @@ document.addEventListener('DOMContentLoaded', () => {
             titulo: tituloInput.value,
             descricao: textoCardInput.value,
             valor: valorCardInput.value,
-            tipo_servico: tipoServicoSelect.value, // <-- Pega o valor do dropdown
+            tipo_servico: tipoServicoSelect.value,
             ativo: ativoCheckbox.checked
         };
+
         const method = id ? 'PUT' : 'POST';
         const url = id ? `${API_URL}/${id}` : API_URL;
-        const token = localStorage.getItem('seuTokenJWT');
+        const token = localStorage.getItem('jwtToken'); // <-- Lendo o nome CORRETO
         if (!token) { alert('Você precisa estar logado para realizar esta ação.'); return; }
 
         try {
@@ -155,7 +141,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 body: JSON.stringify(cardData)
             });
             if (!response.ok) throw new Error('Falha ao salvar');
-            await fetchFeedData(); // Atualiza a tabela com os novos dados
+            await fetchFeedData();
             clearForm();
         } catch (error) {
             console.error('Erro:', error);
@@ -166,5 +152,5 @@ document.addEventListener('DOMContentLoaded', () => {
     btnClearForm.addEventListener('click', clearForm);
 
     // --- INICIALIZAÇÃO ---
-    fetchFeedData(); // Busca os dados da API assim que a página carrega
+    fetchFeedData();
 });

@@ -297,4 +297,250 @@ usuarioController.deleteUser = async (req, res) => {
   }
 };
 
+usuarioController.getAllProfessionals = async (req, res) => {
+  try {
+    const prisma = req.app.get('prisma');
+    const usuariosProfissionais = await prisma.usuario.findMany({
+      where: {
+        tipo_usuario: 'profissional',
+        ativo: true
+      },
+      select: {
+        id_usuario: true,
+        email: true,
+        pessoa: {
+          select: {
+            nome_completo: true,
+            foto_perfil: true,
+            // Acessamos o modelo 'profissional' através da relação em 'pessoa'
+            profissional: {
+              select: {
+                id_profissional: true, // Importante para a agenda
+                especializacao: true
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Formatamos a resposta para ser mais fácil de usar no frontend
+    const profissionaisFormatados = usuariosProfissionais.map(user => {
+      // O resultado de 'profissional' é um array, pois a relação é 1-para-muitos
+      // Pegamos o primeiro (e único) perfil profissional associado à pessoa
+      const perfilProfissional = user.pessoa?.profissional[0];
+
+      return {
+        id_usuario: user.id_usuario,
+        id_profissional: perfilProfissional?.id_profissional,
+        nome: user.pessoa?.nome_completo,
+        foto_perfil: user.pessoa?.foto_perfil,
+        especializacao: perfilProfissional?.especializacao
+      };
+    }).filter(p => p.id_profissional); // Garante que apenas usuários com perfil profissional sejam listados
+
+    res.status(200).json(profissionaisFormatados);
+
+  } catch (error) {
+    console.error('Erro ao buscar profissionais:', error);
+    res.status(500).json({ message: 'Erro interno do servidor', error: error.message });
+  }
+};
+
+
+// Função para atualizar a foto de perfil (versão limpa e correta)
+usuarioController.updateProfilePhoto = async (req, res) => {
+  try {
+    const userId = req.user.id_usuario;
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nenhum arquivo de imagem foi enviado.' });
+    }
+    const filePath = req.file.path.replace(/\\/g, '/');
+    const prisma = req.app.get('prisma');
+    const usuario = await prisma.usuario.findUnique({
+      where: { id_usuario: userId },
+      select: { pessoa: { select: { id_pessoa: true } } }
+    });
+    if (!usuario || !usuario.pessoa || !usuario.pessoa.id_pessoa) {
+      return res.status(404).json({ message: 'Pessoa associada ao usuário não encontrada.' });
+    }
+    const pessoaAtualizada = await prisma.pessoa.update({
+      where: { id_pessoa: usuario.pessoa.id_pessoa },
+      data: { foto_perfil: `/${filePath}` }
+    });
+    res.status(200).json({
+      message: 'Foto de perfil atualizada com sucesso!',
+      foto_perfil: pessoaAtualizada.foto_perfil
+    });
+  } catch (error) {
+    console.error('Erro ao atualizar foto de perfil:', error);
+    res.status(500).json({ message: 'Erro interno ao atualizar a foto.', error: error.message });
+  }
+};
+
+// Função para atualizar a foto de capa (versão limpa e correta)
+usuarioController.updateCoverPhoto = async (req, res) => {
+  try {
+    const userId = req.user.id_usuario;
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nenhum arquivo de imagem foi enviado.' });
+    }
+    const filePath = req.file.path.replace(/\\/g, '/');
+    const prisma = req.app.get('prisma');
+    const usuario = await prisma.usuario.findUnique({
+      where: { id_usuario: userId },
+      select: { pessoa: { select: { id_pessoa: true } } }
+    });
+    if (!usuario || !usuario.pessoa || !usuario.pessoa.id_pessoa) {
+      return res.status(404).json({ message: 'Pessoa associada ao usuário não encontrada.' });
+    }
+    const pessoaAtualizada = await prisma.pessoa.update({
+      where: { id_pessoa: usuario.pessoa.id_pessoa },
+      data: { foto_capa: `/${filePath}` }
+    });
+    res.status(200).json({
+      message: 'Foto de capa atualizada com sucesso!',
+      foto_capa: pessoaAtualizada.foto_capa
+    });
+  } catch (error) {
+    console.error('Erro ao atualizar foto de capa:', error);
+    res.status(500).json({ message: 'Erro interno ao atualizar a foto.', error: error.message });
+  }
+};
+
+
+
+// Adicione esta função dentro de src/controllers/usuarioController.js
+
+// Função para atualizar a foto de perfil
+usuarioController.updateProfilePhoto = async (req, res) => {
+  try {
+    const userId = req.user.id_usuario;
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nenhum arquivo de imagem foi enviado.' });
+    }
+
+    // O caminho do arquivo salvo pelo multer. Ex: 'uploads/profiles/user-1-1678886400000.png'
+    const filePath = req.file.path;
+
+    const prisma = req.app.get('prisma');
+
+    // Precisamos encontrar o 'id_pessoa' associado ao nosso 'id_usuario'
+    const usuario = await prisma.usuario.findUnique({
+      where: { id_usuario: userId },
+      select: { id_pessoa: true }
+    });
+
+    if (!usuario || !usuario.id_pessoa) {
+      return res.status(404).json({ message: 'Pessoa associada ao usuário não encontrada.' });
+    }
+
+    // Atualiza o campo 'foto_perfil' na tabela 'pessoa'
+    const pessoaAtualizada = await prisma.pessoa.update({
+      where: { id_pessoa: usuario.id_pessoa },
+      data: { foto_perfil: `/${filePath}` } // Salva o caminho com uma barra inicial
+    });
+
+    res.status(200).json({
+      message: 'Foto de perfil atualizada com sucesso!',
+      foto_perfil: pessoaAtualizada.foto_perfil
+    });
+
+  } catch (error) {
+    console.error('Erro ao atualizar foto de perfil:', error);
+    res.status(500).json({ message: 'Erro interno ao atualizar a foto.', error: error.message });
+  }
+};
+
+
+// Adicione ou substitua esta função em src/controllers/usuarioController.js
+
+// Função para atualizar a foto de perfil
+usuarioController.updateProfilePhoto = async (req, res) => {
+  try {
+    const userId = req.user.id_usuario;
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nenhum arquivo de imagem foi enviado.' });
+    }
+
+    // Pega o caminho do arquivo salvo e normaliza as barras para o padrão web (/)
+    const filePath = req.file.path.replace(/\\/g, '/');
+
+    const prisma = req.app.get('prisma');
+
+    // =====================================================================
+    // AQUI ESTÁ A CORREÇÃO PRINCIPAL
+    // Buscamos o usuário e incluímos a relação 'pessoa' para pegar o id_pessoa
+    // =====================================================================
+    const usuario = await prisma.usuario.findUnique({
+      where: { id_usuario: userId },
+      select: {
+        pessoa: {
+          select: { id_pessoa: true }
+        }
+      }
+    });
+
+    // Agora, acessamos o id_pessoa através de 'usuario.pessoa.id_pessoa'
+    if (!usuario || !usuario.pessoa || !usuario.pessoa.id_pessoa) {
+      return res.status(404).json({ message: 'Pessoa associada ao usuário não encontrada.' });
+    }
+
+    // Atualiza o campo 'foto_perfil' na tabela 'pessoa'
+    const pessoaAtualizada = await prisma.pessoa.update({
+      where: { id_pessoa: usuario.pessoa.id_pessoa },
+      data: { foto_perfil: `/${filePath}` } // Salva o caminho com uma barra inicial
+    });
+
+    res.status(200).json({
+      message: 'Foto de perfil atualizada com sucesso!',
+      foto_perfil: pessoaAtualizada.foto_perfil
+    });
+
+  } catch (error) {
+    console.error('Erro ao atualizar foto de perfil:', error);
+    res.status(500).json({ message: 'Erro interno ao atualizar a foto.', error: error.message });
+  }
+};
+
+
+// Função para atualizar a foto de capa
+usuarioController.updateCoverPhoto = async (req, res) => {
+  try {
+    const userId = req.user.id_usuario;
+
+    if (!req.file) {
+      return res.status(400).json({ message: 'Nenhum arquivo de imagem foi enviado.' });
+    }
+    const filePath = req.file.path.replace(/\\/g, '/');
+    const prisma = req.app.get('prisma');
+
+    const usuario = await prisma.usuario.findUnique({
+      where: { id_usuario: userId },
+      select: { pessoa: { select: { id_pessoa: true } } }
+    });
+
+    if (!usuario || !usuario.pessoa || !usuario.pessoa.id_pessoa) {
+      return res.status(404).json({ message: 'Pessoa associada ao usuário não encontrada.' });
+    }
+
+    // Atualiza o novo campo 'foto_capa' na tabela 'pessoa'
+    const pessoaAtualizada = await prisma.pessoa.update({
+      where: { id_pessoa: usuario.pessoa.id_pessoa },
+      data: { foto_capa: `/${filePath}` } // Salva o caminho da foto de capa
+    });
+
+    res.status(200).json({
+      message: 'Foto de capa atualizada com sucesso!',
+      foto_capa: pessoaAtualizada.foto_capa
+    });
+
+  } catch (error) {
+    console.error('Erro ao atualizar foto de capa:', error);
+    res.status(500).json({ message: 'Erro interno ao atualizar a foto.', error: error.message });
+  }
+};
+
 module.exports = usuarioController;

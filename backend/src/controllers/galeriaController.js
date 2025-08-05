@@ -15,8 +15,8 @@ const getAllFotos = async (req, res) => {
 // POST /api/galeria - Criar uma nova foto/card
 const createFoto = async (req, res) => {
   const prisma = req.app.get('prisma');
-  // Usando os nomes das colunas que criamos no schema
-  const { imagem_caminho, titulo, descricao, valor, ativo } = req.body;
+  // CORREÇÃO: Adicionado 'tipo_servico' à lista de variáveis lidas do req.body
+  const { imagem_caminho, titulo, descricao, valor, ativo, tipo_servico } = req.body;
   try {
     const novaFoto = await prisma.galeria_fotos.create({
       data: {
@@ -25,8 +25,8 @@ const createFoto = async (req, res) => {
         descricao,
         valor,
         ativo,
-        tipo_servico,
-        id_barbearia: 1 // Assumindo o ID 1 para a barbearia, ajuste se necessário
+        tipo_servico, // Agora a variável existe e pode ser salva
+        id_barbearia: 1
       }
     });
     res.status(201).json(novaFoto);
