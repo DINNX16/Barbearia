@@ -24,6 +24,7 @@
                 <h2 class="section-title">Adicionar Aviso</h2>
                 <form id="aviso-form">
                     <input type="hidden" id="aviso-id">
+                    
                     <div class="form-group">
                         <label for="titulo">Título:</label>
                         <input type="text" id="titulo" required>
@@ -62,7 +63,7 @@
 
                     <div class="form-group">
                         <label for="link-redirecionamento">Link de Redirecionamento (URL):</label>
-                        <input type="url" id="link-redirecionamento" placeholder="horario_funcionamento.html ou https://...">
+                        <input type="url" id="link-redirecionamento" placeholder="Coloque o link da página a qual quer redirecionar aqui">
                     </div>
 
                     <div class="form-group">
@@ -144,7 +145,25 @@
             <button class="btn-form btn-save" id="confirm-time-selection">Confirmar</button>
         </div>
     </div>
+    <div id="confirmation-modal" class="custom-modal">
+        <div class="custom-modal-content">
+            <h3 id="confirmation-title">Confirmação</h3>
+            <p id="confirmation-message">Tem certeza que deseja continuar?</p>
+            <div class="modal-buttons">
+                <button class="btn-form btn-save" id="confirm-yes-btn">OK</button>
+                <button class="btn-form btn-clear" id="confirm-no-btn">Cancelar</button>
+            </div>
+        </div>
+    </div>
 
-<script src="/barbearia-manov/Pages/js/ger.js"></script>
+    <div id="notification-modal" class="custom-modal">
+        <div class="custom-modal-content">
+            <h3 id="notification-title">Notificação</h3>
+            <p id="notification-message">Ação realizada com sucesso.</p>
+            <button class="btn-form btn-save" id="notification-ok-btn">OK</button>
+        </div>
+    </div>
+
+    <script src="/barbearia-manov/Pages/js/ger.js"></script>
 </body>
 </html>
